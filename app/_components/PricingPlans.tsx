@@ -10,25 +10,11 @@ export function PricingPlans() {
 
   const plans = [
     {
-      title: "Plano Free — Axel Lite",
-      price: "R$0",
+      title: "Plano Mensal — Axel Plus",
+      price: "R$25,90",
       description: "",
       buttonText: "Iniciar Assinatura",
       popular: false,
-      planType: "free" as const,
-      features: [
-        ...commonFeatures,
-        { name: "Acesso básico ao assistente", included: true },
-        { name: "Respostas inteligentes limitadas", included: true },
-        { name: "Suporte via FAQ", included: true },
-      ],
-    },
-    {
-      title: "Plano Mensal — Axel Plus",
-      price: "R$52,90",
-      description: "",
-      buttonText: "Iniciar Assinatura",
-      popular: true,
       planType: "mensal" as const,
       features: [
         ...commonFeatures,
@@ -41,7 +27,7 @@ export function PricingPlans() {
     },
     {
       title: "Plano Anual — Axel Pro",
-      price: "R$615,90",
+      price: "R$249,90",
       description: "",
       buttonText: "Iniciar Assinatura",
       popular: false,
@@ -59,19 +45,26 @@ export function PricingPlans() {
   ];
 
   return (
-    <div className="from-muted/20 to-muted/40 bg-gradient-to-br py-20">
+    <section className="from-muted/20 to-muted/40 bg-gradient-to-br py-20">
       <div className="container mx-auto px-4">
-        <div className="mb-10 text-center">
-          <h2 className="mb-2 text-3xl font-bold">Planos e Preços</h2>
-          <p>Escolha o plano perfeito para suas necessidades</p>
+        <div className="mb-16 text-center">
+          <h2 className="text-foreground mb-6 text-4xl font-bold md:text-5xl">
+            Planos e{" "}
+            <span className="bg-gradient-axel bg-clip-text text-transparent">
+              Preços
+            </span>
+          </h2>
+          <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+            Escolha o plano perfeito para suas necessidades
+          </p>
         </div>
 
-        <div className="relative mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
           {plans.map((plan, index) => (
             <PricingCard key={index} {...plan} />
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
