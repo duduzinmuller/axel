@@ -37,14 +37,14 @@ const HeroSection = () => {
               <TypeWriter
                 text="Olá, sou o"
                 className="inline"
-                speed={60}
+                speed={90}
                 startTyping={step === 0}
                 onComplete={() => setStep(1)}
               />
               <TypeWriter
                 text=" Axel AI,"
                 className="bg-gradient-axel inline bg-clip-text text-transparent"
-                speed={60}
+                speed={90}
                 startTyping={step === 1}
                 onComplete={() => setStep(2)}
               />
