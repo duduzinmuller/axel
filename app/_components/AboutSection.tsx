@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { features } from "../utils/features";
+import { features } from "../_data/features";
 
 const AboutSection = () => {
   return (
@@ -51,7 +51,7 @@ const AboutSection = () => {
               Experimente agora e descubra como posso transformar sua rotina com
               soluções inteligentes e personalizadas.
             </p>
-            <button className="transform rounded-lg bg-white px-8 py-4 text-lg font-semibold text-gray-900 transition-colors duration-300 hover:scale-105 hover:bg-gray-100">
+            <button className="transform cursor-pointer rounded-lg bg-white px-8 py-4 text-lg font-semibold text-gray-900 transition-colors duration-300 hover:scale-105 hover:bg-gray-100">
               Começar Agora
             </button>
           </div>
