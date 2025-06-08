@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,31 +38,28 @@ export function PricingCard({
   return (
     <div
       className={cn(
-        "relative mt-10 flex transform flex-col rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-all dark:border-white/70 dark:bg-transparent",
-        popular && "mt-4 scale-105 shadow-md",
+        "group border-border bg-background relative transform overflow-hidden rounded-xl border p-6 shadow-md transition-all duration-300 hover:shadow-xl dark:border-white/20 dark:bg-transparent",
+        popular && "border-primary scale-105 border-2",
         className,
       )}
     >
       {popular && (
-        <div className="absolute -top-4 right-0 left-0 mx-auto w-fit rounded-full bg-black px-3 py-1 text-xs font-medium text-white dark:bg-white dark:text-black">
+        <div className="bg-gradient-axel absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-semibold text-white shadow-md">
           Mais Popular
         </div>
       )}
-      <div className="mb-4 flex flex-col gap-1">
-        <h3 className="text-xl font-bold text-black dark:text-white">
-          {title}
-        </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300">
-          {description}
-        </p>
+
+      <div className="mb-4 text-center">
+        <h3 className="text-foreground mb-1 text-xl font-bold">{title}</h3>
+        <p className="text-muted-foreground text-sm">{description}</p>
       </div>
-      <div className="mb-6">
-        <span className="text-4xl font-bold text-black dark:text-white">
-          {price}
-        </span>
-        <span className="text-gray-600 dark:text-gray-300">/{time}</span>
+
+      <div className="mb-6 text-center">
+        <span className="text-foreground text-4xl font-bold">{price}</span>
+        <span className="text-muted-foreground">/{time}</span>
       </div>
-      <ul className="mb-6 flex flex-col gap-2">
+
+      <ul className="mb-6 flex flex-col gap-3">
         {features.map((feature, index) => (
           <li key={index} className="flex items-center gap-2">
             {feature.included ? (
@@ -70,9 +69,7 @@ export function PricingCard({
             )}
             <span
               className={cn(
-                feature.included
-                  ? "text-black dark:text-white"
-                  : "text-gray-400 dark:text-gray-500",
+                feature.included ? "text-foreground" : "text-muted-foreground",
               )}
             >
               {feature.name}
@@ -80,9 +77,10 @@ export function PricingCard({
           </li>
         ))}
       </ul>
+
       <Button
         onClick={() => router.push(`/checkout?plan=${planType}`)}
-        className="mt-auto cursor-pointer border border-black bg-transparent text-black transition-colors hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black"
+        className="bg-gradient-axel w-full cursor-pointer rounded-md text-white transition-transform duration-200 hover:scale-105"
       >
         {buttonText}
       </Button>
