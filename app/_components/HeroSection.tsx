@@ -23,10 +23,8 @@ const HeroSection = () => {
       </div>
 
       <div className="z-10 mx-auto max-w-4xl px-4 text-center">
-        <div className="mb-8 flex justify-center">
-          <div className="animate-float">
-            <Image src="/axel.svg" width={200} height={200} alt="Axel" />
-          </div>
+        <div className="flex justify-center">
+          <Image src="/axel.svg" width={150} height={150} alt="Axel" />
         </div>
 
         <h1 className="text-foreground relative mb-6 min-h-[140px] text-3xl leading-tight font-bold md:text-6xl lg:text-7xl">
