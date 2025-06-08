@@ -29,7 +29,7 @@ const HeroSection = () => {
 
         <h1 className="text-foreground relative mb-6 min-h-[140px] text-3xl leading-tight font-bold md:text-6xl lg:text-7xl">
           <span className="invisible block">
-            Olá, sou o Axel AI, seu assistente virtual!
+            Olá, sou o Axel AI seu assistente virtual!
           </span>
 
           <span className="absolute inset-0">
@@ -42,7 +42,7 @@ const HeroSection = () => {
                 onComplete={() => setStep(1)}
               />
               <TypeWriter
-                text=" Axel AI,"
+                text=" Axel AI"
                 className="bg-gradient-axel inline bg-clip-text text-transparent"
                 speed={90}
                 startTyping={step === 1}
@@ -73,14 +73,14 @@ const HeroSection = () => {
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button
             size="lg"
-            className="bg-gradient-axel transform cursor-pointer rounded-lg border-0 px-8 py-6 text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:opacity-90"
+            className="bg-gradient-axel w-60 transform cursor-pointer rounded-lg border-0 px-8 py-6 text-center text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:opacity-90"
           >
             Sobre
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="border-border text-foreground hover:bg-accent hover:text-accent-foreground transform cursor-pointer rounded-lg px-8 py-6 text-lg font-semibold transition-all duration-300 hover:scale-105"
+            className="border-border text-foreground hover:bg-accent hover:text-accent-foreground w-60 transform cursor-pointer rounded-lg px-8 py-6 text-center text-lg font-semibold transition-all duration-300 hover:scale-105"
           >
             Experimentar
           </Button>
