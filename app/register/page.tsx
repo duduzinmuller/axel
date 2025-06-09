@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, User } from "lucide-react";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -25,19 +25,30 @@ export default function LoginPage() {
               alt={""}
             />
           </div>
-          <h2 className="mb-2 text-2xl font-medium">Bem-vindo de volta</h2>
+          <h2 className="mb-2 text-2xl font-medium">Crie sua conta</h2>
           <p className="mb-5 text-sm text-zinc-400">
-            Ainda não possuí uma conta?{" "}
+            Ja possuí uma conta?{" "}
             <a
               href="#"
               className="text-blue-500 hover:underline"
-              onClick={() => router.push("/register")}
+              onClick={() => router.push("/login")}
             >
-              Criar conta
+              Entrar
             </a>
           </p>
 
           <form className="space-y-4">
+            <div className="relative">
+              <User
+                className="absolute top-1/2 left-3 -translate-y-1/2 text-zinc-400"
+                size={16}
+              />
+              <Input
+                placeholder="Nome"
+                className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                required
+              />
+            </div>
             <div className="relative">
               <Mail
                 className="absolute top-1/2 left-3 -translate-y-1/2 text-zinc-400"
@@ -62,16 +73,22 @@ export default function LoginPage() {
                 required
               />
             </div>
+            <div className="relative">
+              <Lock
+                className="absolute top-1/2 left-3 -translate-y-1/2 text-zinc-400"
+                size={16}
+              />
+              <Input
+                type="password"
+                placeholder="Confirmar senha"
+                className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                required
+              />
+            </div>
             <Button className="bg-gradient-axel w-full cursor-pointer transition-all duration-300 hover:scale-105 hover:opacity-90">
-              Entrar
+              Cadastrar
             </Button>
           </form>
-          <a
-            href="#"
-            className="mt-2 block w-full text-right text-sm text-blue-500 hover:underline"
-          >
-            Esqueceu sua senha?
-          </a>
 
           <div className="my-5 flex items-center">
             <div className="flex-1 border-t border-zinc-700" />
