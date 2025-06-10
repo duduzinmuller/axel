@@ -3,11 +3,13 @@ import CapabilitiesSection from "./_components/CapabilitiesSection";
 import ExperienceSection from "./_components/ExperienceSection";
 import Footer from "./_components/Footer";
 import HeroSection from "./_components/HeroSection";
+import Navbar from "./_components/Navbar";
 import PricingPlans from "./_components/PricingPlans";
 
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <Navbar />
       <HeroSection />
       <AboutSection />
       <PricingPlans />

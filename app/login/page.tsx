@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -15,6 +15,15 @@ export default function LoginPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center">
       <Card className="w-[380px] border border-zinc-800 bg-transparent text-center">
+        <div className="absolute pl-4">
+          <a
+            href="#"
+            className="text-blue-500 hover:underline"
+            onClick={() => router.push("/")}
+          >
+            <ChevronLeft />
+          </a>
+        </div>
         <CardContent className="px-6 py-8">
           <div className="mb-4">
             <Image
