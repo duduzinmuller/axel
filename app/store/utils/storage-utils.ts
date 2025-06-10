@@ -4,7 +4,7 @@ import {
   LOCAL_STORAGE_USER_KEY,
 } from "@/app/_constants/local-storage";
 
-import type { UserResponse } from "@/app/hooks/service/user";
+import type { UserResponse } from "@/app/_api/services/user";
 import { AuthState, AuthTokens } from "../types/auth-types";
 
 export const StorageUtils = {

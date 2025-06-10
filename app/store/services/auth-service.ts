@@ -1,10 +1,10 @@
 import axios from "axios";
-import { UserService } from "@/app/_api/services/user";
-import type {
+import {
   LoginInput,
   SignupInput,
   UserResponse,
-} from "@/app/hooks/service/user";
+  UserService,
+} from "@/app/_api/services/user";
 import {
   AuthTokens,
   RequestNewPasswordArgs,
