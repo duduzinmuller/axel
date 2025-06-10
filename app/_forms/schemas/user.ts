@@ -15,7 +15,7 @@ export const loginFormSchema = z.object({
   }),
 });
 
-export const signupFormSchema = z
+export const registerFormSchema = z
   .object({
     name: z.string().trim().min(1, {
       message: "O nome é obrigatório",
