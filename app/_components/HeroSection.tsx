@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
 import TypeWriter from "./TypeWriter";
+import { useRouter } from "next/navigation";
 
 const HeroSection = () => {
+  const router = useRouter();
   const [step, setStep] = useState(0);
 
   return (
@@ -80,6 +82,7 @@ const HeroSection = () => {
           <Button
             size="lg"
             variant="outline"
+            onClick={() => router.push("/login")}
             className="border-border text-foreground hover:bg-accent hover:text-accent-foreground w-60 transform cursor-pointer rounded-lg px-8 py-6 text-center text-lg font-semibold transition-all duration-300 hover:scale-105"
           >
             Experimentar
