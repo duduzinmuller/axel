@@ -2,8 +2,8 @@ import { Toaster } from "sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ReduxProvider } from "./provider/ReduxProvider";
 import ThemeProvider from "./_components/ThemeProvider";
-import ClientOnly from "./_components/ClientOnly";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +34,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster />
-        <ClientOnly>
+        <ReduxProvider>
           <ThemeProvider>{children}</ThemeProvider>
-        </ClientOnly>
+        </ReduxProvider>
       </body>
     </html>
   );
