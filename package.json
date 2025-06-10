@@ -10,7 +10,12 @@
     "prepare": "husky"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@radix-ui/react-navigation-menu": "^1.2.13",
+=======
+    "@hookform/resolvers": "^5.1.1",
+    "@radix-ui/react-label": "^2.1.7",
+>>>>>>> 35f95e1 (feat: add form handling with react-hook-form and zod validation for login and signup)
     "@radix-ui/react-slot": "^1.2.3",
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.80.6",
@@ -26,11 +31,13 @@
     "prettier-plugin-tailwindcss": "^0.6.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.57.0",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
     "sonner": "^2.0.5",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "zod": "^3.25.57"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
