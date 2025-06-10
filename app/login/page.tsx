@@ -22,8 +22,6 @@ import { FaGithub } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa6";
 
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { loginFormSchema } from "../_forms/schemas/user";
 import { useAppSelector, useAppDispatch } from "../store";
 import { z } from "zod";
@@ -31,6 +29,7 @@ import { login as loginUser } from "../store/slice/auth";
 import { useEffect } from "react";
 import LoadingScreen from "../_components/LoadingScreen";
 import { toast } from "sonner";
+import { useLoginForm } from "../_forms/hooks/user";
 
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
@@ -41,13 +40,7 @@ export default function LoginPage() {
   );
   const dispatch = useAppDispatch();
 
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginFormSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  const form = useLoginForm();
 
   async function onSubmit(data: LoginFormData) {
     try {
