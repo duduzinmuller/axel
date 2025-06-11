@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
-// Agora incluindo a nova seção:
 const sections = ["inicio", "sobre", "planos", "capacidade", "experimentar"];
 
 export default function Header() {
@@ -30,29 +29,27 @@ export default function Header() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // ativa ao carregar
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="fixed z-10 z-50 w-full bg-[#111] px-4 py-5">
+    <header className="fixed z-1 w-full px-4 py-5">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
-        {/* Logo */}
         <div className="flex items-center gap-2 text-lg font-semibold">
           <Image src="/axel.svg" width={35} height={35} alt="Axel" />
         </div>
 
-        {/* Links de navegação */}
-        <nav className="hidden gap-6 text-sm md:flex">
+        <nav className="hidden gap-10 text-sm md:flex">
           {sections.map((id) => (
             <a
               key={id}
               href={`#${id}`}
-              className={`transition-colors ${
+              className={`cursor-pointer transition-colors ${
                 activeSection === id
                   ? "font-semibold text-purple-500"
-                  : "text-white"
+                  : "hover:text-purple-500"
               }`}
             >
               {
@@ -68,14 +65,13 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Entrar / Registrar */}
         <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm">
+          <Link href="/login" className="cursor-pointer text-sm">
             Entrar
           </Link>
           <Link href="/register">
-            <Button className="h-auto rounded-full bg-purple-500 px-4 py-1 text-sm text-white hover:bg-purple-700">
-              registrar
+            <Button className="bg-gradient-axel h-auto cursor-pointer rounded-full px-4 py-1 text-sm text-white hover:scale-90">
+              Criar conta
             </Button>
           </Link>
         </div>

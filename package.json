@@ -11,9 +11,15 @@
   },
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.13",
+    "@hookform/resolvers": "^5.1.1",
+    "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@tanstack/react-query": "^5.80.6",
+    "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.16.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
     "lucide-react": "^0.513.0",
@@ -22,8 +28,13 @@
     "prettier-plugin-tailwindcss": "^0.6.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.57.0",
     "react-icons": "^5.5.0",
-    "tailwind-merge": "^3.3.0"
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
+    "sonner": "^2.0.5",
+    "tailwind-merge": "^3.3.0",
+    "zod": "^3.25.57"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -31,6 +42,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/redux-persist": "^4.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "git-commit-msg-linter": "^5.0.8",

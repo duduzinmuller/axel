@@ -65,7 +65,7 @@ const HeroSection = () => {
           </span>
         </h1>
 
-        <div className="min-h-[130px]">
+        <div className="min-h-[100px]">
           {step >= 3 && (
             <TypeWriter
               text="Estou aqui para facilitar sua vida e te ajudar com o que for preciso. Quer saber mais sobre como posso te ajudar ou já quer começar a experimentar?"
