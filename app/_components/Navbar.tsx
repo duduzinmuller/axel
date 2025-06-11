@@ -36,7 +36,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="fixed z-10 w-full bg-[#111] px-4 py-5">
+    <header className="fixed z-10 z-50 w-full bg-[#111] px-4 py-5">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-2 text-lg font-semibold">
@@ -74,7 +74,7 @@ export default function Header() {
             Entrar
           </Link>
           <Link href="/register">
-            <Button className="h-auto rounded-full bg-purple-600 px-4 py-1 text-sm text-white hover:bg-purple-700">
+            <Button className="h-auto rounded-full bg-purple-500 px-4 py-1 text-sm text-white hover:bg-purple-700">
               registrar
             </Button>
           </Link>
