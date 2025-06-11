@@ -153,7 +153,7 @@ export default function LoginPage() {
               />
 
               <a
-                href="#"
+                href="/forgot-password"
                 className="block w-full text-right text-sm text-blue-500 hover:underline"
               >
                 Esqueceu sua senha?
