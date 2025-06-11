@@ -3,9 +3,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD
+
 import { Mail, Lock, ChevronLeft } from "lucide-react";
-=======
 import {
   Form,
   FormControl,
@@ -14,8 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Mail, Lock } from "lucide-react";
->>>>>>> 35f95e1 (feat: add form handling with react-hook-form and zod validation for login and signup)
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -35,9 +32,7 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const { error, isAuthenticated, isLoading } = useAppSelector(
-    (state) => state.auth,
-  );
+  const { isAuthenticated, isLoading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const form = useLoginForm();
@@ -55,7 +50,7 @@ export default function LoginPage() {
         toast.success("Login realizado com sucesso!");
         console.log("Login bem-sucedido", resultAction.payload);
       } else if (loginUser.rejected.match(resultAction)) {
-        toast.error(error);
+        toast.error("Email ou senha estão incorretos.");
         console.error("Erro no login:", resultAction.payload);
       }
     } catch (err) {

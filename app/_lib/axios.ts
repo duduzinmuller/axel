@@ -6,11 +6,11 @@ import {
 } from "../_constants/local-storage";
 
 export const protectedApi = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
 });
 
 export const publicApi = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
 });
 
 protectedApi.interceptors.request.use((request) => {

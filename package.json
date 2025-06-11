@@ -10,12 +10,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@radix-ui/react-navigation-menu": "^1.2.13",
-=======
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-label": "^2.1.7",
->>>>>>> 35f95e1 (feat: add form handling with react-hook-form and zod validation for login and signup)
     "@radix-ui/react-slot": "^1.2.3",
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.80.6",
