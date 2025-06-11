@@ -45,3 +45,15 @@ export const registerFormSchema = z
       path: ["passwordConfirmation"],
     },
   );
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z.string().min(6, "Senha deve ter ao menos 6 caracteres"),
+    confirmPassword: z
+      .string()
+      .min(6, "Confirmação deve ter ao menos 6 caracteres"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
