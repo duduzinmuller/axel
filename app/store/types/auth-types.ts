@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/app/_api/hooks/user";
+import { UserResponse } from "@/app/_api/services/user";
 
 export interface AuthState {
   user: UserResponse | null;
