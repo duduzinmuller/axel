@@ -12,7 +12,10 @@ const HeroSection = () => {
   const [step, setStep] = useState(0);
 
   return (
-    <section className="from-background via-background to-muted relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br">
+    <section
+      id="inicio"
+      className="from-background via-background to-muted relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br"
+    >
       <div className="absolute top-6 right-6 z-20">
         <ThemeToggle />
       </div>

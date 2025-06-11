@@ -1,51 +1,85 @@
 "use client";
 
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
-const Navbar = () => {
+// Agora incluindo a nova seção:
+const sections = ["inicio", "sobre", "planos", "capacidade", "experimentar"];
+
+export default function Header() {
+  const [activeSection, setActiveSection] = useState("inicio");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      let current = "inicio";
+
+      for (const id of sections) {
+        const section = document.getElementById(id);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            current = id;
+            break;
+          }
+        }
+      }
+
+      setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // ativa ao carregar
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="fixed top-6 left-1/2 z-10 -translate-x-1/2">
-      <NavigationMenu>
-        <NavigationMenuList className="flex gap-4">
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="#">Início</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+    <header className="fixed z-10 w-full bg-[#111] px-4 py-5">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+        {/* Logo */}
+        <div className="flex items-center gap-2 text-lg font-semibold">
+          <Image src="/axel.svg" width={35} height={35} alt="Axel" />
+        </div>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="#">Sobre</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+        {/* Links de navegação */}
+        <nav className="hidden gap-6 text-sm md:flex">
+          {sections.map((id) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={`transition-colors ${
+                activeSection === id
+                  ? "font-semibold text-purple-500"
+                  : "text-white"
+              }`}
+            >
+              {
+                {
+                  inicio: "Início",
+                  sobre: "Sobre",
+                  planos: "Planos",
+                  capacidade: "Capacidades",
+                  experimentar: "Experimentar",
+                }[id]
+              }
+            </a>
+          ))}
+        </nav>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="#">Planos</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="#">Experimentar</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuLink asChild>
-            <Link href="/login">
-              <div>Login</div>
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
+        {/* Entrar / Registrar */}
+        <div className="flex items-center gap-4">
+          <Link href="/login" className="text-sm">
+            Entrar
+          </Link>
+          <Link href="/register">
+            <Button className="h-auto rounded-full bg-purple-600 px-4 py-1 text-sm text-white hover:bg-purple-700">
+              registrar
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </header>
   );
-};
-
-export default Navbar;
+}

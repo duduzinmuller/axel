@@ -4,7 +4,10 @@ import { capabilities } from "../_data/capabilities";
 
 const CapabilitiesSection = () => {
   return (
-    <section className="from-muted/20 to-muted/40 bg-gradient-to-br py-20">
+    <section
+      id="capacidade"
+      className="from-muted/20 to-muted/40 bg-gradient-to-br py-20"
+    >
       <div className="container mx-auto px-4">
         <div className="mb-16 text-center">
           <h2 className="text-foreground mb-6 text-4xl font-bold md:text-5xl">

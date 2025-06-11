@@ -3,7 +3,10 @@ import { features } from "../_data/features";
 
 const AboutSection = () => {
   return (
-    <section className="from-muted/20 to-muted/40 bg-gradient-to-br py-20">
+    <section
+      id="sobre"
+      className="from-muted/20 to-muted/40 bg-gradient-to-br py-20"
+    >
       <div className="container mx-auto px-4">
         <div className="mb-16 text-center">
           <h2 className="text-foreground mb-6 text-4xl font-bold md:text-5xl">
