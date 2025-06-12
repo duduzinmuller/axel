@@ -22,7 +22,7 @@ const ExampleQuestions = () => {
       }}
     >
       <div className="w-full max-w-6xl">
-        <h1 className="mb-8 text-center text-3xl">AxelAI</h1>
+        <h1 className="mb-10 text-center text-3xl">AxelAI</h1>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="flex flex-col gap-2">
@@ -33,7 +33,7 @@ const ExampleQuestions = () => {
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
               onClick={() =>
                 handleClick("Explique computação quântica em termos simples")
               }
@@ -43,7 +43,7 @@ const ExampleQuestions = () => {
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
               onClick={() =>
                 handleClick(
                   "Me dê ideias criativas para o aniversário de uma criança",
@@ -55,7 +55,7 @@ const ExampleQuestions = () => {
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
               onClick={() =>
                 handleClick("Como faço uma requisição HTTP em JavaScript?")
               }
@@ -71,21 +71,21 @@ const ExampleQuestions = () => {
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
             >
               Lembra o que o usuário disse anteriormente na conversa
             </Button>
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
             >
               Permite correções de perguntas anteriores
             </Button>
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
             >
               Treinado para recusar solicitações inadequadas
             </Button>
@@ -98,21 +98,21 @@ const ExampleQuestions = () => {
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
             >
               Pode gerar informações incorretas ocasionalmente
             </Button>
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
             >
               Pode produzir instruções prejudiciais
             </Button>
 
             <Button
               variant="secondary"
-              className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
+              className="bg-[#3E3F4A] text-left text-sm text-white hover:bg-gray-700"
             >
               Conhecimento limitado sobre eventos após 2021
             </Button>
