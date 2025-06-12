@@ -26,13 +26,13 @@ const PricingPlans = () => {
               key={plan.name}
               className={`relative flex flex-col rounded-xl p-6 shadow-lg ${
                 plan.isPopular
-                  ? "border-2 border-teal-500"
+                  ? "border-2 border-[#764BA2]"
                   : "border border-gray-700"
               }`}
             >
               {plan.isPopular && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <span className="inline-flex items-center gap-x-1.5 rounded-full bg-teal-600 px-3 py-1 text-xs font-semibold">
+                  <span className="inline-flex items-center gap-x-1.5 rounded-full bg-[#764BA2] px-3 py-1 text-xs font-semibold">
                     Mais Popular
                   </span>
                 </div>
@@ -65,7 +65,7 @@ const PricingPlans = () => {
                   href="#"
                   className={`block w-full rounded-lg px-5 py-2.5 text-center font-semibold transition-colors duration-200 ${
                     plan.isPopular
-                      ? "bg-teal-600 hover:bg-teal-700"
+                      ? "bg-[#764BA2] hover:bg-gray-700"
                       : "border-2 border-gray-600 bg-transparent hover:bg-gray-700"
                   }`}
                 >
