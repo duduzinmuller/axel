@@ -34,7 +34,7 @@ const SidebarChat = ({ chats = [], onSelectChat }: SidebarProps) => {
       animate={{ x: 0 }}
       exit={{ x: -300 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="border-border bg-background fixed top-0 left-0 z-50 flex h-full w-[260px] flex-col border-r shadow-lg"
+      className="border-border bg-background fixed top-0 left-0 z-50 flex h-full w-[260px] flex-col border-r"
     >
       <div className="border-border flex items-center justify-between border-b p-4">
         <h1 className="pr-3 text-lg font-bold">AxelAI</h1>

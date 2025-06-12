@@ -21,7 +21,7 @@ const HeaderChatAxel = () => {
             animate={{ x: 0 }}
             exit={{ x: -SIDEBAR_WIDTH }}
             transition={{ duration: 0.3 }}
-            className="fixed top-0 left-0 z-40 h-full w-[260px] shadow-md"
+            className="border-border fixed top-0 left-0 z-40 h-full w-[260px] border-r"
           >
             <SidebarChat
               onNewChat={() => console.log("Nova conversa")}
@@ -53,7 +53,7 @@ const HeaderChatAxel = () => {
                 )}
               </Button>
               <div className="flex flex-col">
-                <h1 className="text-2xl font-bold">Nova conversa</h1>
+                <h1 className="text-2xl font-bold">Nova Conversa</h1>
                 <p className="text-sm font-light text-gray-600 dark:text-gray-300">
                   Assistente AI inteligente
                 </p>
