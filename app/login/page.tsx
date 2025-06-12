@@ -16,7 +16,7 @@ import {
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa6";
+import { FaDiscord } from "react-icons/fa";
 
 import { useRouter } from "next/navigation";
 import { loginFormSchema } from "../_forms/schemas/user";
@@ -118,7 +118,7 @@ export default function LoginPage() {
                         <Input
                           type="email"
                           placeholder="Email"
-                          className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                          className="border-zinc-700 pl-10 text-white"
                           {...field}
                         />
                       </div>
@@ -142,7 +142,7 @@ export default function LoginPage() {
                         <Input
                           type="password"
                           placeholder="Senha"
-                          className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                          className="border-zinc-700 pl-10 text-white"
                           {...field}
                         />
                       </div>
@@ -175,15 +175,30 @@ export default function LoginPage() {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Button variant="outline" className="h-12 w-20 border-zinc-700">
-              <FcGoogle size={24} />
-            </Button>
-            <Button variant="outline" className="h-12 w-20 border-zinc-700">
-              <FaGithub size={24} />
-            </Button>
-            <Button variant="outline" className="h-12 w-20 border-zinc-700">
-              <FaTwitter size={24} />
-            </Button>
+            <a href={`${process.env.NEXT_PUBLIC_API_URL}/auth/login/google`}>
+              <Button
+                variant="outline"
+                className="h-12 w-20 cursor-pointer border-zinc-700"
+              >
+                <FcGoogle size={24} />
+              </Button>
+            </a>
+            <a href={`${process.env.NEXT_PUBLIC_API_URL}/auth/login/github`}>
+              <Button
+                variant="outline"
+                className="h-12 w-20 cursor-pointer border-zinc-700"
+              >
+                <FaGithub size={24} />
+              </Button>
+            </a>
+            <a href={`${process.env.NEXT_PUBLIC_API_URL}/auth/login/discord`}>
+              <Button
+                variant="outline"
+                className="h-12 w-20 cursor-pointer border-zinc-700"
+              >
+                <FaDiscord size={24} />
+              </Button>
+            </a>
           </div>
         </CardContent>
       </Card>
