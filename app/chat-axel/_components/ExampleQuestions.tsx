@@ -1,11 +1,26 @@
 "use client";
 
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { setSelectedExample } from "@/app/store/slice/sidebar/sidebar-reducer";
 import { MessageSquare, Zap, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ExampleQuestions = () => {
+  const dispatch = useAppDispatch();
+  const isSidebarOpen = useAppSelector((state) => state.sidebar.isSidebarOpen);
+
+  const handleClick = (question: string) => {
+    dispatch(setSelectedExample(question));
+    console.log("Exemplo selecionado:", question);
+  };
+
   return (
-    <div className="flex h-screen items-center justify-center p-4">
+    <div
+      className="transition-margin flex h-screen items-center justify-center p-4 duration-300"
+      style={{
+        marginLeft: isSidebarOpen ? "250px" : "0px",
+      }}
+    >
       <div className="w-full max-w-6xl">
         <h1 className="mb-8 text-center text-3xl">AxelAI</h1>
 
@@ -19,7 +34,9 @@ const ExampleQuestions = () => {
             <Button
               variant="secondary"
               className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
-              onClick={() => console.log("Exemplo 1 clicado")}
+              onClick={() =>
+                handleClick("Explique computação quântica em termos simples")
+              }
             >
               Explique computação quântica em termos simples
             </Button>
@@ -27,7 +44,11 @@ const ExampleQuestions = () => {
             <Button
               variant="secondary"
               className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
-              onClick={() => console.log("Exemplo 2 clicado")}
+              onClick={() =>
+                handleClick(
+                  "Me dê ideias criativas para o aniversário de uma criança",
+                )
+              }
             >
               Me dê ideias criativas para o aniversário de uma criança
             </Button>
@@ -35,7 +56,9 @@ const ExampleQuestions = () => {
             <Button
               variant="secondary"
               className="bg-gray-800 text-left text-sm text-white hover:bg-gray-700"
-              onClick={() => console.log("Exemplo 3 clicado")}
+              onClick={() =>
+                handleClick("Como faço uma requisição HTTP em JavaScript?")
+              }
             >
               Como faço uma requisição HTTP em JavaScript?
             </Button>

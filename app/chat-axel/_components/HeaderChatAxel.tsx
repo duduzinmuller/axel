@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import ThemeToggle from "@/app/_components/ThemeToggle";
 import { PanelRightClose, PanelRightOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import SidebarChat from "./SidebarChat";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { toggleSidebar } from "@/app/store/slice/sidebar/sidebar-reducer";
 
 const SIDEBAR_WIDTH = 260;
 
 const HeaderChatAxel = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const { isSidebarOpen } = useAppSelector((state) => state.sidebar);
 
   return (
     <>
@@ -43,7 +45,7 @@ const HeaderChatAxel = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                onClick={() => dispatch(toggleSidebar())}
                 className="cursor-pointer rounded-full hover:bg-transparent"
               >
                 {isSidebarOpen ? (
