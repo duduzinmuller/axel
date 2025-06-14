@@ -5,6 +5,7 @@ import { useAppSelector } from "../store";
 import LoadingScreen from "../_components/LoadingScreen";
 import HeaderChatAxel from "./_components/HeaderChatAxel";
 import ExampleQuestions from "./_components/ExampleQuestions";
+import InputChatAxel from "./_components/InputChatAxel";
 
 const ChatAxel = () => {
   const [hasMounted, setHasMounted] = useState(false);
@@ -29,6 +30,7 @@ const ChatAxel = () => {
     <div className="min-w-screen">
       <HeaderChatAxel />
       <ExampleQuestions />
+      <InputChatAxel />
     </div>
   );
 };
