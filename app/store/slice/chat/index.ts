@@ -7,9 +7,9 @@ import chatReducer, {
   clearChats,
   setLoading,
   setError,
+  removeLastAssistantMessage,
 } from "./chat-reducer";
-
-export default chatReducer;
+// import * as chatThunks from "./chat-thunks"; // Descomente se/ao adicionar thunks
 
 export {
   createChat,
@@ -20,7 +20,11 @@ export {
   clearChats,
   setLoading,
   setError,
+  removeLastAssistantMessage,
+  // ...chatThunks,
 };
+
+export default chatReducer;
 
 export const selectChats = (state: { chat: { chats: any[] } }) =>
   state.chat.chats;
