@@ -1,202 +1,245 @@
 "use client";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Mail,
-  Lock,
-  User,
-  LogOut,
-  Trash2,
-  CheckCircle,
-  Moon,
-  Pen,
-  X,
-  Upload,
-} from "lucide-react";
-import ClientOnly from "../_components/ClientOnly";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import ThemeToggle from "../_components/ThemeToggle";
-import { useRef, useState } from "react";
+import { Edit2, Check, X, LogOut, Lock } from "lucide-react";
+import { useAppSelector, useAppDispatch } from "../store";
+import { useTheme } from "next-themes";
+
+import ImageSelector from "./_components/image-selector";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import AlertDialogDelete from "./_components/alert-dialog-delete";
+import { signOut, updateUserProfile } from "../store/slice/auth";
+import { profileFormSchema } from "../_forms/schemas/profile";
+import { toast } from "sonner";
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export default function ProfilePage() {
-  // Mock de dados do usuário
-  const user = {
-    name: "Maria Fernanda",
-    email: "mariafernanda@gmail.com",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    plan: "FREE",
-    emailVerified: true,
+  const { user, isLoading } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { theme } = useTheme();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [showImageSelector, setShowImageSelector] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: user?.name || "",
+      email: user?.email || "",
+    },
+  });
+
+  useEffect(() => {
+    if (user?.image) {
+      setProfileImage(user.image);
+    }
+    form.reset({
+      name: user?.name || "",
+      email: user?.email || "",
+    });
+  }, [form, user]);
+
+  if (!user) return null;
+
+  const onSubmit = async (data: ProfileFormValues) => {
+    try {
+      await dispatch(
+        updateUserProfile({ ...data, image: profileImage ?? undefined }),
+      ).unwrap();
+      setIsEditing(false);
+      toast.success("Perfil atualizado com sucesso!");
+      toast.success("");
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      toast.error("Erro ao atualizar perfil. Tente novamente.");
+    }
   };
 
-  const [avatarUrl, setAvatarUrl] = useState(user.avatar);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [editName, setEditName] = useState(user.name);
-  const [editEmail, setEditEmail] = useState(user.email);
-  const [activeTab, setActiveTab] = useState<"avatars" | "upload">("upload");
-  const [avatarGallery, setAvatarGallery] = useState([
-    user.avatar,
-    "https://randomuser.me/api/portraits/women/45.jpg",
-    "https://randomuser.me/api/portraits/women/46.jpg",
-  ]);
+  const handleCancel = () => {
+    form.reset({
+      name: user.name,
+      email: user.email,
+    });
+    setIsEditing(false);
+    toast("Edição cancelada.");
+  };
 
-  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (ev.target?.result) {
-          setAvatarUrl(ev.target.result as string);
-          setAvatarGallery((prev) => [ev.target?.result as string, ...prev]);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+  const handleLogout = () => {
+    dispatch(signOut());
+    router.push("/login");
+    toast("Você saiu da sua conta.");
+  };
+
+  const handleImageSelected = (imageUrl: string) => {
+    setProfileImage(imageUrl);
+    setShowImageSelector(false);
+  };
+
+  const handleVerifyEmail = () => {
+    console.log("Verificando e-mail...");
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-100 px-5 py-6 sm:mx-0 dark:bg-[#121212]">
-      {/* Modal de edição de perfil e foto (unificado) */}
-      {showModal && (
+      {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="relative w-full max-w-sm rounded-xl bg-white p-8 shadow-lg dark:bg-[#161616]">
-            <button
-              className="absolute top-3 right-3 text-xl text-zinc-400 hover:text-zinc-700 dark:hover:text-white"
-              onClick={() => setShowModal(false)}
-              aria-label="Fechar"
-            >
-              ×
-            </button>
-            <h2 className="mb-6 text-center text-lg font-semibold text-zinc-900 dark:text-white">
-              Editar Perfil
-            </h2>
-            <div className="flex flex-col items-center gap-4">
-              {/* Foto de perfil */}
-              <Avatar className="mx-auto mb-2 h-24 w-24">
-                <AvatarImage src={avatarUrl} alt={user.name} />
-                <AvatarFallback>{user.name[0]}</AvatarFallback>
-              </Avatar>
-              <div className="mb-2 flex w-full justify-center gap-2">
-                <button
-                  className={`rounded-md border border-transparent px-4 py-2 font-medium transition-all focus:outline-none ${activeTab === "avatars" ? "bg-gradient-to-r from-[#7266e8] to-[#764ba2] text-white shadow-sm" : "bg-transparent text-zinc-500 dark:text-zinc-300"}`}
-                  onClick={() => setActiveTab("avatars")}
-                >
-                  Avatares
-                </button>
-                <button
-                  className={`rounded-md border border-transparent px-4 py-2 font-medium transition-all focus:outline-none ${activeTab === "upload" ? "bg-gradient-to-r from-[#7266e8] to-[#764ba2] text-white shadow-sm" : "bg-transparent text-zinc-500 dark:text-zinc-300"}`}
-                  onClick={() => setActiveTab("upload")}
-                >
-                  Enviar foto
-                </button>
-              </div>
-              {activeTab === "avatars" ? (
-                <div className="mb-2 flex w-full flex-wrap justify-center gap-3">
-                  {avatarGallery.map((img, idx) => (
-                    <button
-                      key={img + idx}
-                      className={`rounded-full border-2 ${avatarUrl === img ? "border-[#7266e8]" : "border-transparent"} p-0.5 transition-all focus:outline-none`}
-                      onClick={() => setAvatarUrl(img)}
-                    >
-                      <Image
-                        src={img}
-                        alt="avatar"
-                        className="rounded-full object-cover"
-                        width={56}
-                        height={56}
-                      />
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <label className="mb-2 flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-400/40 bg-zinc-100/60 py-8 transition-colors hover:border-[#7266e8] dark:bg-[#232323]">
-                  <Upload className="mb-2 h-10 w-10 text-zinc-400" />
-                  <span className="mb-1 text-base text-zinc-500 dark:text-zinc-300">
-                    Clique para enviar ou arraste e solte
-                  </span>
-                  <span className="text-xs text-zinc-400">
-                    PNG, JPG (MÁX. 2MB)
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAvatarChange}
-                    className="hidden"
-                  />
-                </label>
-              )}
-              {/* Campos de nome e email */}
-              <label className="w-full text-left text-sm text-zinc-700 dark:text-zinc-200">
-                Nome
-              </label>
-              <input
-                type="text"
-                className="w-full rounded-lg border border-zinc-300 bg-zinc-100 px-4 py-2 text-zinc-900 focus:ring-2 focus:ring-[#7266e8] focus:outline-none dark:border-zinc-700 dark:bg-[#232323] dark:text-white"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-              />
-              <label className="w-full text-left text-sm text-zinc-700 dark:text-zinc-200">
-                E-mail
-              </label>
-              <input
-                type="email"
-                className="w-full rounded-lg border border-zinc-300 bg-zinc-100 px-4 py-2 text-zinc-900 focus:ring-2 focus:ring-[#7266e8] focus:outline-none dark:border-zinc-700 dark:bg-[#232323] dark:text-white"
-                value={editEmail}
-                onChange={(e) => setEditEmail(e.target.value)}
-              />
-              <button
-                className="mt-4 w-full rounded-lg bg-gradient-to-r from-[#7266e8] to-[#764ba2] px-4 py-2 font-medium text-white shadow-md transition-all hover:opacity-90"
-                onClick={() => setShowModal(false)}
+          <Card className="relative w-full max-w-sm rounded-xl py-4 shadow-lg dark:bg-[#161616]">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-lg">Editar Perfil</CardTitle>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleCancel}
+                className="h-8 w-8 cursor-pointer rounded-full"
               >
-                Salvar alterações
-              </button>
-            </div>
+                <X className="h-4 w-4" />
+                <span className="sr-only">Fechar</span>
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative h-24 w-24">
+                  <Image
+                    src={profileImage || user.image || "/brender.png"}
+                    alt="Avatar"
+                    fill
+                    className="border-primary rounded-full border-2 object-cover"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="bg-primary hover:bg-primary/80 absolute right-0 bottom-0 text-white"
+                    onClick={() => setShowImageSelector(true)}
+                  >
+                    <Edit2 size={16} />
+                  </Button>
+                </div>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="w-full space-y-4"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nome</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Seu nome" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="seu@email.com" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex justify-end space-x-3 pt-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleCancel}
+                        className="flex cursor-pointer items-center"
+                      >
+                        <X size={16} className="mr-2" />
+                        Cancelar
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="flex cursor-pointer items-center"
+                      >
+                        {isLoading ? (
+                          "Salvando..."
+                        ) : (
+                          <>
+                            <Check size={16} className="mr-2" />
+                            Salvar
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      {showImageSelector && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md">
+            <ImageSelector
+              onClose={() => setShowImageSelector(false)}
+              onImageSelected={handleImageSelected}
+            />
           </div>
         </div>
       )}
-      {/* Header com gradiente e avatar */}
       <div className="bg-gradient-axel relative flex h-36 w-full max-w-xl flex-col items-center justify-end rounded-t-2xl">
         <div className="absolute top-3 right-3">
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-zinc-200 dark:hover:bg-white/10"
-            onClick={() => setShowModal(true)}
+            className="cursor-pointer text-white hover:bg-zinc-200 dark:hover:bg-white/10"
+            onClick={() => setIsEditing(true)}
             aria-label="Editar perfil"
           >
-            <Pen className="h-5 w-5" />
+            <Edit2 className="h-5 w-5" />
           </Button>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleAvatarChange}
-            className="hidden"
-          />
         </div>
         <div className="absolute -bottom-11 left-1/2 -translate-x-1/2">
           <button
             type="button"
-            className="group border-background relative h-22 w-22 overflow-hidden rounded-full border-4 shadow-lg focus:outline-none"
-            onClick={() => setShowModal(true)}
+            className="group border-background relative h-22 w-22 cursor-pointer overflow-hidden rounded-full border-4 shadow-lg focus:outline-none"
+            onClick={() => setIsEditing(true)}
             aria-label="Alterar foto de perfil"
           >
-            <Avatar className="h-full w-full rounded-full">
-              <AvatarImage src={avatarUrl} alt={user.name} />
-              <AvatarFallback>{user.name[0]}</AvatarFallback>
-            </Avatar>
-            {/* Overlay e ícone de lápis */}
+            <Image
+              src={profileImage || user.image || "/brender.png"}
+              alt="Avatar"
+              width={88}
+              height={88}
+              className="h-22 w-22 rounded-full object-cover"
+            />
             <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
-              <Pen className="h-4 w-4 text-white opacity-90" />
+              <Edit2 className="h-4 w-4 text-white opacity-90" />
             </span>
           </button>
         </div>
       </div>
-
-      {/* Card principal */}
       <div className="mx-2 flex w-full max-w-xl flex-col items-center gap-7 rounded-b-2xl bg-white px-4 pt-14 pb-7 shadow-md dark:bg-[#161616]">
-        {/* Nome e email */}
         <div className="flex flex-col items-center gap-1">
           <span className="text-2xl font-medium text-zinc-900 dark:text-white">
             {user.name}
@@ -205,59 +248,63 @@ export default function ProfilePage() {
             {user.email}
           </span>
         </div>
-
-        {/* Preferências */}
         <div className="flex w-full flex-col gap-2">
           <div className="mb-1 flex items-center justify-between">
             <span className="text-base font-semibold text-zinc-900 dark:text-white">
               Preferências
             </span>
           </div>
-          <div className="flex h-12 cursor-pointer items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
+          <div className="flex h-12 items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
             <div className="flex items-center gap-3">
-              <Moon className="h-4 w-4 text-zinc-700 dark:text-white" />
-              <span className="text-zinc-900 dark:text-white">Tema escuro</span>
+              <span className="text-zinc-900 dark:text-white">
+                {theme === "dark" ? "Tema escuro" : "Tema claro"}
+              </span>
             </div>
-            <ClientOnly>
-              <ThemeToggle />
-            </ClientOnly>
+            <ThemeToggle />
           </div>
         </div>
-
-        {/* Informações da conta */}
         <div className="flex w-full flex-col gap-2">
           <span className="mb-1 text-base font-semibold text-zinc-900 dark:text-white">
             Informações da conta
           </span>
-          <div className="mb-2 flex cursor-pointer items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
+          <div className="mb-2 flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
             <div className="flex items-center gap-3">
-              <User className="h-4 w-4 text-zinc-700 dark:text-white" />
               <span className="text-zinc-900 dark:text-white">Plano</span>
             </div>
-            <span className="bg-gradient-axel rounded-full px-3 py-1 text-xs font-bold text-white opacity-80">
-              {user.plan}
-            </span>
+            {user?.plan ? (
+              <span
+                className={`rounded px-2 py-0.5 text-xs font-semibold ${user.plan === "FREE" && "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200"} ${user.plan === "MONTHLY" && "shadow-gold border border-yellow-400 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900"} ${user.plan === "ANNUAL" && "shadow-diamond border border-blue-200 bg-gradient-to-r from-cyan-200 via-white to-blue-400 text-blue-900"} `}
+              >
+                {user.plan}
+              </span>
+            ) : (
+              <span className="rounded bg-gray-200 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-200">
+                Gratuito
+              </span>
+            )}
           </div>
-          <div className="flex cursor-pointer items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
+          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
             <div className="flex items-center gap-3">
-              <Mail className="h-4 w-4 text-zinc-700 dark:text-white" />
               <span className="text-zinc-900 dark:text-white">
                 Email verificado
               </span>
             </div>
-            {user.emailVerified ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-500">
-                <CheckCircle className="h-4 w-4" /> Verificado
+            {user.isVerified ? (
+              <span className="flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-400">
+                <Check className="h-4 w-4" /> Verificado
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-xs font-semibold text-red-600 dark:text-red-500">
-                <X className="h-4 w-4" /> Não verificado
-              </span>
+              <div className="flex flex-col items-end">
+                <span className="flex items-center gap-1 text-xs font-semibold text-red-600 dark:text-red-500">
+                  <X className="h-4 w-4" /> Não verificado
+                </span>
+                <Button size="sm" className="mt-1" onClick={handleVerifyEmail}>
+                  Verificar e-mail
+                </Button>
+              </div>
             )}
           </div>
         </div>
-
-        {/* Ações */}
         <div className="flex w-full flex-col gap-2">
           <span className="mb-1 text-base font-semibold text-zinc-900 dark:text-white">
             Ações
@@ -265,23 +312,22 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-2">
             <Button
               variant="ghost"
-              className="h-12 w-full justify-start bg-zinc-50 text-zinc-900 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:text-white dark:hover:bg-[#232323]"
+              className="h-12 w-full cursor-pointer justify-start bg-zinc-50 text-zinc-900 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:text-white dark:hover:bg-[#232323]"
+              onClick={() => router.push("/forgot-password")}
             >
-              <Lock className="mr-3 h-4 w-4 text-zinc-700 dark:text-white" />{" "}
+              <span className="mr-3">
+                <Lock className="h-4 w-4 text-zinc-700 dark:text-white" />
+              </span>
               Alterar senha
             </Button>
             <Button
               variant="ghost"
-              className="h-12 w-full justify-start bg-zinc-50 text-red-600 transition-colors hover:bg-red-100 dark:bg-[#0F0D0D] dark:text-red-500 dark:hover:bg-[#232323]"
+              className="h-12 w-full cursor-pointer justify-start bg-zinc-50 text-red-600 transition-colors hover:bg-red-100 dark:bg-[#0F0D0D] dark:text-red-500 dark:hover:bg-[#232323]"
+              onClick={handleLogout}
             >
               <LogOut className="mr-3 h-4 w-4" /> Sair
             </Button>
-            <Button
-              variant="ghost"
-              className="h-12 w-full justify-start bg-zinc-50 text-red-600 transition-colors hover:bg-red-100 dark:bg-[#0F0D0D] dark:text-red-500 dark:hover:bg-[#232323]"
-            >
-              <Trash2 className="mr-3 h-4 w-4" /> Deletar conta
-            </Button>
+            <AlertDialogDelete />
           </div>
         </div>
       </div>
