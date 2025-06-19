@@ -1,6 +1,5 @@
 "use client";
 import { Check, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface AccountInfoSectionProps {
   plan: string | null;
@@ -11,7 +10,6 @@ interface AccountInfoSectionProps {
 export default function AccountInfoSection({
   plan,
   isVerified,
-  onVerifyEmail,
 }: AccountInfoSectionProps) {
   return (
     <div className="flex w-full flex-col gap-2">
@@ -49,9 +47,6 @@ export default function AccountInfoSection({
             <span className="flex items-center gap-1 text-xs font-semibold text-red-600 dark:text-red-500">
               <X className="h-4 w-4" /> Não verificado
             </span>
-            <Button size="sm" className="mt-1" onClick={onVerifyEmail}>
-              Verificar e-mail
-            </Button>
           </div>
         )}
       </div>
