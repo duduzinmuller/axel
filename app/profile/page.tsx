@@ -8,6 +8,7 @@ import { signOut, updateUserProfile } from "../store/slice/auth";
 import { profileFormSchema } from "../_forms/schemas/profile";
 import { toast } from "sonner";
 import * as z from "zod";
+import { ArrowLeft } from "lucide-react";
 
 import EditProfileModal from "./_components/EditProfileModal";
 import ProfileHeader from "./_components/ProfileHeader";
@@ -15,6 +16,7 @@ import PreferencesSection from "./_components/PreferencesSection";
 import AccountInfoSection from "./_components/AccountInfoSection";
 import ProfileActions from "./_components/ProfileActions";
 import ThemeToggle from "../_components/ThemeToggle";
+import { Button } from "@/components/ui/button";
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
@@ -74,7 +76,17 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-100 px-5 py-6 sm:mx-0 dark:bg-[#121212]">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-zinc-100 px-5 py-6 sm:mx-0 dark:bg-[#121212]">
+      <div className="absolute top-4 left-4">
+        <Button
+          onClick={() => router.back()}
+          variant="ghost"
+          className="flex cursor-pointer items-center rounded p-2 transition hover:bg-zinc-200 dark:hover:bg-zinc-800"
+          aria-label="Voltar"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+      </div>
       <EditProfileModal
         open={isEditing}
         onClose={handleEditCancel}
