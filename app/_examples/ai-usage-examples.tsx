@@ -7,7 +7,6 @@ import { Sparkles, Send, Lightbulb } from "lucide-react";
 import { AIService } from "@/app/_api/services";
 import { useAI } from "@/app/_lib/hooks";
 
-// Exemplo 1: Uso direto do serviço
 export const DirectServiceUsage = () => {
   const [question, setQuestion] = useState("");
   const [generatedQuestion, setGeneratedQuestion] = useState("");
@@ -17,7 +16,13 @@ export const DirectServiceUsage = () => {
     setIsLoading(true);
     try {
       const result = await AIService.generationQuestionWithAI(question);
-      setGeneratedQuestion(result || "Erro ao gerar pergunta");
+      if (typeof result === "string") {
+        setGeneratedQuestion(result);
+      } else if (result && typeof result.response === "string") {
+        setGeneratedQuestion(result.response);
+      } else {
+        setGeneratedQuestion("Erro ao gerar pergunta");
+      }
     } catch {
       setGeneratedQuestion("Erro ao gerar pergunta");
     } finally {
