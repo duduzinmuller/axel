@@ -2,15 +2,100 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import { setSelectedExample } from "@/app/store/slice/sidebar/sidebar-reducer";
+import { createChat, addMessage } from "@/app/store/slice/chat";
 import { MessageSquare, Zap, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAI } from "@/app/_lib/hooks";
+import { useRef, useEffect, RefObject } from "react";
 
 const ExampleQuestions = () => {
   const dispatch = useAppDispatch();
   const isSidebarOpen = useAppSelector((state) => state.sidebar.isSidebarOpen);
+  const currentChatId = useAppSelector((state) => state.chat.currentChatId);
+  const currentChatIdRef = useRef(currentChatId);
+  const { sendMessage, isLoading, error } = useAI();
 
-  const handleClick = (question: string) => {
+  useEffect(() => {
+    currentChatIdRef.current = currentChatId;
+  }, [currentChatId]);
+
+  const waitForChatId = async (
+    ref: RefObject<string | null>,
+    maxTries = 20,
+    interval = 50,
+  ) => {
+    let tries = 0;
+    while (!ref.current && tries < maxTries) {
+      await new Promise((resolve) => setTimeout(resolve, interval));
+      tries++;
+    }
+    return ref.current;
+  };
+
+  const handleClick = async (question: string) => {
     dispatch(setSelectedExample(question));
+
+    let chatId = currentChatIdRef.current;
+
+    if (!chatId) {
+      dispatch(
+        createChat({
+          title: question,
+          initialMessage: question,
+        }),
+      );
+      chatId = await waitForChatId(currentChatIdRef, 20, 50);
+    } else {
+      dispatch(
+        addMessage({
+          chatId,
+          content: question,
+          role: "user",
+        }),
+      );
+      dispatch({
+        type: "chat/updateChatTitle",
+        payload: { chatId, title: question },
+      });
+    }
+
+    if (chatId) {
+      dispatch(
+        addMessage({
+          chatId,
+          content: "Gerando resposta...",
+          role: "assistant",
+        }),
+      );
+
+      const aiResponse = await sendMessage(question);
+
+      dispatch({
+        type: "chat/removeLastAssistantMessage",
+        payload: { chatId },
+      });
+
+      if (aiResponse) {
+        dispatch(
+          addMessage({
+            chatId,
+            content: aiResponse,
+            role: "assistant",
+          }),
+        );
+      } else {
+        dispatch(
+          addMessage({
+            chatId,
+            content: "Erro ao gerar resposta da IA.",
+            role: "assistant",
+          }),
+        );
+      }
+    } else {
+      console.error("ChatId não encontrado após criar conversa (timeout)");
+    }
+
     console.log("Exemplo selecionado:", question);
   };
 
@@ -37,8 +122,11 @@ const ExampleQuestions = () => {
               onClick={() =>
                 handleClick("Explique computação quântica em termos simples")
               }
+              disabled={isLoading}
             >
-              Explique computação quântica em termos simples
+              {isLoading
+                ? "Processando..."
+                : "Explique computação quântica em termos simples"}
             </Button>
 
             <Button
@@ -49,8 +137,11 @@ const ExampleQuestions = () => {
                   "Me dê ideias criativas para o aniversário de uma criança",
                 )
               }
+              disabled={isLoading}
             >
-              Me dê ideias criativas para o aniversário de uma criança
+              {isLoading
+                ? "Processando..."
+                : "Me dê ideias criativas para o aniversário de uma criança"}
             </Button>
 
             <Button
@@ -59,8 +150,11 @@ const ExampleQuestions = () => {
               onClick={() =>
                 handleClick("Como faço uma requisição HTTP em JavaScript?")
               }
+              disabled={isLoading}
             >
-              Como faço uma requisição HTTP em JavaScript?
+              {isLoading
+                ? "Processando..."
+                : "Como faço uma requisição HTTP em JavaScript?"}
             </Button>
           </div>
           <div className="flex flex-col gap-2">
@@ -118,6 +212,10 @@ const ExampleQuestions = () => {
             </Button>
           </div>
         </div>
+
+        {error && (
+          <p className="mt-4 text-center text-sm text-red-500">{error}</p>
+        )}
       </div>
     </div>
   );

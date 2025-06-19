@@ -7,12 +7,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import SidebarChat from "./SidebarChat";
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import { toggleSidebar } from "@/app/store/slice/sidebar/sidebar-reducer";
+import { selectCurrentChat } from "@/app/store/slice/chat";
 
 const SIDEBAR_WIDTH = 260;
 
 const HeaderChatAxel = () => {
   const dispatch = useAppDispatch();
   const { isSidebarOpen } = useAppSelector((state) => state.sidebar);
+  const currentChat = useAppSelector(selectCurrentChat);
 
   return (
     <>
@@ -37,8 +39,12 @@ const HeaderChatAxel = () => {
         style={{ paddingLeft: isSidebarOpen ? SIDEBAR_WIDTH : 0 }}
       >
         <div
-          className="fixed top-0 left-0 z-50 w-full px-4 py-2 shadow-md transition-all duration-300"
-          style={{ paddingLeft: isSidebarOpen ? SIDEBAR_WIDTH : 0 }}
+          className="fixed top-0 z-50 px-4 py-2 shadow-md transition-all duration-300"
+          style={{
+            left: isSidebarOpen ? SIDEBAR_WIDTH : 0,
+            width: isSidebarOpen ? `calc(100% - ${SIDEBAR_WIDTH}px)` : "100%",
+            paddingLeft: isSidebarOpen ? 0 : undefined,
+          }}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -54,8 +60,11 @@ const HeaderChatAxel = () => {
                   <PanelRightOpen className="cursor-pointer" />
                 )}
               </Button>
+
               <div className="flex flex-col">
-                <h1 className="text-2xl font-bold">Nova Conversa</h1>
+                <h1 className="text-2xl font-bold">
+                  {currentChat?.title || "Nova Conversa"}
+                </h1>
                 <p className="text-sm font-light text-gray-600 dark:text-gray-300">
                   Assistente AI inteligente
                 </p>

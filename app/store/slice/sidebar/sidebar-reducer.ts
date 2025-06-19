@@ -6,7 +6,7 @@ interface SidebarState {
 }
 
 const initialState: SidebarState = {
-  isSidebarOpen: false,
+  isSidebarOpen: true,
   selectedExample: null,
 };
 

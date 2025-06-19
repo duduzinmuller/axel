@@ -27,6 +27,7 @@ const authSlice = createSlice({
       state.error = null;
       state.hasRegistered = false;
       StorageUtils.removeTokens();
+      localStorage.removeItem("ai_usage");
     },
     clearError: (state) => {
       state.error = null;
