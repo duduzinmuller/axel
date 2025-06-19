@@ -9,7 +9,6 @@ import chatReducer, {
   setError,
   removeLastAssistantMessage,
 } from "./chat-reducer";
-// import * as chatThunks from "./chat-thunks"; // Descomente se/ao adicionar thunks
 
 export {
   createChat,
@@ -21,7 +20,6 @@ export {
   setLoading,
   setError,
   removeLastAssistantMessage,
-  // ...chatThunks,
 };
 
 export default chatReducer;
