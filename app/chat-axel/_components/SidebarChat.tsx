@@ -22,6 +22,7 @@ import {
 } from "@/app/store/slice/chat";
 import MessageLimitIndicator from "./MessageLimitIndicator";
 import LimitWarning from "./LimitWarning";
+import Link from "next/link";
 
 interface SidebarProps {
   onNewChat?: () => void;
@@ -126,29 +127,31 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
         <LimitWarning />
         <MessageLimitIndicator />
         <div className="flex items-center space-x-3">
-          <Avatar className="border-border h-10 w-10 border">
-            <AvatarImage src={user?.image} alt={user?.name} />
-          </Avatar>
-          <div className="flex flex-col">
-            <div className="flex flex-row items-center gap-2">
-              <p className="text-sm font-medium">{user?.name}</p>
-              {user?.plan && (
-                <span
-                  className={cn(
-                    "rounded px-2 py-0.5 text-xs font-semibold",
-                    user.plan === "FREE" && "bg-muted text-muted-foreground",
-                    user.plan === "MONTHLY" &&
-                      "shadow-gold border border-yellow-400 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900",
-                    user.plan === "ANNUAL" &&
-                      "shadow-diamond border border-blue-200 bg-gradient-to-r from-cyan-200 via-white to-blue-400 text-blue-900",
-                  )}
-                >
-                  {user.plan}
-                </span>
-              )}
+          <Link href="/profile" className="flex items-center space-x-3">
+            <Avatar className="border-border h-10 w-10 border">
+              <AvatarImage src={user?.image} alt={user?.name} />
+            </Avatar>
+            <div className="flex flex-col">
+              <div className="flex flex-row items-center gap-2">
+                <p className="text-sm font-medium">{user?.name}</p>
+                {user?.plan && (
+                  <span
+                    className={cn(
+                      "rounded px-2 py-0.5 text-xs font-semibold",
+                      user.plan === "FREE" && "bg-muted text-muted-foreground",
+                      user.plan === "MONTHLY" &&
+                        "shadow-gold border border-yellow-400 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900",
+                      user.plan === "ANNUAL" &&
+                        "shadow-diamond border border-blue-200 bg-gradient-to-r from-cyan-200 via-white to-blue-400 text-blue-900",
+                    )}
+                  >
+                    {user.plan}
+                  </span>
+                )}
+              </div>
+              <p className="text-muted-foreground text-xs">{user?.email}</p>
             </div>
-            <p className="text-muted-foreground text-xs">{user?.email}</p>
-          </div>
+          </Link>
           <Settings />
         </div>
       </div>

@@ -16,6 +16,7 @@ export interface UserResponse {
   name: string;
   email: string;
   password: string;
+  isVerified?: boolean;
   image?: string;
   plan?: string;
   tokens?: {

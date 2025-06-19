@@ -8,16 +8,13 @@ const LimitWarning = () => {
   const { currentCount, limit, isLimitReached } = useMessageLimit();
   const { usage } = useAI();
 
-  // Usar as informações do backend se disponíveis, senão usar o localStorage
   const backendCount = usage?.currentCount || 0;
   const backendLimit = usage?.planLimit || limit;
   const backendRemaining = usage?.remainingMessages || 0;
   const backendIsLimitReached = backendCount >= backendLimit;
 
-  // Só mostrar se há uso de mensagens
   if (backendCount === 0 && currentCount === 0) return null;
 
-  // Usar remainingMessages do backend se disponível, senão calcular
   const remainingMessages =
     backendRemaining > 0
       ? backendRemaining

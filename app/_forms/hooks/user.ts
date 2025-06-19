@@ -9,8 +9,8 @@ import {
 import z from "zod";
 
 type LoginFormData = z.infer<typeof loginFormSchema>;
-type RegisterFormSchema = z.infer<typeof registerFormSchema>;
-type ResetPasswordFormSchema = z.infer<typeof resetPasswordSchema>;
+type RegisterFormData = z.infer<typeof registerFormSchema>;
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 export const useLoginForm = () => {
   return useForm<LoginFormData>({
@@ -23,7 +23,7 @@ export const useLoginForm = () => {
 };
 
 export const useRegisterForm = () => {
-  return useForm<RegisterFormSchema>({
+  return useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
@@ -35,7 +35,7 @@ export const useRegisterForm = () => {
 };
 
 export const useResetPasswordForm = () => {
-  return useForm<ResetPasswordFormSchema>({
+  return useForm<ResetPasswordFormData>({
     defaultValues: {
       newPassword: "",
       confirmPassword: "",
