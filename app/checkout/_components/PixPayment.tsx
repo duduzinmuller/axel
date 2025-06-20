@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-export function PixPayment() {
+export function PixPayment({ price }: { price: number }) {
   return (
     <div className="space-y-6">
       <Alert>
@@ -33,6 +33,12 @@ export function PixPayment() {
         <p className="text-muted-foreground mb-4 text-center text-sm">
           QR Code será gerado após a confirmação do pedido
         </p>
+        <div className="mb-4 flex flex-col items-center gap-2">
+          <span className="text-muted-foreground text-xs">Valor</span>
+          <span className="text-lg font-bold">
+            R$ {price.toFixed(2).replace(".", ",")}
+          </span>
+        </div>
         <div className="flex gap-3">
           <Button variant="outline" size="sm" className="text-xs">
             Copiar código PIX

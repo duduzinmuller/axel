@@ -22,6 +22,7 @@ import { CreditCardForm } from "./_components/CreditCardForm";
 import { OrderSummary } from "./_components/OrderSummary";
 import { PaymentMethodSelector } from "./_components/PaymentMethodSelector";
 import { PixPayment } from "./_components/PixPayment";
+import { plans as plansData } from "@/app/_data/plans";
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
@@ -60,12 +61,16 @@ export default function CheckoutPage() {
   const plan =
     (searchParams.get("plan") as "mensal" | "anual" | "free") || "mensal";
 
-  const planPrices = {
-    mensal: 52.9,
-    anual: 615.9,
-    free: 0,
+  // Buscar plano selecionado de plansData
+  const planMap = {
+    mensal: plansData.find((p) => p.frequency === "/mês" && p.price !== "R$0"),
+    anual: plansData.find((p) => p.frequency === "/ano"),
+    free: plansData.find((p) => p.price === "R$0"),
   };
-  const price = planPrices[plan];
+  const selectedPlan = planMap[plan];
+  const price = selectedPlan
+    ? Number(selectedPlan.price.replace(/[^\d,]/g, "").replace(",", "."))
+    : 0;
 
   const { user, isAuthenticated, isLoading } = useAppSelector(
     (state) => state.auth,
@@ -120,7 +125,7 @@ export default function CheckoutPage() {
                       {paymentMethod === "credit-card" && (
                         <CreditCardForm price={price} />
                       )}
-                      {paymentMethod === "pix" && <PixPayment />}
+                      {paymentMethod === "pix" && <PixPayment price={price} />}
                       {paymentMethod === "boleto" && (
                         <BoletoPayment
                           price={price}

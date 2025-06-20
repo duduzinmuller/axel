@@ -54,7 +54,7 @@ export function CreditCardForm({ price }: CreditCardFormProps) {
 
   const cardBrand = getCardBrand(cardNumber);
 
-  const maxInstallments = 6;
+  const maxInstallments = 12;
   const installmentsOptions = Array.from(
     { length: maxInstallments },
     (_, i) => {
