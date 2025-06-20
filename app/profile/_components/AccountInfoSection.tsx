@@ -1,5 +1,6 @@
 "use client";
-import { Check, X } from "lucide-react";
+import { Check, X, Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface AccountInfoSectionProps {
   plan: string | null;
@@ -11,6 +12,7 @@ export default function AccountInfoSection({
   plan,
   isVerified,
 }: AccountInfoSectionProps) {
+  const router = useRouter();
   return (
     <div className="flex w-full flex-col gap-2">
       <span className="mb-1 text-base font-semibold text-zinc-900 dark:text-white">
@@ -49,6 +51,18 @@ export default function AccountInfoSection({
             </span>
           </div>
         )}
+      </div>
+      <div
+        className="flex cursor-pointer items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]"
+        onClick={() => router.push("/settings")}
+        tabIndex={0}
+        role="button"
+        aria-label="Ir para configurações"
+      >
+        <div className="flex items-center gap-3">
+          <Settings className="h-4 w-4 text-zinc-900 dark:text-white" />
+          <span className="text-zinc-900 dark:text-white">Configurações</span>
+        </div>
       </div>
     </div>
   );

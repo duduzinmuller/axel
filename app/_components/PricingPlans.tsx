@@ -1,12 +1,18 @@
+"use client";
 import { Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { plans } from "../_data/plans";
 
+const planTypeMap = {
+  "Plano Free": "free",
+  "Plano Mensal": "mensal",
+  "Plano Anual": "anual",
+};
+
 const PricingPlans = () => {
+  const router = useRouter();
   return (
-    <div
-      id="planos"
-      className="from-muted/20 to-muted/40 bg-gradient-to-br py-20"
-    >
+    <div id="planos" className="from-muted/20 to-muted/40 py-20">
       <div className="mx-auto max-w-5xl px-4">
         <div className="text-center">
           <h2 className="text-foreground mb-6 text-4xl font-bold md:text-5xl">
@@ -61,8 +67,13 @@ const PricingPlans = () => {
               </div>
 
               <div className="mt-8">
-                <a
-                  href="#"
+                <button
+                  type="button"
+                  onClick={() =>
+                    router.push(
+                      `/checkout?plan=${planTypeMap[plan.name as keyof typeof planTypeMap]}`,
+                    )
+                  }
                   className={`block w-full rounded-lg px-5 py-2.5 text-center font-semibold transition-colors duration-200 ${
                     plan.isPopular
                       ? "bg-[#764BA2] hover:bg-gray-700"
@@ -70,7 +81,7 @@ const PricingPlans = () => {
                   }`}
                 >
                   Iniciar Assinatura
-                </a>
+                </button>
               </div>
             </div>
           ))}
