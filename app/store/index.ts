@@ -9,6 +9,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import authReducer from "./slice/auth/auth-reducer";
 import sidebarReducer from "./slice/sidebar/sidebar-reducer";
 import chatReducer from "./slice/chat/chat-reducer";
+import paymentReducer from "./slice/payment";
 
 const authPersistConfig = {
   key: "auth",
@@ -28,6 +29,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     sidebar: sidebarReducer,
     chat: persistedChatReducer,
+    payment: paymentReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
