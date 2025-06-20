@@ -3,10 +3,7 @@ import { plans } from "../_data/plans";
 
 const PricingPlans = () => {
   return (
-    <div
-      id="planos"
-      className="from-muted/20 to-muted/40 bg-gradient-to-br py-20"
-    >
+    <div id="planos" className="from-muted/20 to-muted/40 py-20">
       <div className="mx-auto max-w-5xl px-4">
         <div className="text-center">
           <h2 className="text-foreground mb-6 text-4xl font-bold md:text-5xl">
