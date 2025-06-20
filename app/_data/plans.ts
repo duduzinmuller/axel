@@ -1,3 +1,5 @@
+export const commonFeatures = ["Acesso à plataforma", "Suporte por email"];
+
 export const plans = [
   {
     name: "Plano Free",
@@ -5,8 +7,7 @@ export const plans = [
     price: "R$0",
     frequency: "/mês",
     features: [
-      "Acesso à plataforma",
-      "Suporte por email",
+      ...commonFeatures,
       "Acesso básico ao assistente",
       "Respostas inteligentes limitadas",
       "Suporte via FAQ",
@@ -19,8 +20,7 @@ export const plans = [
     price: "R$25,90",
     frequency: "/mês",
     features: [
-      "Acesso à plataforma",
-      "Suporte por email",
+      ...commonFeatures,
       "Respostas inteligentes ilimitadas",
       "Até 5 automações conectadas",
       "Acesso a comandos personalizados",
@@ -34,8 +34,7 @@ export const plans = [
     price: "R$249,90",
     frequency: "/ano",
     features: [
-      "Acesso à plataforma",
-      "Suporte por email",
+      ...commonFeatures,
       "Tudo do Axel Plus",
       "Acesso antecipado a novos recursos",
       "Automação ilimitada",
