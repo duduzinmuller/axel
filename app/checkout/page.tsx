@@ -11,7 +11,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { BoletoPayment } from "./_components/BoletoPayment";
+
 import { useAppDispatch, useAppSelector } from "../store";
 import LoadingScreen from "../_components/LoadingScreen";
 import { useRouter } from "next/navigation";
@@ -23,6 +23,7 @@ import { OrderSummary } from "./_components/OrderSummary";
 import { PaymentMethodSelector } from "./_components/PaymentMethodSelector";
 import { PixPayment } from "./_components/PixPayment";
 import { plans as plansData } from "@/app/_data/plans";
+import { BoletoPayment } from "./_components/BoletoPayment";
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
@@ -61,7 +62,6 @@ export default function CheckoutPage() {
   const plan =
     (searchParams.get("plan") as "mensal" | "anual" | "free") || "mensal";
 
-  // Buscar plano selecionado de plansData
   const planMap = {
     mensal: plansData.find((p) => p.frequency === "/mês" && p.price !== "R$0"),
     anual: plansData.find((p) => p.frequency === "/ano"),
