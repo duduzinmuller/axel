@@ -27,7 +27,7 @@ const LimitReachedModal = ({
 
   const handleUpgrade = () => {
     setIsUpgrading(true);
-    router.push("/#planos");
+    router.push("/payment");
   };
 
   return (
