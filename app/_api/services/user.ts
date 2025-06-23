@@ -18,6 +18,7 @@ export interface UserResponse {
   password: string;
   isVerified?: boolean;
   image?: string;
+  cpf?: string;
   plan?: string;
   tokens?: {
     accessToken: string;

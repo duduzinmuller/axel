@@ -7,7 +7,7 @@ export interface PaymentState {
 }
 
 export interface BoletoData {
-  amount: number;
+  amount: string;
   currency: string;
   paymentMethod: string;
   plan: string;
@@ -18,4 +18,12 @@ export interface BoletoData {
   neighborhood: string;
   city: string;
   federal_unit: string;
+}
+
+export interface PixData {
+  amount: number;
+  currency: string;
+  paymentMethod: string;
+  plan: string;
+  cpf?: string;
 }
