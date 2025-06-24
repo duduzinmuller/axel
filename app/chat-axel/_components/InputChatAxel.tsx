@@ -24,7 +24,8 @@ const InputChatAxel = () => {
   const currentChatId = useAppSelector(selectCurrentChatId);
   const currentChatIdRef = useRef(currentChatId);
   const { sendMessage, isLoading, error, usage, loadingUsage } = useAI();
-  const { currentCount, limit, resetTime } = useMessageLimit();
+  const { currentCount, limit, resetTime, incrementMessageCount } =
+    useMessageLimit();
 
   const backendCount = usage?.currentCount || 0;
   const backendLimit = usage?.planLimit || limit;
@@ -95,6 +96,7 @@ const InputChatAxel = () => {
           }),
         );
       }
+      incrementMessageCount();
       setMessage("");
     } finally {
       setPendingResponse(false);
