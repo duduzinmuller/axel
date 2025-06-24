@@ -29,6 +29,7 @@ type BoletoForm = z.infer<typeof boletoSchema>;
 
 interface BoletoPaymentProps {
   price: number;
+  plan: string;
   onDataChange: (data: any) => void;
   boletoUrl?: string | null;
   loading?: boolean;
@@ -36,13 +37,13 @@ interface BoletoPaymentProps {
 
 export function BoletoPayment({
   price,
+  plan,
   onDataChange,
   boletoUrl,
   loading,
 }: BoletoPaymentProps) {
   const {
     register,
-    handleSubmit,
     setValue,
     watch,
     formState: { errors },
@@ -86,7 +87,7 @@ export function BoletoPayment({
         amount: price,
         currency: "brl",
         paymentMethod: "bolbradesco",
-        plan: price === 615.9 ? "ANNUAL" : "MONTHLY",
+        plan: plan,
         cpf: (values.cpf ?? "").replace(/\D/g, ""),
         zip_code: values.zipCode,
         street_name: values.streetName,
@@ -97,10 +98,10 @@ export function BoletoPayment({
       });
     });
     return () => subscription.unsubscribe();
-  }, [watch, price, onDataChange]);
+  }, [watch, price, plan, onDataChange]);
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(() => {})}>
+    <div className="space-y-6">
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertTitle className="ml-2 font-medium">Importante</AlertTitle>
@@ -236,7 +237,7 @@ export function BoletoPayment({
                 rel="noopener noreferrer"
                 download
               >
-                Baixar Boleto
+                Visualizar Boleto
               </a>
             </Button>
           </div>
@@ -245,6 +246,6 @@ export function BoletoPayment({
           <p className="mt-2 text-sm text-gray-500">Gerando boleto...</p>
         )}
       </motion.div>
-    </form>
+    </div>
   );
 }

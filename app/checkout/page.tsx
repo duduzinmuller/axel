@@ -11,11 +11,10 @@ import {
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-
 import { useAppDispatch, useAppSelector } from "../store";
 import LoadingScreen from "../_components/LoadingScreen";
 import { useRouter } from "next/navigation";
-import { createBoletoPayment } from "../store/slice/payment";
+import { createBoletoPayment, createPixPayment } from "../store/slice/payment";
 import { PaymentMethod } from "../types/checkout";
 import { PromoCodeInput } from "./_components/CodeInput";
 import { CreditCardForm } from "./_components/CreditCardForm";
@@ -24,6 +23,12 @@ import { PaymentMethodSelector } from "./_components/PaymentMethodSelector";
 import { PixPayment } from "./_components/PixPayment";
 import { plans as plansData } from "@/app/_data/plans";
 import { BoletoPayment } from "./_components/BoletoPayment";
+import { usePaymentPolling } from "@/app/_lib/hooks/usePaymentPolling";
+import { PixTransactionData } from "../types/transaction-data";
+import {
+  createCardToken,
+  createCreditCardPayment,
+} from "../store/slice/payment";
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
@@ -34,6 +39,13 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   const [boletoData, setBoletoData] = useState<any>(null);
+  const [creditCardData, setCreditCardData] = useState<any>(null);
+  const [pixTransactionData, setPixTransactionData] = useState<
+    PixTransactionData | undefined
+  >(undefined);
+  const [externalId] = useState<string | null>(null);
+  const [isPaid, setIsPaid] = useState(false);
+  const [pixCpf, setPixCpf] = useState<string>("");
 
   const {
     boletoUrl,
@@ -44,7 +56,50 @@ export default function CheckoutPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (paymentMethod === "boleto" && boletoData) {
+    if (paymentMethod === "credit-card" && creditCardData) {
+      // Processar pagamento com cartão de crédito
+      const cardData = {
+        card_number: creditCardData.cardNumber,
+        expiration_month: creditCardData.expirationMonth,
+        expiration_year: creditCardData.expirationYear,
+        security_code: creditCardData.securityCode,
+        cardholder: {
+          name: creditCardData.name,
+          identification: {
+            type: "CPF",
+            number: creditCardData.cpf,
+          },
+        },
+      };
+
+      try {
+        const result = await dispatch(
+          createCardToken(cardData as any),
+        ).unwrap();
+        if (result && result.id) {
+          const paymentData: any = {
+            amount: creditCardData.amount,
+            plan: creditCardData.plan,
+            currency: creditCardData.currency,
+            cpf: creditCardData.cpf,
+            name: creditCardData.name,
+            paymentMethod: creditCardData.paymentMethod,
+            token: result.id,
+          };
+          if (creditCardData.installments > 1) {
+            paymentData.installments = creditCardData.installments;
+          }
+          dispatch(createCreditCardPayment(paymentData));
+        }
+      } catch (error) {
+        console.error("Erro ao processar pagamento:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    if (paymentMethod === "bolbradesco" && boletoData) {
       dispatch(createBoletoPayment(boletoData))
         .unwrap()
         .finally(() => {
@@ -53,10 +108,36 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (paymentMethod === "pix") {
+      const payload = {
+        amount: price.toString(),
+        currency: "brl",
+        paymentMethod: "pix",
+        plan: planApiMap[plan],
+        cpf: pixCpf.replace(/\D/g, ""),
+      };
+      dispatch(createPixPayment({ ...payload, amount: Number(payload.amount) }))
+        .unwrap()
+        .then((pixData) => {
+          setPixTransactionData({
+            qr_code: pixData.qr_code ?? "",
+            qr_code_base64: pixData.qr_code_base64 ?? "",
+          });
+        })
+        .finally(() => setIsSubmitting(false));
+      return;
+    }
+
     setTimeout(() => {
       setIsSubmitting(false);
     }, 2000);
   };
+
+  const planApiMap = {
+    mensal: "MONTHLY",
+    anual: "ANNUAL",
+    free: "FREE",
+  } as const;
 
   const searchParams = useSearchParams();
   const plan =
@@ -82,6 +163,8 @@ export default function CheckoutPage() {
       router.push("/login");
     }
   }, [isAuthenticated, user, isLoading, router]);
+
+  usePaymentPolling(externalId ?? "", () => setIsPaid(true));
 
   if (!hasMounted || isLoading || !user) {
     return <LoadingScreen />;
@@ -123,12 +206,26 @@ export default function CheckoutPage() {
 
                     <div className="mt-6">
                       {paymentMethod === "credit-card" && (
-                        <CreditCardForm price={price} />
+                        <CreditCardForm
+                          price={price}
+                          plan={planApiMap[plan]}
+                          currency="brl"
+                          cpf={user?.cpf || ""}
+                          onDataChange={setCreditCardData}
+                        />
                       )}
-                      {paymentMethod === "pix" && <PixPayment price={price} />}
-                      {paymentMethod === "boleto" && (
+                      {paymentMethod === "pix" && (
+                        <PixPayment
+                          price={price}
+                          transactionData={pixTransactionData}
+                          cpf={pixCpf}
+                          setCpf={setPixCpf}
+                        />
+                      )}
+                      {paymentMethod === "bolbradesco" && (
                         <BoletoPayment
                           price={price}
+                          plan={planApiMap[plan]}
                           onDataChange={setBoletoData}
                           boletoUrl={boletoUrl}
                           loading={paymentLoading}
@@ -156,13 +253,19 @@ export default function CheckoutPage() {
               >
                 <Button
                   type="submit"
-                  className="w-full py-6 text-lg"
+                  className="bg-gradient-axel w-full cursor-pointer py-6 text-lg text-white hover:scale-90"
                   disabled={isSubmitting || paymentLoading}
                 >
                   {isSubmitting || paymentLoading
                     ? "Processando..."
                     : "Finalizar Pagamento"}
                 </Button>
+
+                {isPaid && (
+                  <div className="mt-4 text-center text-green-600">
+                    Pagamento confirmado! Obrigado.
+                  </div>
+                )}
 
                 {paymentError && (
                   <div className="mt-2 text-center text-sm text-red-500">

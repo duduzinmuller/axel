@@ -8,6 +8,8 @@ const initialState: PaymentState = {
   error: null,
   validateCode: null,
   plan: null,
+  cardToken: null,
+  paymentResult: null,
 };
 
 const paymentSlice = createSlice({
@@ -56,7 +58,37 @@ const paymentSlice = createSlice({
         state.validateCode = null;
         state.plan = null;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(paymentThunks.createCardToken.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(paymentThunks.createCardToken.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cardToken = action.payload;
+      })
+      .addCase(paymentThunks.createCardToken.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string | null;
+      })
+      .addCase(paymentThunks.createCreditCardPayment.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        paymentThunks.createCreditCardPayment.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.paymentResult = action.payload;
+        },
+      )
+      .addCase(
+        paymentThunks.createCreditCardPayment.rejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.payload as string | null;
+        },
+      );
   },
 });
 

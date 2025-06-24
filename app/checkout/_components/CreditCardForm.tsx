@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormField } from "./FormField";
 import { CardBrands } from "./CardBrands";
 import { Input } from "@/components/ui/input";
@@ -6,19 +6,31 @@ import {
   normalizeCardNumber,
   normalizeExpiryDate,
   normalizeCVV,
+  normalizeCPF,
 } from "@/app/_lib/utils/formatter";
 import { Grid } from "./Grid";
 
 interface CreditCardFormProps {
   price: number;
+  plan: string;
+  currency: string;
+  cpf: string;
+  onDataChange: (data: any) => void;
 }
 
-export function CreditCardForm({ price }: CreditCardFormProps) {
+export function CreditCardForm({
+  price,
+  plan,
+  currency,
+  cpf,
+  onDataChange,
+}: CreditCardFormProps) {
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [cardName, setCardName] = useState("");
   const [installments, setInstallments] = useState("1");
+  const [cpfValue, setCpfValue] = useState(cpf);
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = normalizeCardNumber(e.target.value);
@@ -33,6 +45,11 @@ export function CreditCardForm({ price }: CreditCardFormProps) {
   const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = normalizeCVV(e.target.value);
     setCvv(value);
+  };
+
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = normalizeCPF(e.target.value);
+    setCpfValue(value);
   };
 
   const getCardBrand = (number: string) => {
@@ -66,6 +83,50 @@ export function CreditCardForm({ price }: CreditCardFormProps) {
       };
     },
   );
+
+  useEffect(() => {
+    const sendDataToParent = () => {
+      if (
+        cardNumber &&
+        expiryDate &&
+        cvv &&
+        cardName &&
+        cpfValue &&
+        cardBrand
+      ) {
+        const paymentData = {
+          amount: price,
+          plan,
+          currency,
+          cpf: cpfValue.replace(/\D/g, ""),
+          name: cardName,
+          paymentMethod: cardBrand,
+          cardNumber: cardNumber.replace(/\s/g, ""),
+          expirationMonth: expiryDate.split("/")[0],
+          expirationYear: "20" + expiryDate.split("/")[1],
+          securityCode: cvv,
+          installments: Number(installments),
+        };
+        onDataChange(paymentData);
+      } else {
+        onDataChange(null);
+      }
+    };
+
+    sendDataToParent();
+  }, [
+    cardNumber,
+    expiryDate,
+    cvv,
+    cardName,
+    cpfValue,
+    installments,
+    price,
+    plan,
+    currency,
+    cardBrand,
+    onDataChange,
+  ]);
 
   return (
     <div className="space-y-6">
@@ -117,6 +178,17 @@ export function CreditCardForm({ price }: CreditCardFormProps) {
             value={cardName}
             onChange={(e) => setCardName(e.target.value)}
             placeholder="Como está impresso no cartão"
+          />
+        </FormField>
+
+        <FormField label="CPF do titular">
+          <Input
+            type="text"
+            id="cpf"
+            value={cpfValue}
+            onChange={handleCpfChange}
+            placeholder="000.000.000-00"
+            maxLength={14}
           />
         </FormField>
 
