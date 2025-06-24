@@ -28,7 +28,7 @@ export function PaymentMethodSelector({
       description: "Pagamento instantâneo",
     },
     {
-      id: "boleto",
+      id: "bolbradesco",
       name: "Boleto",
       icon: Receipt,
       description: "Vencimento em 3 dias úteis",

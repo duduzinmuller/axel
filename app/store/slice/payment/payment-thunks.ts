@@ -28,11 +28,15 @@ export const createBoletoPayment = createAsyncThunk<
         },
       },
     );
-    return (
+    const url =
+      response.data.mercadoPago?.transaction_details?.external_resource_url ||
+      response.data.mercadoPago?.point_of_interaction?.transaction_data
+        ?.external_resource_url ||
       response.data.boletoUrl ||
       response.data.external_resource_url ||
-      response.data.transaction_details?.external_resource_url
-    );
+      response.data.transaction_details?.external_resource_url;
+    console.log("URL do boleto retornada:", url);
+    return url;
   } catch (error: any) {
     console.error("Erro ao gerar boleto:", error, error.response?.data);
     return rejectWithValue(

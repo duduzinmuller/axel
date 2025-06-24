@@ -1,4 +1,4 @@
-export type PaymentMethod = "credit-card" | "pix" | "boleto";
+export type PaymentMethod = "credit-card" | "pix" | "bolbradesco";
 
 export interface PaymentFormData {
   method: PaymentMethod;
