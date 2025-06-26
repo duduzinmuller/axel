@@ -128,7 +128,7 @@ export default function RegisterPage() {
                         />
                         <Input
                           placeholder="Nome"
-                          className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                          className="border-zinc-700 pl-10"
                           {...field}
                         />
                       </div>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
                         <Input
                           type="email"
                           placeholder="Email"
-                          className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                          className="border-zinc-700 pl-10"
                           {...field}
                         />
                       </div>
@@ -176,7 +176,7 @@ export default function RegisterPage() {
                         <Input
                           type="password"
                           placeholder="Senha"
-                          className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                          className="border-zinc-700 pl-10"
                           {...field}
                         />
                       </div>
@@ -200,7 +200,7 @@ export default function RegisterPage() {
                         <Input
                           type="password"
                           placeholder="Confirmar senha"
-                          className="border-zinc-700 bg-zinc-800 pl-10 text-white"
+                          className="border-zinc-700 pl-10"
                           {...field}
                         />
                       </div>
