@@ -78,6 +78,9 @@ const InputChatAxel = () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       const aiResponse = await sendMessage(message);
       const chatId = currentChatIdRef.current;
+
+      console.log("InputChatAxel - usage após sendMessage:", usage);
+
       if (aiResponse && chatId) {
         dispatch(
           addMessage({

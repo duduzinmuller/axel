@@ -7,7 +7,6 @@ export const useAI = () => {
   const [usage, setUsage] = useState<any>(null);
   const [loadingUsage, setLoadingUsage] = useState(true);
 
-  // Carregar informações de uso do localStorage ao inicializar
   useEffect(() => {
     const savedUsage = localStorage.getItem("ai_usage");
     if (savedUsage) {
@@ -21,7 +20,6 @@ export const useAI = () => {
     setLoadingUsage(false);
   }, []);
 
-  // Salvar informações de uso no localStorage sempre que mudar
   useEffect(() => {
     if (usage) {
       localStorage.setItem("ai_usage", JSON.stringify(usage));
