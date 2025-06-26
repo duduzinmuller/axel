@@ -18,7 +18,7 @@ export default function AccountInfoSection({
       <span className="mb-1 text-base font-semibold text-zinc-900 dark:text-white">
         Informações da conta
       </span>
-      <div className="mb-2 flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
+      <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
         <div className="flex items-center gap-3">
           <span className="text-zinc-900 dark:text-white">Plano</span>
         </div>
@@ -34,6 +34,18 @@ export default function AccountInfoSection({
           </span>
         )}
       </div>
+
+      {plan === "FREE" && (
+        <div className="mb-1 flex justify-end">
+          <a
+            href="/payment"
+            className="mt-2 rounded bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-2 text-xs font-semibold text-white shadow transition hover:scale-105"
+          >
+            Atualizar Plano
+          </a>
+        </div>
+      )}
+
       <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 transition-colors hover:bg-zinc-200 dark:bg-[#0F0D0D] dark:hover:bg-[#232323]">
         <div className="flex items-center gap-3">
           <span className="text-zinc-900 dark:text-white">

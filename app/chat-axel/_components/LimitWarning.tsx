@@ -1,12 +1,12 @@
 "use client";
 
 import { useMessageLimit } from "@/app/_lib/hooks";
-import { useAI } from "@/app/_lib/hooks/useAI";
+import { useUsage } from "@/app/_lib/hooks/useUsage";
 import { AlertTriangle } from "lucide-react";
 
 const LimitWarning = () => {
   const { currentCount, limit, isLimitReached } = useMessageLimit();
-  const { usage } = useAI();
+  const { usage } = useUsage();
 
   const backendCount = usage?.currentCount || 0;
   const backendLimit = usage?.planLimit || limit;

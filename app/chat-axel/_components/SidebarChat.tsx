@@ -21,8 +21,9 @@ import {
   createChat,
 } from "@/app/store/slice/chat";
 import MessageLimitIndicator from "./MessageLimitIndicator";
-import LimitWarning from "./LimitWarning";
 import Link from "next/link";
+import { useUsage } from "@/app/_lib/hooks/useUsage";
+import LimitWarning from "./LimitWarning";
 
 interface SidebarProps {
   onNewChat?: () => void;
@@ -34,6 +35,9 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
   const { user } = useAppSelector((state) => state.auth);
   const chats = useAppSelector(selectChats);
   const currentChatId = useAppSelector(selectCurrentChatId);
+  const { usage } = useUsage();
+
+  console.log("Sidebar usage:", usage);
 
   const handleNewChat = () => {
     console.log("Sidebar: Criando nova conversa...");
@@ -67,6 +71,7 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className="border-border bg-background fixed top-0 left-0 flex h-full w-[260px] flex-col border-r"
     >
+      <div style={{ display: "none" }}>{usage?.currentCount}</div>
       <div className="border-border flex items-center justify-between border-b p-4">
         <h1 className="pr-3 text-lg font-bold">AxelAI</h1>
         <TooltipProvider>

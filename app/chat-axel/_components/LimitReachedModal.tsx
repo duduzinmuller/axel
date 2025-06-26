@@ -35,7 +35,7 @@ const LimitReachedModal = ({
       <div className="relative mx-4 w-full max-w-md rounded-lg bg-gray-800 p-6 shadow-xl">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          className="absolute top-4 right-4 cursor-pointer text-gray-400 hover:text-white"
         >
           <X className="h-5 w-5" />
         </button>
@@ -75,7 +75,7 @@ const LimitReachedModal = ({
             <Button
               onClick={onClose}
               variant="outline"
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+              className="w-full cursor-pointer border-gray-600 text-gray-300 hover:bg-gray-700"
             >
               Fechar
             </Button>
