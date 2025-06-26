@@ -13,8 +13,6 @@ const LimitWarning = () => {
   const backendRemaining = usage?.remainingMessages || 0;
   const backendIsLimitReached = backendCount >= backendLimit;
 
-  if (backendCount === 0 && currentCount === 0) return null;
-
   const remainingMessages =
     backendRemaining > 0
       ? backendRemaining

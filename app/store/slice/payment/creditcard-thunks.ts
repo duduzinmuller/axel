@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { updatePayment } from "./payment-thunks";
 
 export const createCardToken = createAsyncThunk(
   "payment/createCardToken",
@@ -40,6 +41,38 @@ export const createCreditCardPayment = createAsyncThunk(
       return rejectWithValue(
         error.response?.data || "Erro ao criar pagamento com cartão",
       );
+    }
+  },
+);
+
+export const payWithCreditCard = createAsyncThunk(
+  "payment/payWithCreditCard",
+  async (
+    { cardData, paymentData }: { cardData: any; paymentData: any },
+    { dispatch, rejectWithValue },
+  ) => {
+    try {
+      const tokenResult = await dispatch(createCardToken(cardData)).unwrap();
+      if (!tokenResult?.id) throw new Error("Token do cartão não criado");
+
+      const paymentPayload = { ...paymentData, token: tokenResult.id };
+      const paymentResult = await dispatch(
+        createCreditCardPayment(paymentPayload),
+      ).unwrap();
+      const paymentId = paymentResult?.externalId || paymentResult?.id;
+      if (!paymentId) throw new Error("Pagamento não criado");
+
+      const updateResult = await dispatch<any>(
+        updatePayment({ paymentId, data: {} }),
+      ).unwrap();
+
+      return {
+        tokenResult,
+        paymentResult,
+        updateResult,
+      };
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Erro no pagamento com cartão");
     }
   },
 );

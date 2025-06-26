@@ -10,6 +10,7 @@ const initialState: PaymentState = {
   plan: null,
   cardToken: null,
   paymentResult: null,
+  paymentStatus: "PENDING",
 };
 
 const paymentSlice = createSlice({
@@ -21,9 +22,16 @@ const paymentSlice = createSlice({
       state.boletoUrl = null;
       state.error = null;
       state.plan = null;
+      state.paymentStatus = "PENDING";
     },
     setPlan: (state, action: PayloadAction<string | null>) => {
       state.plan = action.payload;
+    },
+    setPaymentStatus: (
+      state,
+      action: PayloadAction<"FAILED" | "PENDING" | "COMPLETED" | "CANCELED">,
+    ) => {
+      state.paymentStatus = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -88,9 +96,13 @@ const paymentSlice = createSlice({
           state.loading = false;
           state.error = action.payload as string | null;
         },
-      );
+      )
+      .addCase(paymentThunks.pollPaymentStatus.fulfilled, (state, action) => {
+        state.paymentStatus = action.payload as any;
+      });
   },
 });
 
-export const { clearPaymentState, setPlan } = paymentSlice.actions;
+export const { clearPaymentState, setPlan, setPaymentStatus } =
+  paymentSlice.actions;
 export default paymentSlice.reducer;

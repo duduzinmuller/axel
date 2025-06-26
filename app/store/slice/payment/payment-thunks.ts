@@ -184,3 +184,17 @@ export const createCreditCardPayment = createAsyncThunk(
     }
   },
 );
+
+export const pollPaymentStatus = createAsyncThunk<string, string>(
+  "payment/pollPaymentStatus",
+  async (externalId, { rejectWithValue }) => {
+    try {
+      const status = await PaymentService.getPaymentStatus(externalId);
+      return status;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.message || "Erro ao consultar status do pagamento",
+      );
+    }
+  },
+);

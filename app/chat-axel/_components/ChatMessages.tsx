@@ -6,11 +6,18 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { formatISOTime } from "@/app/_lib/utils/date";
 import { Bot, User } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 const ChatMessages = () => {
   const currentChat = useAppSelector(selectCurrentChat);
 
   const { user } = useAppSelector((state) => state.auth);
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [currentChat?.messages.length]);
 
   if (!currentChat) {
     return (
@@ -71,6 +78,7 @@ const ChatMessages = () => {
             )}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
     </div>
   );

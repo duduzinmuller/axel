@@ -13,6 +13,7 @@ import { useAppDispatch } from "@/app/store";
 import { useRouter } from "next/navigation";
 import { validateCodePlan } from "@/app/store/slice/payment";
 import { updateUserPlan } from "@/app/store/slice/auth";
+import { setPaymentStatus } from "@/app/store/slice/payment/payment-reducer";
 
 interface PromoCodeInputProps {
   value: string;
@@ -35,6 +36,7 @@ export function PromoCodeInput({ value, onChange }: PromoCodeInputProps) {
       if (validateCodePlan.fulfilled.match(result)) {
         setIsValid(true);
         dispatch(updateUserPlan(result.payload.plan));
+        dispatch(setPaymentStatus("COMPLETED"));
         router.push("/success");
       } else {
         setIsValid(false);
@@ -87,7 +89,7 @@ export function PromoCodeInput({ value, onChange }: PromoCodeInputProps) {
             type="button"
             onClick={handleValidate}
             disabled={isSubmitting || !value}
-            className="flex-shrink-0"
+            className="bg-gradient-axel flex-shrink-0 cursor-pointer text-white"
           >
             {isSubmitting ? "Validando..." : "Validar"}
           </Button>

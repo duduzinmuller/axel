@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createCardToken, createCreditCardPayment } from "./creditcard-thunks";
+import { updatePayment } from "./payment-thunks";
 
 const initialState = {
   cardToken: null,
   paymentResult: null,
   loading: false,
   error: null as string | null,
+  status: null as "PENDING" | "COMPLETED" | "FAILED" | null,
 };
 
 const creditCardSlice = createSlice({
@@ -17,6 +19,7 @@ const creditCardSlice = createSlice({
       state.paymentResult = null;
       state.loading = false;
       state.error = null;
+      state.status = null;
     },
   },
   extraReducers: (builder) => {
@@ -36,14 +39,20 @@ const creditCardSlice = createSlice({
       .addCase(createCreditCardPayment.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.status = "PENDING";
       })
       .addCase(createCreditCardPayment.fulfilled, (state, action) => {
         state.loading = false;
         state.paymentResult = action.payload;
+        state.status = action.payload.status || "PENDING";
       })
       .addCase(createCreditCardPayment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string | null;
+        state.status = "FAILED";
+      })
+      .addCase(updatePayment.fulfilled, (state, action) => {
+        state.status = action.payload.status || state.status;
       });
   },
 });
