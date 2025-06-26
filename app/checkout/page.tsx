@@ -73,8 +73,7 @@ export default function CheckoutPage() {
           },
         },
       };
-      console.log("cardData", cardData);
-      const paymentData: any = {
+      const paymentData = {
         amount: creditCardData.amount,
         plan: creditCardData.plan,
         currency: creditCardData.currency,
