@@ -22,4 +22,18 @@ export const PaymentService = {
     );
     return response.data;
   },
+
+  getPaymentStatus: async (externalId: string) => {
+    const accessToken = StorageUtils.getAccessToken();
+    if (!accessToken) throw new Error("Token de acesso não encontrado.");
+    const response = await axios.get(
+      `${API_URL}/payment/status/${externalId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data.status;
+  },
 };

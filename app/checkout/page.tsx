@@ -14,7 +14,11 @@ import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../store";
 import LoadingScreen from "../_components/LoadingScreen";
 import { useRouter } from "next/navigation";
-import { createBoletoPayment, createPixPayment } from "../store/slice/payment";
+import {
+  createBoletoPayment,
+  createPixPayment,
+  pollPaymentStatus,
+} from "../store/slice/payment";
 import { PaymentMethod } from "../types/checkout";
 import { PromoCodeInput } from "./_components/CodeInput";
 import { CreditCardForm } from "./_components/CreditCardForm";
@@ -25,10 +29,8 @@ import { plans as plansData } from "@/app/_data/plans";
 import { BoletoPayment } from "./_components/BoletoPayment";
 import { usePaymentPolling } from "@/app/_lib/hooks/usePaymentPolling";
 import { PixTransactionData } from "../types/transaction-data";
-import {
-  createCardToken,
-  createCreditCardPayment,
-} from "../store/slice/payment";
+import { toast } from "sonner";
+import { payWithCreditCard } from "../store/slice/payment/creditcard-thunks";
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
@@ -43,7 +45,7 @@ export default function CheckoutPage() {
   const [pixTransactionData, setPixTransactionData] = useState<
     PixTransactionData | undefined
   >(undefined);
-  const [externalId] = useState<string | null>(null);
+  const [externalId, setExternalId] = useState<string | null>(null);
   const [isPaid, setIsPaid] = useState(false);
   const [pixCpf, setPixCpf] = useState<string>("");
 
@@ -51,13 +53,13 @@ export default function CheckoutPage() {
     boletoUrl,
     loading: paymentLoading,
     error: paymentError,
+    paymentStatus,
   } = useAppSelector((state) => state.payment);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     if (paymentMethod === "credit-card" && creditCardData) {
-      // Processar pagamento com cartão de crédito
       const cardData = {
         card_number: creditCardData.cardNumber,
         expiration_month: creditCardData.expirationMonth,
@@ -71,28 +73,42 @@ export default function CheckoutPage() {
           },
         },
       };
-
+      console.log("cardData", cardData);
+      const paymentData: any = {
+        amount: creditCardData.amount,
+        plan: creditCardData.plan,
+        currency: creditCardData.currency,
+        cpf: creditCardData.cpf,
+        name: creditCardData.name,
+        paymentMethod: creditCardData.paymentMethod,
+        installments: creditCardData.installments,
+      };
+      console.log("paymentData", paymentData);
       try {
         const result = await dispatch(
-          createCardToken(cardData as any),
+          payWithCreditCard({ cardData, paymentData }),
         ).unwrap();
-        if (result && result.id) {
-          const paymentData: any = {
-            amount: creditCardData.amount,
-            plan: creditCardData.plan,
-            currency: creditCardData.currency,
-            cpf: creditCardData.cpf,
-            name: creditCardData.name,
-            paymentMethod: creditCardData.paymentMethod,
-            token: result.id,
-          };
-          if (creditCardData.installments > 1) {
-            paymentData.installments = creditCardData.installments;
-          }
-          dispatch(createCreditCardPayment(paymentData));
+
+        const paymentId =
+          result.paymentResult?.externalId || result.paymentResult?.id;
+        if (paymentId) setExternalId(paymentId);
+
+        const status = result.updateResult?.status;
+        if (status === "COMPLETED") {
+          toast.success("Seu pagamento foi confirmado com sucesso.");
+          router.push("/success");
+        } else if (status === "FAILED") {
+          toast.error(
+            "Pagamento recusado. Tente novamente ou use outro cartão.",
+          );
+        } else if (status === "PENDING") {
+          toast("Estamos processando seu pagamento. Aguarde a confirmação.");
+        } else {
+          toast("Status desconhecido. Aguarde ou tente novamente.");
         }
       } catch (error) {
         console.error("Erro ao processar pagamento:", error);
+        toast.error("Não foi possível processar o pagamento. Tente novamente.");
       } finally {
         setIsSubmitting(false);
       }
@@ -163,6 +179,21 @@ export default function CheckoutPage() {
       router.push("/login");
     }
   }, [isAuthenticated, user, isLoading, router]);
+
+  useEffect(() => {
+    if (!externalId) return;
+    const interval = setInterval(() => {
+      dispatch(pollPaymentStatus(externalId));
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [externalId, dispatch]);
+
+  useEffect(() => {
+    if (paymentStatus === "COMPLETED") {
+      router.push("/success");
+    }
+  }, [paymentStatus, router]);
 
   usePaymentPolling(externalId ?? "", () => setIsPaid(true));
 

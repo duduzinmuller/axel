@@ -6,6 +6,7 @@ export interface PaymentState {
   plan: string | null;
   cardToken: any;
   paymentResult: any;
+  paymentStatus: "FAILED" | "PENDING" | "COMPLETED" | "CANCELED";
 }
 
 export interface BoletoData {
