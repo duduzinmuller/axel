@@ -12,8 +12,6 @@ const MessageLimitIndicator = () => {
   const backendRemaining = usage?.remainingMessages || 0;
   const backendIsLimitReached = backendCount >= backendLimit;
 
-  if (backendCount === 0 && currentCount === 0) return null;
-
   const progress =
     ((backendCount || currentCount) / (backendLimit || limit)) * 100;
 
