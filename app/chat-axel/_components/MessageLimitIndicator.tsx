@@ -1,12 +1,12 @@
 "use client";
 
 import { useMessageLimit } from "@/app/_lib/hooks";
-import { useAI } from "@/app/_lib/hooks/useAI";
+import { useUsage } from "@/app/_lib/hooks/useUsage";
 import { useEffect, useState } from "react";
 
 const MessageLimitIndicator = () => {
   const { currentCount, limit, isLimitReached } = useMessageLimit();
-  const { usage } = useAI();
+  const { usage, isLoading } = useUsage();
   const [forceUpdate, setForceUpdate] = useState(0);
 
   const backendCount = usage?.currentCount || 0;
@@ -18,15 +18,17 @@ const MessageLimitIndicator = () => {
     console.log("MessageLimitIndicator - usage atualizado:", usage);
     console.log("backendRemaining:", backendRemaining);
     console.log("backendCount:", backendCount);
+    console.log("isLoading:", isLoading);
+
     setForceUpdate((prev) => prev + 1);
-  }, [usage, backendRemaining, backendCount]);
+  }, [usage, backendRemaining, backendCount, isLoading]);
 
   const progress =
     ((backendCount || currentCount) / (backendLimit || limit)) * 100;
 
   return (
     <div
-      key={`${backendCount}-${backendRemaining}-${forceUpdate}`}
+      key={`${backendCount}-${backendRemaining}-${forceUpdate}-${isLoading}-${currentCount}`}
       className="border-border space-y-2 border-t p-4"
     >
       <div className="flex items-center justify-between text-sm">

@@ -10,6 +10,7 @@ interface MessageLimitInfo {
   canSendMessage: boolean;
   incrementMessageCount: () => void;
   loading: boolean;
+  forceUpdate: () => void;
 }
 
 export const useMessageLimit = (): MessageLimitInfo => {
@@ -53,5 +54,14 @@ export const useMessageLimit = (): MessageLimitInfo => {
     canSendMessage,
     incrementMessageCount,
     loading,
+    forceUpdate: () => {
+      if (user?.plan === "FREE") {
+        setLoading(true);
+        const count = MessageLimitUtils.getMessageCount();
+        setCurrentCount(count);
+        setResetTime(MessageLimitUtils.getResetTime());
+        setLoading(false);
+      }
+    },
   };
 };

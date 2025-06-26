@@ -22,7 +22,7 @@ import {
 } from "@/app/store/slice/chat";
 import MessageLimitIndicator from "./MessageLimitIndicator";
 import Link from "next/link";
-import { useAI } from "@/app/_lib/hooks/useAI";
+import { useUsage } from "@/app/_lib/hooks/useUsage";
 import LimitWarning from "./LimitWarning";
 
 interface SidebarProps {
@@ -35,7 +35,7 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
   const { user } = useAppSelector((state) => state.auth);
   const chats = useAppSelector(selectChats);
   const currentChatId = useAppSelector(selectCurrentChatId);
-  const { usage } = useAI();
+  const { usage } = useUsage();
 
   console.log("Sidebar usage:", usage);
 

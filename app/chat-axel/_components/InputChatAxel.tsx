@@ -12,6 +12,7 @@ import {
   selectCurrentChatId,
 } from "@/app/store/slice/chat";
 import { useAI, useMessageLimit } from "@/app/_lib/hooks";
+import { useUsage } from "@/app/_lib/hooks/useUsage";
 import { MessageLimitUtils } from "@/app/_lib/utils/messageLimit";
 import LimitReachedModal from "./LimitReachedModal";
 import LimitWarning from "./LimitWarning";
@@ -23,7 +24,8 @@ const InputChatAxel = () => {
   const dispatch = useAppDispatch();
   const currentChatId = useAppSelector(selectCurrentChatId);
   const currentChatIdRef = useRef(currentChatId);
-  const { sendMessage, isLoading, error, usage, loadingUsage } = useAI();
+  const { sendMessage, isLoading, error, loadingUsage } = useAI();
+  const { usage } = useUsage();
   const { currentCount, limit, resetTime, incrementMessageCount } =
     useMessageLimit();
 
