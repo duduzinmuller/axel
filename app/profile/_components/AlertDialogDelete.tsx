@@ -21,6 +21,32 @@ import { useRouter } from "next/navigation";
 import { deleteUserProfile, signOut } from "@/app/store/slice/auth";
 import LoadingScreen from "@/app/_components/LoadingScreen";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Registre os elementos e escalas necessários
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
+
 export default function AlertDialogDelete() {
   const router = useRouter();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
