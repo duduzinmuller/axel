@@ -295,8 +295,10 @@ vercel
 
 ## 🏆 Autores
 
+- **Aldair Rocha**
+- **André Nunes**
 - **Eduardo Muller**
-- **André Nunus**
+- **Lucas Alves**
 
 ## 📄 Licença
 
