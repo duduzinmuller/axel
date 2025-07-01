@@ -4,13 +4,15 @@ import { Button } from "../../../components/ui/button";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import React, { useState } from "react";
 import { CircleCheckBig, Clock, X, XCircle } from "lucide-react";
+import { usePayments } from "@/app/_lib/hooks/usePayments";
 
-// Componentes reutilizáveis para badges
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
-    MONTHLY: "bg-[#0E0F11] text-[#FFFFFF] border border-[#353945]",
-    ANNUAL: "bg-[#F8FAFC] text-[#16A34A]",
-    FREE: "bg-[#1E293B] text-[#4B5563]",
+    MONTHLY:
+      "shadow-gold border border-yellow-400 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900",
+    ANNUAL:
+      "shadow-diamond border border-blue-200 bg-gradient-to-r from-cyan-200 via-white to-blue-400 text-blue-900",
+    FREE: "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200",
   };
 
   return (
@@ -48,133 +50,99 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 const ProviderBadge = ({ provider }: { provider: string }) => {
-  const providerStyles = {
-    MERCADOPAGO: "bg-transparent text-white",
-    PIX: "bg-[#FEE2E2] text-[#991B1B]",
-    CREDIT_CARD: "bg-[#E9E9E9] text-[#23262F]",
-  };
-
   return (
-    <Badge
-      className={`rounded-full px-3 py-1 text-xs font-semibold ${providerStyles[provider as keyof typeof providerStyles] || providerStyles.MERCADOPAGO}`}
-    >
+    <Badge className="rounded-full px-3 py-1 text-xs font-semibold">
       {provider}
     </Badge>
   );
 };
 
-// Mock de pagamentos
-const pagamentosMock = [
-  {
-    usuario: { nome: "João Silva", email: "joao@email.com" },
-    valor: "R$ 29,90",
-    plano: "MONTHLY",
-    status: "COMPLETED",
-    provider: "MERCADOPAGO",
-    data: "20/01/2024",
-    hora: "19:00",
-  },
-  {
-    usuario: { nome: "Maria Santos", email: "maria@email.com" },
-    valor: "R$ 299,90",
-    plano: "ANNUAL",
-    status: "COMPLETED",
-    provider: "MERCADOPAGO",
-    data: "19/01/2024",
-    hora: "18:00",
-  },
-  {
-    usuario: { nome: "Pedro Oliveira", email: "pedro@email.com" },
-    valor: "R$ 29,90",
-    plano: "MONTHLY",
-    status: "PENDING",
-    provider: "MERCADOPAGO",
-    data: "20/01/2024",
-    hora: "17:00",
-  },
-  {
-    usuario: { nome: "Ana Costa", email: "ana@email.com" },
-    valor: "R$ 29,90",
-    plano: "MONTHLY",
-    status: "FAILED",
-    provider: "MERCADOPAGO",
-    data: "18/01/2024",
-    hora: "16:00",
-  },
-  {
-    usuario: { nome: "Carlos Ferreira", email: "carlos@email.com" },
-    valor: "R$ 299,90",
-    plano: "ANNUAL",
-    status: "CANCELED",
-    provider: "MERCADOPAGO",
-    data: "17/01/2024",
-    hora: "12:00",
-  },
-];
-
 export default function Pagamentos() {
   const [statusFiltro, setStatusFiltro] = useState("Todos os status");
   const [periodoFiltro, setPeriodoFiltro] = useState("Últimos 30 dias");
+  const { statusPercentages, history, loading, error } = usePayments();
 
-  // Função para filtrar pagamentos
-  const pagamentosFiltrados = pagamentosMock.filter((p) => {
+  const pagamentosFiltrados = history.filter((p) => {
     const statusOk =
       statusFiltro === "Todos os status" ||
       p.status.toLowerCase() === statusFiltro.toLowerCase();
     return statusOk;
   });
 
+  if (loading) {
+    return (
+      <div className="mt-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-white"></div>
+          <p className="mt-2 text-sm text-gray-400">Carregando pagamentos...</p>
+        </div>
+      </div>
+    );
+  }
+  if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
+
   return (
     <>
-      {/* Cards de resumo */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-        <Card className="flex flex-col gap-2 rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
+        <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="text-[10px] text-[#B1B5C3] md:text-xs">
             Receita Total
           </span>
-          <span className="text-lg font-bold text-white md:text-xl">
-            R$ 329,80
+          <span className="text-lg font-bold md:text-xl">
+            R${" "}
+            {history
+              .reduce((sum, p) => sum + Number(p.amount), 0)
+              .toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
           </span>
-          <span className="text-[10px] text-green-500 md:text-xs">
-            +12,8% vs mês anterior
-          </span>
+          <span className="text-[10px] text-green-500 md:text-xs"></span>
         </Card>
-        <Card className="flex flex-col gap-2 rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
+        <Card className="border] flex flex-col gap-2 rounded-xl p-6 shadow-none">
           <span className="text-[10px] text-[#B1B5C3] md:text-xs">
             Transações
           </span>
-          <span className="text-lg font-bold text-white md:text-xl">5</span>
-          <span className="text-[10px] text-green-500 md:text-xs">
-            +1 esta semana
-          </span>
+          <span className="text-lg font-bold md:text-xl">{history.length}</span>
+          <span className="text-[10px] text-green-500 md:text-xs"></span>
         </Card>
-        <Card className="flex flex-col gap-2 rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
+        <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="flex items-center gap-1 text-[10px] text-[#B1B5C3] md:text-xs">
             <span className="text-orange-400">Pagamentos Pendentes</span>
           </span>
           <span className="text-lg font-bold text-orange-400 md:text-xl">
-            R$ 29,90
+            R${" "}
+            {history
+              .filter((p) => p.status === "PENDING")
+              .reduce((sum, p) => sum + Number(p.amount), 0)
+              .toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
           </span>
           <span className="text-[10px] text-orange-400 md:text-xs">
-            1 transação
+            {history.filter((p) => p.status === "PENDING").length}{" "}
+            transação(ões)
           </span>
         </Card>
-        <Card className="flex flex-col gap-2 rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
+        <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="text-[10px] text-[#B1B5C3] md:text-xs">
             Taxa de Sucesso
           </span>
           <span className="text-lg font-bold text-green-400 md:text-xl">
-            40.0%
+            {(() => {
+              const completed = history.filter(
+                (p) => p.status === "COMPLETED",
+              ).length;
+              return history.length > 0
+                ? ((completed / history.length) * 100).toFixed(1)
+                : "0.0";
+            })()}
+            %
           </span>
           <span className="text-[10px] text-green-400 md:text-xs">
-            2 de 5 transações
+            {history.filter((p) => p.status === "COMPLETED").length} de{" "}
+            {history.length} transações
           </span>
         </Card>
       </div>
-      {/* Gráficos */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card className="rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
-          <div className="mb-2 text-sm font-semibold text-white md:text-base">
+        <Card className="rounded-xl border p-6 shadow-none">
+          <div className="mb-2 text-sm font-semibold md:text-base">
             Receita Mensal
           </div>
           <span className="text-[10px] text-[#B1B5C3] md:text-xs">
@@ -225,30 +193,25 @@ export default function Pagamentos() {
             />
           </div>
         </Card>
-        <Card className="rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
-          <div className="mb-2 font-semibold text-white">
-            Status dos Pagamentos
-          </div>
+        <Card className="rounded-xl border p-6 shadow-none">
+          <div className="mb-2 font-semibold">Status dos Pagamentos</div>
           <span className="text-xs text-[#B1B5C3]">
             Distribuição por status
           </span>
           <div className="flex h-56 items-center justify-center">
             <Pie
               data={{
-                labels: [
-                  "Completed 91%",
-                  "Pending 5%",
-                  "Failed 2%",
-                  "Canceled 2%",
-                ],
+                labels: statusPercentages.map(
+                  (s) => `${s.status} ${s.percentage}%`,
+                ),
                 datasets: [
                   {
-                    data: [91, 5, 2, 2],
+                    data: statusPercentages.map((s) => s.percentage),
                     backgroundColor: [
-                      "#34d399",
-                      "#fbbf24",
-                      "#f87171",
-                      "#818cf8",
+                      "#34d399", // COMPLETED
+                      "#fbbf24", // PENDING
+                      "#f87171", // FAILED
+                      "#818cf8", // CANCELED
                     ],
                     borderWidth: 0,
                   },
@@ -261,9 +224,8 @@ export default function Pagamentos() {
           </div>
         </Card>
       </div>
-      {/* Receita por Plano */}
-      <Card className="mt-6 flex min-h-0 flex-col rounded-xl border border-[#1E293B] bg-[#0E0F11] p-6 shadow-none">
-        <div className="mb-2 font-semibold text-white">Receita por Plano</div>
+      <Card className="mt-6 flex min-h-0 flex-col rounded-xl border p-6 shadow-none">
+        <div className="mb-2 font-semibold">Receita por Plano</div>
         <span className="text-xs text-[#B1B5C3]">
           Comparativo de receita entre planos
         </span>
@@ -274,7 +236,14 @@ export default function Pagamentos() {
               datasets: [
                 {
                   label: "Receita",
-                  data: [15000, 45000],
+                  data: [
+                    history
+                      .filter((p) => p.plan === "MONTHLY")
+                      .reduce((sum, p) => sum + Number(p.amount), 0),
+                    history
+                      .filter((p) => p.plan === "ANNUAL")
+                      .reduce((sum, p) => sum + Number(p.amount), 0),
+                  ],
                   backgroundColor: ["#a78bfa", "#a78bfa"],
                   borderRadius: 8,
                   barPercentage: 0.5,
@@ -312,14 +281,13 @@ export default function Pagamentos() {
           />
         </div>
       </Card>
-      {/* Filtros de Pagamento */}
-      <Card className="mt-6 rounded-xl border border-[#1E293B] bg-[#0E0F11] p-0 shadow-none">
-        <div className="px-6 pt-6 pb-2 text-base font-semibold text-white">
+      <Card className="mt-6 rounded-xl border p-0 shadow-none">
+        <div className="px-6 pt-6 pb-2 text-base font-semibold">
           Filtros de Pagamento
         </div>
         <div className="flex flex-col items-center gap-4 px-6 pb-6 md:flex-row">
           <select
-            className="rounded-md border border-[#353945] bg-[#0E0F11] px-3 py-2 text-sm text-white"
+            className="rounded-md border px-3 py-2 text-sm"
             value={statusFiltro}
             onChange={(e) => setStatusFiltro(e.target.value)}
           >
@@ -330,7 +298,7 @@ export default function Pagamentos() {
             <option>Canceled</option>
           </select>
           <select
-            className="rounded-md border border-[#353945] bg-[#0E0F11] px-3 py-2 text-sm text-white"
+            className="rounded-md border px-3 py-2 text-sm"
             value={periodoFiltro}
             onChange={(e) => setPeriodoFiltro(e.target.value)}
           >
@@ -341,18 +309,17 @@ export default function Pagamentos() {
           </select>
         </div>
       </Card>
-      {/* Histórico de Pagamentos */}
-      <Card className="mt-6 overflow-x-auto rounded-xl border border-[#1E293B] bg-[#0E0F11] p-0 shadow-none">
-        <div className="p-6 pb-2 text-base font-semibold text-white">
-          Histórico de Pagamentos (5)
+      <Card className="mt-6 overflow-x-auto rounded-xl border p-0 shadow-none">
+        <div className="p-6 pb-2 text-base font-semibold">
+          Histórico de Pagamentos ({pagamentosFiltrados.length})
         </div>
         <div className="px-6 pb-4 text-xs text-[#777]">
           Lista completa de todas as transações
         </div>
-        <div className="mx-5 mb-6 overflow-x-auto rounded-md border border-[#1E293B]">
-          <table className="min-w-full text-sm text-white">
+        <div className="mx-5 mb-6 overflow-x-auto rounded-md border">
+          <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-[#1E293B] bg-[#0E0F11] text-[#B1B5C3]">
+              <tr className="border-b text-[#B1B5C3]">
                 <th className="px-4 py-3 text-left font-semibold">Usuário</th>
                 <th className="px-4 py-3 text-left font-semibold">Valor</th>
                 <th className="px-4 py-3 text-left font-semibold">Plano</th>
@@ -363,33 +330,33 @@ export default function Pagamentos() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#1E293B]">
-              {pagamentosFiltrados.map((p, idx) => (
-                <tr key={idx}>
+              {pagamentosFiltrados.map((p) => (
+                <tr key={p.id}>
                   <td className="px-4 py-3">
-                    <div className="font-semibold text-white">
-                      {p.usuario.nome}
-                    </div>
-                    <div className="text-xs text-[#777]">{p.usuario.email}</div>
+                    <div className="font-semibold">{p.user?.name}</div>
+                    <div className="text-xs text-[#777]">{p.user?.email}</div>
                   </td>
-                  <td className="px-4 py-3 text-white">{p.valor}</td>
                   <td className="px-4 py-3">
-                    <PlanBadge plan={p.plano} />
+                    R${" "}
+                    {Number(p.amount).toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="px-4 py-3">
+                    <PlanBadge plan={p.plan} />
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={p.status} />
                   </td>
                   <td className="px-4 py-3">
-                    <ProviderBadge provider={p.provider} />
+                    <ProviderBadge provider={p.paymentProvider} />
                   </td>
-                  <td className="px-4 py-3 text-white">
-                    {p.data}
-                    <br />
-                    <span className="text-xs text-[#777]">{p.hora}</span>
+                  <td className="px-4 py-3">
+                    {new Date(p.createdAt).toLocaleDateString("pt-BR")}
                   </td>
                   <td className="px-4 py-3">
                     <Button
                       size="sm"
-                      variant="ghost"
                       className="px-2 py-1 text-[#F8FAFC] hover:bg-[#23262F]"
                     >
                       Ver detalhes
