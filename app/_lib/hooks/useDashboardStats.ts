@@ -41,7 +41,12 @@ export const useDashboardStats = () => {
       .reduce((sum, plan) => sum + plan.count, 0);
 
     const verifiedUsers = Math.round(totalUsers * 0.9);
-    const totalRevenue = paidUsers * 25.9;
+    const monthlyUsers =
+      planDistribution.find((p) => p.plan === "MONTHLY")?.count || 0;
+    const annualUsers =
+      planDistribution.find((p) => p.plan === "ANNUAL")?.count || 0;
+    const totalRevenue = monthlyUsers * 25.9 + annualUsers * 249.9;
+
     const pendingPayments = Math.max(1, Math.round(totalUsers * 0.05));
 
     return {

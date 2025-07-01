@@ -79,7 +79,7 @@ export default function DashboardPage() {
           box-shadow: none !important;
         }
       `}</style>
-      {/* Header Gradient */}
+
       <div className="flex flex-col gap-1 bg-gradient-to-r from-indigo-500 to-purple-700 p-6 pb-4">
         <div className="mx-10 flex items-center justify-between">
           <div>
@@ -90,7 +90,7 @@ export default function DashboardPage() {
               Gestão completa do sistema
             </span>
           </div>
-          {/* Menu desktop */}
+
           <div className="hidden items-center gap-4 md:flex">
             <div className="flex items-center gap-2 text-xs text-white/80">
               <Calendar size={16} />

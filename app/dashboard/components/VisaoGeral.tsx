@@ -137,7 +137,11 @@ export default function VisaoGeral() {
             })}
           </span>
           <span className="text-xs text-green-500">
-            R$ 12.450,30 <span className="text-gray-500">este mês</span>
+            R${" "}
+            {(dashboardStats?.totalRevenue || 0).toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}{" "}
+            <span className="text-gray-500">total</span>
           </span>
         </Card>
         <Card className="flex flex-col gap-2 p-4">
