@@ -26,7 +26,26 @@ export interface UserResponse {
   };
 }
 
-// Interfaces para estatísticas
+// Interface para usuários do dashboard
+export interface DashboardUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  image?: string;
+  provider: string;
+  providerId?: string;
+  plan: string;
+  planExpiresAt?: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  isVerified: boolean;
+  resetPasswordToken?: string;
+  resetPasswordTokenExpires?: string;
+  messages?: number; // Campo adicional para contagem de mensagens
+}
+
 export interface PlanStatistics {
   plan: string;
   count: number;
@@ -80,6 +99,11 @@ export const UserService = {
 
   async getPlanDistribution(): Promise<PlanStatistics[]> {
     const response = await protectedApi.get<PlanStatistics[]>("/users/plans");
+    return response.data;
+  },
+
+  async getAllUsers(): Promise<DashboardUser[]> {
+    const response = await protectedApi.get<DashboardUser[]>("/users");
     return response.data;
   },
 };
