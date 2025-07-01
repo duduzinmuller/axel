@@ -7,27 +7,70 @@ import {
   TabsContent,
 } from "../../components/ui/tabs";
 import { Button } from "../../components/ui/button";
-import { Calendar, Clock, ArrowLeft, Info, Menu } from "lucide-react";
-import React from "react";
+import { Calendar, Clock, ArrowLeft, Menu } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "../../components/ui/sheet";
 import VisaoGeral from "./components/VisaoGeral";
 import Usuarios from "./components/Usuarios";
 import Pagamentos from "./components/Pagamentos";
 import LogsESistema from "./components/LogsESistema";
 import { Badge } from "../../components/ui/badge";
+import ThemeToggle from "../_components/ThemeToggle";
 
 export default function DashboardPage() {
+  const [dataAtual, setDataAtual] = useState("");
+  const [horaAtual, setHoraAtual] = useState("");
+
+  useEffect(() => {
+    const atualizarDataHora = () => {
+      const agora = new Date();
+      const dias = [
+        "domingo",
+        "segunda-feira",
+        "terça-feira",
+        "quarta-feira",
+        "quinta-feira",
+        "sexta-feira",
+        "sábado",
+      ];
+      const meses = [
+        "janeiro",
+        "fevereiro",
+        "março",
+        "abril",
+        "maio",
+        "junho",
+        "julho",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "dezembro",
+      ];
+      const diaSemana = dias[agora.getDay()];
+      const dia = agora.getDate();
+      const mes = meses[agora.getMonth()];
+      const ano = agora.getFullYear();
+      setDataAtual(`${diaSemana}, ${dia} de ${mes} de ${ano}`);
+      const hora = agora.getHours().toString().padStart(2, "0");
+      const minuto = agora.getMinutes().toString().padStart(2, "0");
+      setHoraAtual(`${hora}:${minuto}`);
+    };
+    atualizarDataHora();
+    const intervalo = setInterval(atualizarDataHora, 1000 * 60);
+    return () => clearInterval(intervalo);
+  }, []);
+
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="min-h-screen">
       <style jsx global>{`
         .dashboard-tabs [data-state="active"] {
-          background-color: #0e0f11 !important;
-          color: white !important;
+          background-color: var(--tab-active-bg);
+          color: var(--tab-active-color);
           border: none !important;
           box-shadow: none !important;
         }
         .dashboard-tabs [data-state="active"]:hover {
-          background-color: #0e0f11 !important;
           border: none !important;
         }
         .dashboard-tabs [data-state="active"]:focus {
@@ -51,17 +94,15 @@ export default function DashboardPage() {
           <div className="hidden items-center gap-4 md:flex">
             <div className="flex items-center gap-2 text-xs text-white/80">
               <Calendar size={16} />
-              <span>segunda-feira, 10 de junho de 2024</span>
+              <span>{dataAtual}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-white/80">
               <Clock size={16} />
-              <span>14:30</span>
+              <span>{horaAtual}</span>
             </div>
-            <Button size="icon" variant="ghost" className="text-white">
-              <Info size={18} />
-            </Button>
+            <ThemeToggle />
           </div>
-          {/* Menu mobile/hamburguer */}
+
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
@@ -82,22 +123,15 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex items-center gap-2 text-xs text-white/80">
                     <Calendar size={16} />
-                    <span>segunda-feira, 10 de junho de 2024</span>
+                    <span>{dataAtual}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-white/80">
                     <Clock size={16} />
-                    <span>14:30</span>
+                    <span>{horaAtual}</span>
                   </div>
                   <Badge className="w-fit bg-green-500 text-white">
                     Sistema Online
                   </Badge>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="w-fit text-white"
-                  >
-                    <Info size={18} />
-                  </Button>
                 </div>
               </SheetContent>
             </Sheet>
@@ -125,49 +159,25 @@ export default function DashboardPage() {
           >
             <TabsTrigger
               value="visao-geral"
-              className="flex-1 text-xs md:text-sm lg:text-base"
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-                border: "none",
-                outline: "none",
-              }}
+              className="flex-1 text-xs text-white md:text-sm lg:text-base"
             >
               Visão Geral
             </TabsTrigger>
             <TabsTrigger
               value="usuarios"
-              className="flex-1 text-xs md:text-sm lg:text-base"
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-                border: "none",
-                outline: "none",
-              }}
+              className="flex-1 text-xs text-white md:text-sm lg:text-base"
             >
               Usuários
             </TabsTrigger>
             <TabsTrigger
               value="pagamentos"
-              className="flex-1 text-xs md:text-sm lg:text-base"
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-                border: "none",
-                outline: "none",
-              }}
+              className="flex-1 text-xs text-white md:text-sm lg:text-base"
             >
               Pagamentos
             </TabsTrigger>
             <TabsTrigger
               value="logs"
-              className="flex-1 text-xs md:text-sm lg:text-base"
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-                border: "none",
-                outline: "none",
-              }}
+              className="flex-1 text-xs text-white md:text-sm lg:text-base"
             >
               Logs & Sistema
             </TabsTrigger>

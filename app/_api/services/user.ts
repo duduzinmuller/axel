@@ -26,6 +26,13 @@ export interface UserResponse {
   };
 }
 
+// Interfaces para estatísticas
+export interface PlanStatistics {
+  plan: string;
+  count: number;
+  percentage: number;
+}
+
 export const UserService = {
   async signup(data: SignupInput): Promise<UserResponse> {
     const response = await publicApi.post<UserResponse>(
@@ -69,5 +76,10 @@ export const UserService = {
     password: string;
   }): Promise<void> {
     await publicApi.post("/users/reset-password", data);
+  },
+
+  async getPlanDistribution(): Promise<PlanStatistics[]> {
+    const response = await protectedApi.get<PlanStatistics[]>("/users/plans");
+    return response.data;
   },
 };
