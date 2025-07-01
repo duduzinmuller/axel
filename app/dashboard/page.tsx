@@ -16,8 +16,10 @@ import Pagamentos from "./components/Pagamentos";
 import LogsESistema from "./components/LogsESistema";
 import { Badge } from "../../components/ui/badge";
 import ThemeToggle from "../_components/ThemeToggle";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [dataAtual, setDataAtual] = useState("");
   const [horaAtual, setHoraAtual] = useState("");
 
@@ -138,10 +140,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      {/* Voltar e título */}
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div className="mb-2 flex items-center gap-2">
-          <Button size="icon" variant="outline">
+          <Button size="icon" variant="outline" onClick={() => router.back()}>
             <ArrowLeft size={18} />
           </Button>
           <div>
@@ -151,7 +152,6 @@ export default function DashboardPage() {
             </span>
           </div>
         </div>
-        {/* Tabs */}
         <Tabs defaultValue="visao-geral" className="dashboard-tabs mt-4 w-full">
           <TabsList
             className="flex w-full"
