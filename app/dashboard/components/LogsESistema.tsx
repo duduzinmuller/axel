@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { useCodes } from "@/app/_lib/hooks/useCodes";
 import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
+import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
+import { useUsers } from "@/app/_lib/hooks/useUsers";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
@@ -96,6 +98,18 @@ export default function LogsESistema() {
     loading: loadingEmails,
     error: errorEmails,
   } = useEmailNotifications();
+  const {
+    verifications,
+    loading: loadingVerifications,
+    error: errorVerifications,
+  } = useEmailVerifications();
+
+  const { users } = useUsers();
+
+  const getUserName = (userId: string) => {
+    const user = users.find((u) => u.id === userId);
+    return user ? user.name : userId;
+  };
 
   return (
     <>
@@ -225,8 +239,6 @@ export default function LogsESistema() {
             </div>
           </div>
         </Card>
-
-        {/* Notificações por Email */}
         <Card className="rounded-sm border p-0 shadow-none">
           <div className="mt-2 ml-4 p-2">
             <div className="mb-2 flex items-center gap-2">
@@ -322,13 +334,13 @@ export default function LogsESistema() {
             </div>
           </div>
         </Card>
-
-        {/* Verificações de Email */}
         <Card className="rounded-sm border p-0 shadow-none">
           <div className="mt-2 ml-4 p-2">
             <div className="mb-2 flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5" />
-              <p className="text-xl font-semibold">Verificações de Email (3)</p>
+              <p className="text-xl font-semibold">
+                Verificações de Email ({verifications.length})
+              </p>
             </div>
             <div>
               <p className="text-xs text-[#777]">
@@ -338,7 +350,6 @@ export default function LogsESistema() {
           </div>
           <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
             <div className="mx-auto w-full max-w-full min-w-[900px]">
-              {/* Cabeçalho */}
               <div className="mb-2 grid grid-cols-6 gap-2 border-b border-[#23262F] pb-2 md:gap-4">
                 <div className="text-left text-xs font-semibold text-[#B1B5C3] md:text-sm">
                   Usuário
@@ -359,104 +370,60 @@ export default function LogsESistema() {
                   Ações
                 </div>
               </div>
-
-              {/* Linhas de dados */}
               <div className="space-y-0">
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      João Silva
-                    </div>
-                    <div className="text-[10px] text-[#777] md:text-xs">
-                      joao@email.com
-                    </div>
+                {loadingVerifications ? (
+                  <div className="py-8 text-center text-gray-400">
+                    Carregando verificações...
                   </div>
-                  <div className="text-center">
-                    <div className="text-xs md:text-sm">123456</div>
+                ) : errorVerifications ? (
+                  <div className="py-8 text-center text-red-400">
+                    {errorVerifications}
                   </div>
-                  <div className="text-center">
-                    <StatusBadge status="verified" type="verification" />
+                ) : verifications.length === 0 ? (
+                  <div className="py-8 text-center text-gray-400">
+                    Nenhuma verificação encontrada.
                   </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
+                ) : (
+                  verifications.map((verification) => (
+                    <div
+                      key={verification.id}
+                      className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4"
                     >
-                      Reenviar
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      Pedro Oliveira
+                      <div className="text-left">
+                        <div className="text-xs font-semibold md:text-sm">
+                          {getUserName(verification.userId)}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xs md:text-sm">
+                          {verification.code}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <StatusBadge status="pending" type="verification" />
+                      </div>
+                      <div className="text-center text-xs md:text-sm">
+                        {new Date(verification.expiresAt).toLocaleDateString(
+                          "pt-BR",
+                        )}
+                      </div>
+                      <div className="text-center text-xs md:text-sm">
+                        {new Date(verification.createdAt).toLocaleDateString(
+                          "pt-BR",
+                        )}
+                      </div>
+                      <div className="flex justify-center gap-1 md:gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="hover:bg-[#23262F]"
+                        >
+                          Reenviar
+                        </Button>
+                      </div>
                     </div>
-                    <div className="text-[10px] text-[#777] md:text-xs">
-                      pedro@email.com
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs md:text-sm">789012</div>
-                  </div>
-                  <div className="text-center">
-                    <StatusBadge status="pending" type="verification" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
-                    >
-                      Reenviar
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      Carlos Ferreira
-                    </div>
-                    <div className="text-[10px] text-[#777] md:text-xs">
-                      carlos@email.com
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs md:text-sm">364789</div>
-                  </div>
-                  <div className="text-center">
-                    <StatusBadge status="expired" type="verification" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    19/01/2024
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    19/01/2024
-                  </div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
-                    >
-                      Reenviar
-                    </Button>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
