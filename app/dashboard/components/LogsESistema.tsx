@@ -12,6 +12,7 @@ import {
   Info,
 } from "lucide-react";
 import { useCodes } from "@/app/_lib/hooks/useCodes";
+import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
@@ -89,7 +90,12 @@ const StatusBadge = ({ status, type }: { status: string; type: string }) => {
 };
 
 export default function LogsESistema() {
-  const { codes, loading, error } = useCodes();
+  const { codes, loading: loadingCodes, error: errorCodes } = useCodes();
+  const {
+    emails,
+    loading: loadingEmails,
+    error: errorEmails,
+  } = useEmailNotifications();
 
   return (
     <>
@@ -105,8 +111,10 @@ export default function LogsESistema() {
         </Card>
         <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="text-muted-foreground text-xs">Emails Enviados</span>
-          <span className="text-2xl font-bold">4</span>
-          <span className="text-xs">1 pendente</span>
+          <span className="text-2xl font-bold">{emails.length}</span>
+          <span className="text-xs">
+            {emails.filter((e) => e.status === "PENDING").length} pendente(s)
+          </span>
         </Card>
         <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="text-muted-foreground text-xs">Verificações</span>
@@ -159,12 +167,14 @@ export default function LogsESistema() {
                 </div>
               </div>
               <div className="space-y-0">
-                {loading ? (
+                {loadingCodes ? (
                   <div className="py-8 text-center text-gray-400">
                     Carregando códigos...
                   </div>
-                ) : error ? (
-                  <div className="py-8 text-center text-red-400">{error}</div>
+                ) : errorCodes ? (
+                  <div className="py-8 text-center text-red-400">
+                    {errorCodes}
+                  </div>
                 ) : codes.length === 0 ? (
                   <div className="py-8 text-center text-gray-400">
                     Nenhum código encontrado.
@@ -222,7 +232,7 @@ export default function LogsESistema() {
             <div className="mb-2 flex items-center gap-2">
               <Mail className="h-5 w-5" />
               <p className="text-xl font-semibold">
-                Notificações por Email (4)
+                Notificações por Email ({emails.length})
               </p>
             </div>
             <div>
@@ -233,7 +243,6 @@ export default function LogsESistema() {
           </div>
           <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
             <div className="mx-auto w-full max-w-full min-w-[900px]">
-              {/* Cabeçalho */}
               <div className="mb-2 grid grid-cols-6 gap-2 border-b border-[#23262F] pb-2 md:gap-4">
                 <div className="text-left text-xs font-semibold text-[#B1B5C3] md:text-sm">
                   Destinatário
@@ -254,128 +263,61 @@ export default function LogsESistema() {
                   Ações
                 </div>
               </div>
-
-              {/* Linhas de dados */}
               <div className="space-y-0">
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      joao@email.com
-                    </div>
+                {loadingEmails ? (
+                  <div className="py-8 text-center text-gray-400">
+                    Carregando emails...
                   </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm">
-                      Bem-vindo ao sistema!
-                    </div>
+                ) : errorEmails ? (
+                  <div className="py-8 text-center text-red-400">
+                    {errorEmails}
                   </div>
-                  <div className="text-center">
-                    <StatusBadge status="SENT" type="email" />
+                ) : emails.length === 0 ? (
+                  <div className="py-8 text-center text-gray-400">
+                    Nenhum email encontrado.
                   </div>
-                  <div className="text-center">
-                    <PlanBadge plan="MONTHLY" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
+                ) : (
+                  emails.map((email) => (
+                    <div
+                      key={email.id}
+                      className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4"
                     >
-                      Ver Conteúdo
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      maria@email.com
+                      <div className="text-left">
+                        <div className="text-[10px] font-semibold">
+                          {email.recipient}
+                        </div>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs md:text-sm">
+                          {email.subject}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <StatusBadge status={email.status} type="email" />
+                      </div>
+                      <div className="text-center">
+                        <PlanBadge plan={email.plan} />
+                      </div>
+                      <div className="text-center text-xs md:text-sm">
+                        {email.sentAt
+                          ? new Date(email.sentAt).toLocaleDateString("pt-BR")
+                          : new Date(email.createdAt).toLocaleDateString(
+                              "pt-BR",
+                            )}
+                      </div>
+                      <div className="flex justify-center gap-1 md:gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="hover:bg-[#23262F]"
+                          onClick={() => alert(email.content)}
+                        >
+                          Ver Conteúdo
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm">
-                      Confirmação de pagamento
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <StatusBadge status="SENT" type="email" />
-                  </div>
-                  <div className="text-center">
-                    <PlanBadge plan="ANNUAL" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    19/01/2024
-                  </div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
-                    >
-                      Ver Conteúdo
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      pedro@email.com
-                    </div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm">
-                      Verificação de email pendente
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <StatusBadge status="PENDING" type="email" />
-                  </div>
-                  <div className="text-center">
-                    <PlanBadge plan="FREE" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">-</div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
-                    >
-                      Ver Conteúdo
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      ana@email.com
-                    </div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xs md:text-sm">
-                      Falha no processamento
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <StatusBadge status="FAILED" type="email" />
-                  </div>
-                  <div className="text-center">
-                    <PlanBadge plan="MONTHLY" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">-</div>
-                  <div className="flex justify-center gap-1 md:gap-2">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="hover:bg-[#23262F]"
-                    >
-                      Ver Conteúdo
-                    </Button>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
