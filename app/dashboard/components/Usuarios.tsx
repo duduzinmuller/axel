@@ -18,9 +18,11 @@ import { useUsers } from "@/app/_lib/hooks/useUsers";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
-    MONTHLY: "bg-[#F8FAFC] text-[#2563EB]",
-    ANNUAL: "bg-[#F8FAFC] text-[#16A34A]",
-    FREE: "bg-[#1E293B] text-[#4B5563]",
+    MONTHLY:
+      "shadow-gold border border-yellow-400 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900",
+    ANNUAL:
+      "shadow-diamond border border-blue-200 bg-gradient-to-r from-cyan-200 via-white to-blue-400 text-blue-900",
+    FREE: "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200",
   };
 
   return (
@@ -179,7 +181,6 @@ export default function Usuarios() {
 
   return (
     <>
-      {/* Filtros e Busca */}
       <Card className="mt-5 mb-6 rounded-sm border p-0 shadow-none">
         <div className="px-6 pt-6 text-base">
           <div className="flex items-center justify-between">
@@ -195,7 +196,7 @@ export default function Usuarios() {
                 onClick={clearFilters}
                 variant="ghost"
                 size="sm"
-                className="text-[#777] hover:text-white"
+                className="hover:text-white"
               >
                 <X className="mr-1 h-4 w-4" />
                 Limpar filtros
@@ -251,8 +252,6 @@ export default function Usuarios() {
           </Button>
         </div>
       </Card>
-
-      {/* Lista de Usuários */}
       <Card className="mb-5 overflow-x-auto rounded-sm border border-[#1E293B] p-0 shadow-none">
         <div className="mt-2 ml-4 p-2">
           <p className="mb-2 text-base font-semibold md:text-lg">
@@ -267,7 +266,6 @@ export default function Usuarios() {
 
         <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
           <div className="mx-auto w-full max-w-full min-w-[900px]">
-            {/* Cabeçalho */}
             <div className="mb-2 grid grid-cols-8 gap-2 border-b border-[#23262F] pb-2 md:gap-4">
               <div className="col-span-2 text-left text-[10px] font-semibold text-[#B1B5C3] md:col-span-1 md:text-xs">
                 Usuário
@@ -294,8 +292,6 @@ export default function Usuarios() {
                 Ações
               </div>
             </div>
-
-            {/* Linhas de dados */}
             <div className="space-y-0">
               {filteredUsers.length === 0 ? (
                 <div className="py-8 text-center">
