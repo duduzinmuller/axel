@@ -138,14 +138,21 @@ export default function LogsESistema() {
         </Card>
         <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="text-muted-foreground text-xs">Verificações</span>
-          <span className="text-2xl font-bold">3</span>
-          <span className="text-xs">1 pendente</span>
+          <span className="text-2xl font-bold">{verifications.length}</span>
+          <span className="text-xs">
+            {verifications.filter((v) => v.status === "pending").length}{" "}
+            pendente(s)
+          </span>
         </Card>
         <Card className="flex flex-col gap-2 rounded-xl border p-6 shadow-none">
           <span className="text-muted-foreground text-xs">
             Uso de Mensagens
           </span>
-          <span className="text-2xl font-bold">177</span>
+          <span className="text-2xl font-bold">
+            {messageUsage
+              ? messageUsage.reduce((acc, u) => acc + (u.messages || 0), 0)
+              : 0}
+          </span>
           <span className="text-xs">Total hoje</span>
         </Card>
       </div>

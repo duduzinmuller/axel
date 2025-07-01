@@ -1,6 +1,7 @@
 import { protectedApi } from "@/app/_lib/axios";
 
 export interface EmailVerification {
+  status: string;
   id: string;
   code: string;
   expiresAt: string;
