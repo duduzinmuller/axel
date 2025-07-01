@@ -26,8 +26,8 @@ export interface UserResponse {
   };
 }
 
-// Interface para usuários do dashboard
 export interface DashboardUser {
+  messageLimit: any;
   id: string;
   name: string;
   email: string;
@@ -43,7 +43,7 @@ export interface DashboardUser {
   isVerified: boolean;
   resetPasswordToken?: string;
   resetPasswordTokenExpires?: string;
-  messages?: number; // Campo adicional para contagem de mensagens
+  messages?: number;
 }
 
 export interface PlanStatistics {

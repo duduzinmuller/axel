@@ -15,6 +15,7 @@ import { useCodes } from "@/app/_lib/hooks/useCodes";
 import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
 import { useUsers } from "@/app/_lib/hooks/useUsers";
+import { useMessageUsage } from "@/app/_lib/hooks";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
@@ -105,6 +106,11 @@ export default function LogsESistema() {
   } = useEmailVerifications();
 
   const { users } = useUsers();
+  const {
+    data: messageUsage,
+    loading: loadingUsage,
+    error: errorUsage,
+  } = useMessageUsage();
 
   const getUserName = (userId: string) => {
     const user = users.find((u) => u.id === userId);
@@ -428,13 +434,13 @@ export default function LogsESistema() {
             </div>
           </div>
         </Card>
-
-        {/* Uso de Mensagens */}
         <Card className="rounded-sm border p-0 shadow-none">
           <div className="mt-2 ml-4 p-2">
             <div className="mb-2 flex items-center gap-2">
               <Info className="h-5 w-5" />
-              <p className="text-xl font-semibold">Uso de Mensagens (3)</p>
+              <p className="text-xl font-semibold">
+                Uso de Mensagens ({messageUsage ? messageUsage.length : 0})
+              </p>
             </div>
             <div>
               <p className="text-xs text-[#777]">
@@ -444,7 +450,6 @@ export default function LogsESistema() {
           </div>
           <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
             <div className="mx-auto w-full max-w-full min-w-[800px]">
-              {/* Cabeçalho */}
               <div className="mb-2 grid grid-cols-6 gap-2 border-b border-[#23262F] pb-2 md:gap-4">
                 <div className="text-left text-xs font-semibold text-[#B1B5C3] md:text-sm">
                   Usuário
@@ -465,65 +470,52 @@ export default function LogsESistema() {
                   Status
                 </div>
               </div>
-
-              {/* Linhas de dados */}
               <div className="space-y-0">
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      João Silva
+                {loadingUsage ? (
+                  <div className="py-8 text-center text-gray-400">
+                    Carregando uso de mensagens...
+                  </div>
+                ) : errorUsage ? (
+                  <div className="py-8 text-center text-red-400">
+                    {errorUsage}
+                  </div>
+                ) : !messageUsage || messageUsage.length === 0 ? (
+                  <div className="py-8 text-center text-gray-400">
+                    Nenhum uso de mensagem encontrado.
+                  </div>
+                ) : (
+                  messageUsage.map((usage) => (
+                    <div
+                      key={usage.id}
+                      className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4"
+                    >
+                      <div className="text-left">
+                        <div className="text-xs font-semibold md:text-sm">
+                          {usage.name}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <PlanBadge plan={usage.plan} />
+                      </div>
+                      <div className="text-center text-xs md:text-sm">
+                        {new Date(usage.date).toLocaleDateString("pt-BR")}
+                      </div>
+                      <div className="text-center text-xs md:text-sm">
+                        {usage.messages}
+                      </div>
+                      <div className="text-center text-xs md:text-sm">
+                        {usage.plan === "MONTHLY" || usage.plan === "ANNUAL" ? (
+                          <span title="Ilimitado">&#8734;</span>
+                        ) : (
+                          <p>Limitado</p>
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <StatusBadge status={usage.status} type="usage" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-center">
-                    <PlanBadge plan="MONTHLY" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="text-center text-xs md:text-sm">45</div>
-                  <div className="text-center text-xs md:text-sm">500</div>
-                  <div className="text-center">
-                    <StatusBadge status="Normal" type="usage" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      Maria Santos
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <PlanBadge plan="ANNUAL" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="text-center text-xs md:text-sm">120</div>
-                  <div className="text-center text-xs md:text-sm">1000</div>
-                  <div className="text-center">
-                    <StatusBadge status="Normal" type="usage" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-6 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4">
-                  <div className="text-left">
-                    <div className="text-xs font-semibold md:text-sm">
-                      Pedro Oliveira
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <PlanBadge plan="FREE" />
-                  </div>
-                  <div className="text-center text-xs md:text-sm">
-                    20/01/2024
-                  </div>
-                  <div className="text-center text-xs md:text-sm">12</div>
-                  <div className="text-center text-xs md:text-sm">50</div>
-                  <div className="text-center">
-                    <StatusBadge status="Normal" type="usage" />
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
