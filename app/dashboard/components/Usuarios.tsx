@@ -12,108 +12,17 @@ import {
   Trash2,
   Search,
   X,
+  AlertCircle,
 } from "lucide-react";
+import { useUsers } from "@/app/_lib/hooks/useUsers";
 
-// Tipos para os dados dos usuários
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  plan: string;
-  role: string;
-  provider: string;
-  status: string;
-  messages: number;
-  createdAt: string;
-}
-
-// Dados mockados dos usuários
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "João Silva",
-    email: "joao@email.com",
-    plan: "MONTHLY",
-    role: "USER",
-    provider: "email",
-    status: "Verificado",
-    messages: 45,
-    createdAt: "14/01/2024",
-  },
-  {
-    id: "2",
-    name: "Maria Santos",
-    email: "maria@email.com",
-    plan: "ANNUAL",
-    role: "ADMIN",
-    provider: "google",
-    status: "Verificado",
-    messages: 120,
-    createdAt: "09/01/2024",
-  },
-  {
-    id: "3",
-    name: "Pedro Oliveira",
-    email: "pedro@email.com",
-    plan: "FREE",
-    role: "USER",
-    provider: "email",
-    status: "Pendente",
-    messages: 12,
-    createdAt: "17/01/2024",
-  },
-  {
-    id: "4",
-    name: "Ana Costa",
-    email: "ana@email.com",
-    plan: "MONTHLY",
-    role: "USER",
-    provider: "github",
-    status: "Verificado",
-    messages: 78,
-    createdAt: "11/01/2024",
-  },
-  {
-    id: "5",
-    name: "Carlos Ferreira",
-    email: "carlos@email.com",
-    plan: "FREE",
-    role: "USER",
-    provider: "email",
-    status: "Pendente",
-    messages: 5,
-    createdAt: "18/01/2024",
-  },
-  {
-    id: "6",
-    name: "Lucia Mendes",
-    email: "lucia@email.com",
-    plan: "ANNUAL",
-    role: "USER",
-    provider: "google",
-    status: "Verificado",
-    messages: 95,
-    createdAt: "05/01/2024",
-  },
-  {
-    id: "7",
-    name: "Roberto Alves",
-    email: "roberto@email.com",
-    plan: "FREE",
-    role: "USER",
-    provider: "email",
-    status: "Pendente",
-    messages: 8,
-    createdAt: "20/01/2024",
-  },
-];
-
-// Componentes reutilizáveis para badges
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
-    MONTHLY: "bg-[#F8FAFC] text-[#2563EB]",
-    ANNUAL: "bg-[#F8FAFC] text-[#16A34A]",
-    FREE: "bg-[#1E293B] text-[#4B5563]",
+    MONTHLY:
+      "shadow-gold border border-yellow-400 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900",
+    ANNUAL:
+      "shadow-diamond border border-blue-200 bg-gradient-to-r from-cyan-200 via-white to-blue-400 text-blue-900",
+    FREE: "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200",
   };
 
   return (
@@ -174,13 +83,12 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 export default function Usuarios() {
-  // Estados para filtros
+  const { users, loading, error } = useUsers();
   const [searchTerm, setSearchTerm] = useState("");
   const [planFilter, setPlanFilter] = useState("Todos os planos");
   const [roleFilter, setRoleFilter] = useState("Todas as roles");
   const [statusFilter, setStatusFilter] = useState("Todos");
 
-  // Função para limpar todos os filtros
   const clearFilters = () => {
     setSearchTerm("");
     setPlanFilter("Todos os planos");
@@ -188,44 +96,36 @@ export default function Usuarios() {
     setStatusFilter("Todos");
   };
 
-  // Função para filtrar usuários
   const filteredUsers = useMemo(() => {
-    return mockUsers.filter((user) => {
-      // Filtro por busca (nome ou email)
+    return users.filter((user) => {
       const matchesSearch =
         searchTerm === "" ||
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Filtro por plano
       const matchesPlan =
         planFilter === "Todos os planos" ||
         (planFilter === "Gratuito" && user.plan === "FREE") ||
         (planFilter === "Mensal" && user.plan === "MONTHLY") ||
         (planFilter === "Anual" && user.plan === "ANNUAL");
 
-      // Filtro por role
       const matchesRole =
         roleFilter === "Todas as roles" ||
         (roleFilter === "User" && user.role === "USER") ||
         (roleFilter === "Admin" && user.role === "ADMIN");
 
-      // Filtro por status
       const matchesStatus =
-        statusFilter === "Todos" || user.status === statusFilter;
+        statusFilter === "Todos" ||
+        (statusFilter === "Verificado" && user.isVerified) ||
+        (statusFilter === "Pendente" && !user.isVerified);
 
       return matchesSearch && matchesPlan && matchesRole && matchesStatus;
     });
-  }, [searchTerm, planFilter, roleFilter, statusFilter]);
+  }, [users, searchTerm, planFilter, roleFilter, statusFilter]);
 
-  // Calcular estatísticas baseadas nos usuários filtrados
   const stats = useMemo(() => {
-    const verified = filteredUsers.filter(
-      (user) => user.status === "Verificado",
-    ).length;
-    const pending = filteredUsers.filter(
-      (user) => user.status === "Pendente",
-    ).length;
+    const verified = filteredUsers.filter((user) => user.isVerified).length;
+    const pending = filteredUsers.filter((user) => !user.isVerified).length;
 
     const freePlan = filteredUsers.filter(
       (user) => user.plan === "FREE",
@@ -238,7 +138,7 @@ export default function Usuarios() {
     ).length;
 
     const totalMessages = filteredUsers.reduce(
-      (sum, user) => sum + user.messages,
+      (sum, user) => sum + (user.messages || 0),
       0,
     );
     const avgMessages =
@@ -257,17 +157,36 @@ export default function Usuarios() {
     };
   }, [filteredUsers]);
 
+  if (loading) {
+    return (
+      <div className="mt-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-white"></div>
+          <p className="mt-2 text-sm text-gray-400">Carregando usuários...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-6 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="mx-auto h-8 w-8 text-red-500" />
+          <p className="mt-2 text-sm text-red-400">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      {/* Filtros e Busca */}
-      <Card className="mt-5 mb-6 rounded-sm border border-[#23262F] bg-[#0E0F11] p-0 shadow-none">
+      <Card className="mt-5 mb-6 rounded-sm border p-0 shadow-none">
         <div className="px-6 pt-6 text-base">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Funnel />
-              <p className="text-xl font-semibold text-white">
-                Filtros e Busca
-              </p>
+              <p className="text-xl font-semibold">Filtros e Busca</p>
             </div>
             {(searchTerm ||
               planFilter !== "Todos os planos" ||
@@ -277,7 +196,7 @@ export default function Usuarios() {
                 onClick={clearFilters}
                 variant="ghost"
                 size="sm"
-                className="text-[#777] hover:text-white"
+                className="hover:text-white"
               >
                 <X className="mr-1 h-4 w-4" />
                 Limpar filtros
@@ -294,14 +213,14 @@ export default function Usuarios() {
           <div className="relative w-3/4 md:w-1/5">
             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#777]" />
             <input
-              className="focus:ring-primary/30 w-full rounded-md border border-[#353945] bg-[#0E0F11] py-2 pr-3 pl-10 text-sm text-white outline-none placeholder:text-[#777] focus:ring-2"
+              className="focus:ring-primary/30 w-full rounded-md border py-2 pr-3 pl-10 text-sm outline-none placeholder:text-[#777] focus:ring-2"
               placeholder="Buscar por nome ou email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <select
-            className="w-3/4 rounded-md border border-[#353945] bg-[#0E0F11] px-3 py-2 text-sm text-white md:w-1/5"
+            className="w-3/4 rounded-md border px-3 py-2 text-sm md:w-1/5"
             value={planFilter}
             onChange={(e) => setPlanFilter(e.target.value)}
           >
@@ -311,7 +230,7 @@ export default function Usuarios() {
             <option>Anual</option>
           </select>
           <select
-            className="w-3/4 rounded-md border border-[#353945] bg-[#0E0F11] px-3 py-2 text-sm text-white md:w-1/5"
+            className="w-3/4 rounded-md border px-3 py-2 text-sm md:w-1/5"
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
@@ -320,7 +239,7 @@ export default function Usuarios() {
             <option>Admin</option>
           </select>
           <select
-            className="w-3/4 rounded-md border border-[#353945] bg-[#0E0F11] px-3 py-2 text-sm text-white md:w-1/5"
+            className="text-smmd:w-1/5 w-3/4 rounded-md border px-3 py-2"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -328,16 +247,14 @@ export default function Usuarios() {
             <option>Verificado</option>
             <option>Pendente</option>
           </select>
-          <Button className="mt-2 w-2/4 border border-[#353945] bg-[#0E0F11] text-white hover:bg-[#23262F]/80 md:mt-0 md:w-1/5">
+          <Button className="mt-2 w-2/4 border border-[#353945] text-white hover:bg-[#23262F]/80 md:mt-0 md:w-1/5">
             Exportar
           </Button>
         </div>
       </Card>
-
-      {/* Lista de Usuários */}
-      <Card className="mb-5 overflow-x-auto rounded-sm border border-[#1E293B] bg-[#0E0F11] p-0 shadow-none">
+      <Card className="mb-5 overflow-x-auto rounded-sm border border-[#1E293B] p-0 shadow-none">
         <div className="mt-2 ml-4 p-2">
-          <p className="mb-2 text-base font-semibold text-white md:text-lg">
+          <p className="mb-2 text-base font-semibold md:text-lg">
             Lista de Usuários ({filteredUsers.length})
           </p>
           <div>
@@ -349,7 +266,6 @@ export default function Usuarios() {
 
         <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
           <div className="mx-auto w-full max-w-full min-w-[900px]">
-            {/* Cabeçalho */}
             <div className="mb-2 grid grid-cols-8 gap-2 border-b border-[#23262F] pb-2 md:gap-4">
               <div className="col-span-2 text-left text-[10px] font-semibold text-[#B1B5C3] md:col-span-1 md:text-xs">
                 Usuário
@@ -376,8 +292,6 @@ export default function Usuarios() {
                 Ações
               </div>
             </div>
-
-            {/* Linhas de dados */}
             <div className="space-y-0">
               {filteredUsers.length === 0 ? (
                 <div className="py-8 text-center">
@@ -392,7 +306,7 @@ export default function Usuarios() {
                     className="grid grid-cols-8 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4"
                   >
                     <div className="col-span-2 text-left md:col-span-1">
-                      <div className="text-[10px] font-semibold text-white md:text-xs">
+                      <div className="text-[10px] font-semibold md:text-xs">
                         {user.name}
                       </div>
                       <div className="text-[9px] text-[#777] md:text-[10px]">
@@ -409,13 +323,15 @@ export default function Usuarios() {
                       <ProviderBadge provider={user.provider} />
                     </div>
                     <div className="text-center">
-                      <StatusBadge status={user.status} />
+                      <StatusBadge
+                        status={user.isVerified ? "Verificado" : "Pendente"}
+                      />
                     </div>
-                    <div className="text-center text-[10px] text-white md:text-xs">
-                      {user.messages}
+                    <div className="text-center text-[10px] md:text-xs">
+                      {user.messages || 0}
                     </div>
-                    <div className="text-center text-[10px] text-white md:text-xs">
-                      {user.createdAt}
+                    <div className="text-center text-[10px] md:text-xs">
+                      {new Date(user.createdAt).toLocaleDateString("pt-BR")}
                     </div>
                     <div className="-ml-7 -ml-12 ml-4 flex justify-center gap-1 md:ml-0 md:gap-2">
                       <Button
@@ -461,10 +377,8 @@ export default function Usuarios() {
 
       {/* Estatísticas */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card className="rounded-xl border border-[#23262F] bg-[#0E0F11] p-4 shadow-none">
-          <div className="mb-2 font-semibold text-white">
-            Estatísticas de Verificação
-          </div>
+        <Card className="rounded-xl border p-4 shadow-none">
+          <div className="mb-2 font-semibold">Estatísticas de Verificação</div>
           <div className="flex flex-col gap-1 text-sm">
             <div className="flex justify-between">
               <span>Verificados</span>{" "}
@@ -476,10 +390,8 @@ export default function Usuarios() {
             </div>
           </div>
         </Card>
-        <Card className="rounded-xl border border-[#23262F] bg-[#0E0F11] p-4 shadow-none">
-          <div className="mb-2 font-semibold text-white">
-            Distribuição por Plano
-          </div>
+        <Card className="rounded-xl border p-4 shadow-none">
+          <div className="mb-2 font-semibold">Distribuição por Plano</div>
           <div className="flex flex-col gap-1 text-sm">
             <div className="flex justify-between">
               <span>Gratuito</span>{" "}
@@ -495,8 +407,8 @@ export default function Usuarios() {
             </div>
           </div>
         </Card>
-        <Card className="rounded-xl border border-[#23262F] bg-[#0E0F11] p-4 shadow-none">
-          <div className="mb-2 font-semibold text-white">Uso de Mensagens</div>
+        <Card className="rounded-xl border p-4 shadow-none">
+          <div className="mb-2 font-semibold">Uso de Mensagens</div>
           <div className="flex flex-col gap-1 text-sm">
             <div className="flex justify-between">
               <span>Total</span>{" "}

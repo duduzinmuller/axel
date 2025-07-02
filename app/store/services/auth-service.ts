@@ -100,18 +100,24 @@ export const AuthService = {
   },
 
   verifyCode: async (email: string, code: string): Promise<void> => {
-    const response = await axios.post(`${API_URL}/validate-code`, {
-      email,
-      code,
-    });
+    const response = await axios.post(
+      `${API_URL}/email-verification/validate-code`,
+      {
+        email,
+        code,
+      },
+    );
 
     return response.data;
   },
 
   resendVerificationCode: async (email: string): Promise<void> => {
-    const response = await axios.post(`${API_URL}/verification-code`, {
-      email,
-    });
+    const response = await axios.post(
+      `${API_URL}/email-verification/verification-code`,
+      {
+        email,
+      },
+    );
 
     return response.data;
   },

@@ -26,6 +26,32 @@ export interface UserResponse {
   };
 }
 
+export interface DashboardUser {
+  messageLimit: any;
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  image?: string;
+  provider: string;
+  providerId?: string;
+  plan: string;
+  planExpiresAt?: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  isVerified: boolean;
+  resetPasswordToken?: string;
+  resetPasswordTokenExpires?: string;
+  messages?: number;
+}
+
+export interface PlanStatistics {
+  plan: string;
+  count: number;
+  percentage: number;
+}
+
 export const UserService = {
   async signup(data: SignupInput): Promise<UserResponse> {
     const response = await publicApi.post<UserResponse>(
@@ -69,5 +95,15 @@ export const UserService = {
     password: string;
   }): Promise<void> {
     await publicApi.post("/users/reset-password", data);
+  },
+
+  async getPlanDistribution(): Promise<PlanStatistics[]> {
+    const response = await protectedApi.get<PlanStatistics[]>("/users/plans");
+    return response.data;
+  },
+
+  async getAllUsers(): Promise<DashboardUser[]> {
+    const response = await protectedApi.get<DashboardUser[]>("/users");
+    return response.data;
   },
 };

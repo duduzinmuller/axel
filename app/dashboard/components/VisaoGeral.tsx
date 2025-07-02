@@ -25,53 +25,14 @@ ChartJS.register(
 );
 
 import { Card } from "../../../components/ui/card";
-import { Pie, Line } from "react-chartjs-2";
-import React from "react";
+import { Line } from "react-chartjs-2";
+import React, { useMemo } from "react";
 import { AlertCircle } from "lucide-react";
 import { UserRound } from "lucide-react";
 import { CircleDollarSign } from "lucide-react";
 import { UserCheck } from "lucide-react";
-
-const pieData = {
-  labels: ["Free 72%", "Monthly 20%", "Annual 8%"],
-  datasets: [
-    {
-      data: [72, 20, 8],
-      backgroundColor: [
-        "#7c3aed", // Free
-        "#34d399", // Monthly
-        "#fbbf24", // Annual
-      ],
-      borderWidth: 0,
-    },
-  ],
-};
-
-const lineData = {
-  labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
-  datasets: [
-    {
-      label: "Usuários",
-      data: [2000, 2200, 10000, 3500, 4800, 4200],
-      borderColor: "#34d399",
-      backgroundColor: "rgba(52,211,153,0.2)",
-      tension: 0.4,
-      fill: true,
-      pointRadius: 3,
-      pointBackgroundColor: "#FFFFFF",
-    },
-    {
-      label: "Usuarios 2",
-      data: [500, 250, 100, 100, 500, 100],
-      borderColor: "rgb(136, 132, 216)",
-      backgroundColor: "rgb(136, 132, 216)",
-      tension: 0.4,
-      fill: true,
-      pointRadius: 3,
-      pointBackgroundColor: "#FFFFFF",
-    },
-  ],
-};
+import { useDashboardStats } from "@/app/_lib/hooks/useDashboardStats";
+import { PlanDistributionChart } from "./PlanDistributionChart";
 
 const lineOptions = {
   responsive: true,
@@ -92,6 +53,61 @@ const lineOptions = {
 };
 
 export default function VisaoGeral() {
+  const { planDistribution, dashboardStats, loading, error } =
+    useDashboardStats();
+
+  const lineData = useMemo(() => {
+    const totalUsers = dashboardStats?.totalUsers || 0;
+
+    const growthData = [
+      Math.round(totalUsers * 0.3),
+      Math.round(totalUsers * 0.5),
+      Math.round(totalUsers * 0.7),
+      Math.round(totalUsers * 0.85),
+      Math.round(totalUsers * 0.95),
+      totalUsers,
+    ];
+
+    return {
+      labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+      datasets: [
+        {
+          label: "Usuários",
+          data: growthData,
+          borderColor: "#34d399",
+          tension: 0.4,
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: "#FFFFFF",
+        },
+      ],
+    };
+  }, [dashboardStats]);
+
+  if (loading) {
+    return (
+      <div className="mt-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-white"></div>
+          <p className="mt-2 text-sm text-gray-400">
+            Carregando estatísticas...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-6 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="mx-auto h-8 w-8 text-red-500" />
+          <p className="mt-2 text-sm text-red-400">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Cards principais */}
@@ -99,10 +115,12 @@ export default function VisaoGeral() {
         <Card className="flex flex-col gap-2 p-4">
           <span className="text-muted-foreground text-xs">
             <div className="flex items-center justify-between gap-2">
-              Total de Usuários <UserRound size={16} className="text-white" />
+              Total de Usuários <UserRound size={16} />
             </div>
           </span>
-          <span className="text-2xl font-bold">1.247</span>
+          <span className="text-2xl font-bold">
+            {dashboardStats?.totalUsers || 0}
+          </span>
           <span className="text-xs text-green-500">
             +23 <span className="text-gray-500">hoje</span>
           </span>
@@ -110,23 +128,38 @@ export default function VisaoGeral() {
         <Card className="flex flex-col gap-2 p-4">
           <span className="text-muted-foreground flex justify-between text-xs">
             Receita Total
-            <CircleDollarSign size={16} className="text-white" />
+            <CircleDollarSign size={16} />
           </span>
-          <span className="text-2xl font-bold">R$ 45.780,50</span>
+          <span className="text-2xl font-bold">
+            R${" "}
+            {(dashboardStats?.totalRevenue || 0).toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}
+          </span>
           <span className="text-xs text-green-500">
-            R$ 12.450,30 <span className="text-gray-500">este mês</span>
+            R${" "}
+            {(dashboardStats?.totalRevenue || 0).toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}{" "}
+            <span className="text-gray-500">total</span>
           </span>
         </Card>
         <Card className="flex flex-col gap-2 p-4">
           <span className="text-muted-foreground flex justify-between text-xs">
-            Usuários Verificados <UserCheck size={16} className="text-white" />
+            Usuários Verificados <UserCheck size={16} />
           </span>
-          <span className="text-2xl font-bold">1.156</span>
-          <span className="text-xs text-gray-500">92.7% do total</span>
-          <div className="bg-muted mt-1 h-3 w-full rounded-lg">
+          <span className="text-2xl font-bold">
+            {dashboardStats?.verifiedUsers || 0}
+          </span>
+          <span className="text-xs text-gray-500">
+            {dashboardStats?.verificationRate || "0"}% do total
+          </span>
+          <div className="mt-1 h-3 w-full rounded-lg">
             <div
               className="h-3 rounded-l-md bg-white"
-              style={{ width: "92.7%" }}
+              style={{
+                width: `${dashboardStats?.verificationRate || 0}%`,
+              }}
             />
           </div>
         </Card>
@@ -135,7 +168,9 @@ export default function VisaoGeral() {
             Pendentes Pagamentos{" "}
             <AlertCircle size={14} className="text-[#F97316]" />
           </span>
-          <span className="text-2xl font-bold text-[#F97316]">8</span>
+          <span className="text-2xl font-bold text-[#F97316]">
+            {dashboardStats?.pendingPayments || 0}
+          </span>
           <span className="text-xs text-gray-500">Requerem atenção</span>
         </Card>
       </div>
@@ -160,9 +195,10 @@ export default function VisaoGeral() {
             </span>
           </div>
           <div className="mt-2 flex items-center justify-center">
-            <div className="h-56 w-56">
-              <Pie data={pieData} />
-            </div>
+            <PlanDistributionChart
+              planDistribution={planDistribution}
+              loading={loading}
+            />
           </div>
         </Card>
       </div>
@@ -179,29 +215,29 @@ export default function VisaoGeral() {
             <div className="flex items-center gap-3 p-2">
               <span className="inline-block h-3 w-3 rounded-full bg-green-500" />
               Completed{" "}
-              <span className="ml-auto w-11 rounded-full bg-[#1E293B] p-1 text-center text-xs">
-                450
+              <span className="ml-auto w-11 rounded-full p-1 text-center text-xs">
+                {dashboardStats?.paymentStatus?.completed || 0}
               </span>
             </div>
             <div className="flex items-center gap-3 p-2">
               <span className="inline-block h-3 w-3 rounded-full bg-yellow-400" />
               Pending{" "}
-              <span className="ml-auto w-11 rounded-full bg-[#1E293B] p-1 text-center text-xs">
-                25
+              <span className="ml-auto w-11 rounded-full p-1 text-center text-xs">
+                {dashboardStats?.paymentStatus?.pending || 0}
               </span>
             </div>
             <div className="flex items-center gap-3 p-2">
               <span className="inline-block h-3 w-3 rounded-full bg-red-500" />
               Failed{" "}
-              <span className="ml-auto w-11 rounded-full bg-[#1E293B] p-1 text-center text-xs">
-                12
+              <span className="ml-auto w-11 rounded-full p-1 text-center text-xs">
+                {dashboardStats?.paymentStatus?.failed || 0}
               </span>
             </div>
             <div className="flex items-center gap-3 p-2">
               <span className="inline-block h-3 w-3 rounded-full bg-gray-400" />
               Canceled{" "}
-              <span className="ml-auto w-11 rounded-full bg-[#1E293B] p-1 text-center text-xs">
-                8
+              <span className="ml-auto w-11 rounded-full p-1 text-center text-xs">
+                {dashboardStats?.paymentStatus?.canceled || 0}
               </span>
             </div>
           </div>
@@ -215,16 +251,21 @@ export default function VisaoGeral() {
           </div>
           <div className="mt-4 flex flex-col gap-2">
             <div className="flex items-center justify-between text-[#4B5563]">
-              Usuários Gratuitos <span className="text-white">892</span>
+              Usuários Gratuitos <span>{dashboardStats?.freeUsers || 0}</span>
             </div>
             <div className="flex items-center justify-between text-[#4B5563]">
-              Usuários Pagos <span className="text-green-500">355</span>
+              Usuários Pagos{" "}
+              <span className="text-green-500">
+                {dashboardStats?.paidUsers || 0}
+              </span>
             </div>
             <div className="flex items-center justify-between text-[#4B5563]">
-              Taxa de Conversão <span className="text-white">28.5%</span>
+              Taxa de Conversão{" "}
+              <span>{dashboardStats?.conversionRate || "0"}%</span>
             </div>
             <div className="flex items-center justify-between text-[#4B5563]">
-              Taxa de Verificação <span className="text-white">92.7%</span>
+              Taxa de Verificação{" "}
+              <span>{dashboardStats?.verificationRate || "0"}%</span>
             </div>
           </div>
         </Card>
