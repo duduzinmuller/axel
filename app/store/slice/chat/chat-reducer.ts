@@ -11,6 +11,7 @@ const initialState: ChatState = {
   currentChatId: null,
   isLoading: false,
   error: null,
+  isTyping: false,
 };
 
 const generateChatTitle = (message: string): string => {
@@ -132,6 +133,14 @@ const chatSlice = createSlice({
         }
       }
     },
+
+    setTyping: (state) => {
+      state.isTyping = true;
+    },
+
+    unsetTyping: (state) => {
+      state.isTyping = false;
+    },
   },
 });
 
@@ -145,6 +154,8 @@ export const {
   setLoading,
   setError,
   removeLastAssistantMessage,
+  setTyping,
+  unsetTyping,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

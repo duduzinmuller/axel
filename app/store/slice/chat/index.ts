@@ -8,6 +8,8 @@ import chatReducer, {
   setLoading,
   setError,
   removeLastAssistantMessage,
+  setTyping,
+  unsetTyping,
 } from "./chat-reducer";
 
 export {
@@ -20,6 +22,8 @@ export {
   setLoading,
   setError,
   removeLastAssistantMessage,
+  setTyping,
+  unsetTyping,
 };
 
 export default chatReducer;
@@ -45,3 +49,5 @@ export const selectIsLoading = (state: { chat: { isLoading: boolean } }) =>
   state.chat.isLoading;
 export const selectError = (state: { chat: { error: string | null } }) =>
   state.chat.error;
+export const selectIsTyping = (state: { chat: { isTyping?: boolean } }) =>
+  state.chat.isTyping;
