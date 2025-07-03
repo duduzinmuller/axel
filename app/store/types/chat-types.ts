@@ -19,6 +19,7 @@ export interface ChatState {
   isLoading: boolean;
   error: string | null;
   isTyping?: boolean;
+  stopTyping?: boolean;
 }
 
 export interface CreateChatPayload {

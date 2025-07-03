@@ -10,6 +10,8 @@ import chatReducer, {
   removeLastAssistantMessage,
   setTyping,
   unsetTyping,
+  setStopTyping,
+  unsetStopTyping,
 } from "./chat-reducer";
 
 export {
@@ -24,6 +26,8 @@ export {
   removeLastAssistantMessage,
   setTyping,
   unsetTyping,
+  setStopTyping,
+  unsetStopTyping,
 };
 
 export default chatReducer;
