@@ -110,17 +110,17 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
               >
                 <button
                   onClick={() => handleSelectChat(chat.id)}
-                  className="flex-1 truncate text-left"
+                  className="max-w-[60%] flex-1 truncate text-left"
                 >
                   {chat.title}
                 </button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                  className="ml-2 h-6 w-6 flex-shrink-0"
                   onClick={(e) => handleDeleteChat(chat.id, e)}
                 >
-                  <Trash2 className="h-3 w-3" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             ))

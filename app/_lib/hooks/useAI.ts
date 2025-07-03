@@ -29,6 +29,8 @@ export const useAI = () => {
 
       if (errorMessage === "LIMIT_REACHED") {
         setError("LIMIT_REACHED");
+      } else if (errorMessage === "RATE_LIMIT_EXCEEDED") {
+        setError("RATE_LIMIT_EXCEEDED");
       } else {
         setError(errorMessage);
       }
@@ -57,6 +59,8 @@ export const useAI = () => {
 
       if (errorMessage === "LIMIT_REACHED") {
         setError("LIMIT_REACHED");
+      } else if (errorMessage === "RATE_LIMIT_EXCEEDED") {
+        setError("RATE_LIMIT_EXCEEDED");
       } else {
         setError(errorMessage);
       }
@@ -82,6 +86,10 @@ export const useAI = () => {
     [updateUsage],
   );
 
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
   return {
     generateQuestion,
     sendMessage,
@@ -91,5 +99,6 @@ export const useAI = () => {
     clearUsage,
     loadingUsage,
     syncUsage,
+    clearError,
   };
 };
