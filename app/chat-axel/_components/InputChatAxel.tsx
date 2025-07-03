@@ -61,17 +61,28 @@ const InputChatAxel = () => {
 
     try {
       setPendingResponse(true);
-      if (!currentChatId) {
-        dispatch(
-          createChat({
-            title: "Nova Conversa",
-            initialMessage: message,
-          }),
-        );
+      let chatId = currentChatId;
+      if (!chatId) {
+        await new Promise((resolve) => {
+          dispatch(
+            createChat({
+              title: "Nova Conversa",
+              initialMessage: message,
+            }),
+          );
+          const interval = setInterval(() => {
+            const updatedChatId = currentChatIdRef.current;
+            if (updatedChatId) {
+              clearInterval(interval);
+              chatId = updatedChatId;
+              resolve(null);
+            }
+          }, 50);
+        });
       } else {
         dispatch(
           addMessage({
-            chatId: currentChatId,
+            chatId,
             content: message,
             role: "user",
           }),
@@ -79,9 +90,7 @@ const InputChatAxel = () => {
       }
       await new Promise((resolve) => setTimeout(resolve, 100));
       const aiResponse = await sendMessage(message);
-      const chatId = currentChatIdRef.current;
-
-      console.log("InputChatAxel - usage após sendMessage:", usage);
+      chatId = currentChatIdRef.current;
 
       if (aiResponse && chatId) {
         dispatch(

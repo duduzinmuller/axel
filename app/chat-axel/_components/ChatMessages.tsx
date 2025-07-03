@@ -12,6 +12,7 @@ import { formatISOTime } from "@/app/_lib/utils/date";
 import { Bot, User } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import TypeWriter from "@/app/_components/TypeWriter";
+import MessageContent from "./MessageContent";
 
 const ChatMessages = () => {
   const currentChat = useAppSelector(selectCurrentChat);
@@ -46,6 +47,8 @@ const ChatMessages = () => {
     .filter((idx: number) => idx !== -1)
     .pop();
 
+  const [partialTypewriterText, setPartialTypewriterText] = useState("");
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentChat?.messages.length, isTyping]);
@@ -59,7 +62,6 @@ const ChatMessages = () => {
       lastAssistantIdx !== undefined &&
       !typedAssistantIds.includes(currentChat.messages[lastAssistantIdx]?.id)
     ) {
-      // Não faz nada, só garante que o efeito só aparece para mensagens novas
     }
   }, [currentChat, lastAssistantIdx, typedAssistantIds]);
 
@@ -92,6 +94,55 @@ const ChatMessages = () => {
             idx === lastAssistantIdx &&
             !isLoading;
 
+          if (isLastAssistant && !typedAssistantIds.includes(message.id)) {
+            return (
+              <div
+                key={message.id}
+                className={cn(
+                  "flex gap-4",
+                  message.role === "user" ? "justify-end" : "justify-start",
+                )}
+              >
+                {message.role === "assistant" && (
+                  <Avatar className="h-8 w-8 flex-shrink-0">
+                    <AvatarImage src="/axel.svg" alt="AxelAI" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
+                      <Bot className="h-4 w-4 text-white" />
+                    </div>
+                  </Avatar>
+                )}
+                <div
+                  className={cn(
+                    "max-w-[80%] rounded-lg px-4 py-3",
+                    message.role === "user"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100",
+                  )}
+                >
+                  <TypeWriter
+                    text={message.content}
+                    onComplete={() => handleTypeWriterComplete(message.id)}
+                    onTyping={setPartialTypewriterText}
+                    speed={20}
+                    visual={false}
+                  />
+                  <MessageContent content={partialTypewriterText} />
+                  <p className="mt-1 text-xs opacity-70">
+                    {formatISOTime(message.timestamp)}
+                  </p>
+                </div>
+                {message.role === "user" && (
+                  <Avatar className="h-8 w-8 flex-shrink-0">
+                    <AvatarImage src={user?.image} alt="Usuário" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
+                  </Avatar>
+                )}
+              </div>
+            );
+          }
+
           return (
             <div
               key={message.id}
@@ -108,7 +159,6 @@ const ChatMessages = () => {
                   </div>
                 </Avatar>
               )}
-
               <div
                 className={cn(
                   "max-w-[80%] rounded-lg px-4 py-3",
@@ -117,21 +167,11 @@ const ChatMessages = () => {
                     : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100",
                 )}
               >
-                {isLastAssistant && !typedAssistantIds.includes(message.id) ? (
-                  <TypeWriter
-                    text={message.content}
-                    onComplete={() => handleTypeWriterComplete(message.id)}
-                  />
-                ) : (
-                  <p className="text-sm whitespace-pre-wrap">
-                    {message.content}
-                  </p>
-                )}
+                <MessageContent content={message.content} />
                 <p className="mt-1 text-xs opacity-70">
                   {formatISOTime(message.timestamp)}
                 </p>
               </div>
-
               {message.role === "user" && (
                 <Avatar className="h-8 w-8 flex-shrink-0">
                   <AvatarImage src={user?.image} alt="Usuário" />
@@ -151,9 +191,6 @@ const ChatMessages = () => {
                 <Bot className="h-4 w-4 text-white" />
               </div>
             </Avatar>
-            <div className="max-w-[80%] rounded-lg bg-gray-100 px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-gray-100">
-              <TypeWriter text="Carregando..." />
-            </div>
           </div>
         )}
         <div ref={messagesEndRef} />
