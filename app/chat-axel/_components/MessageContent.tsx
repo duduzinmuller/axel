@@ -1,13 +1,20 @@
 import React from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import CodeBlock from "./CodeBlock";
+
+function formatLists(text: string) {
+  text = text.replace(/(?<!^)(\d+\.\s)/gm, "<br/>$1");
+  text = text.replace(/\n/g, "<br/>");
+  return text;
+}
 
 function linkify(text: string) {
+  text = formatLists(text);
   return text.replace(
     /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#4f8cff; text-decoration:underline;">$1</a>',
   );
 }
+
 const MessageContent = ({ content }: { content: string }) => {
   const codeBlockRegex = /```([a-z]*)\n([\s\S]*?)```/g;
 
@@ -27,39 +34,29 @@ const MessageContent = ({ content }: { content: string }) => {
       );
     }
     elements.push(
-      <div style={{ position: "relative", margin: "1em 0" }} key={key++}>
-        <SyntaxHighlighter language={match[1] || "javascript"} style={oneDark}>
-          {match[2]}
-        </SyntaxHighlighter>
-        <button
-          style={{
-            position: "absolute",
-            top: 8,
-            right: 8,
-            background: "#222",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            padding: "2px 8px",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            if (match && match[2]) {
-              navigator.clipboard.writeText(match[2]);
-            }
-          }}
-        >
-          Copiar /```([a-z]*)\n([\s\S]*?)```/g;{" "}
-        </button>
-      </div>,
+      <CodeBlock code={match[2]} language={match[1]} key={key++} />,
     );
     lastIndex = codeBlockRegex.lastIndex;
   }
   if (lastIndex < content.length) {
     const rest = content.slice(lastIndex);
-    elements.push(
-      <span key={key++} dangerouslySetInnerHTML={{ __html: linkify(rest) }} />,
-    );
+    const partialCodeBlock = rest.match(/^```([a-z]*)\n([\s\S]*)/);
+    if (partialCodeBlock) {
+      elements.push(
+        <CodeBlock
+          code={partialCodeBlock[2]}
+          language={partialCodeBlock[1]}
+          key={key++}
+        />,
+      );
+    } else {
+      elements.push(
+        <span
+          key={key++}
+          dangerouslySetInnerHTML={{ __html: linkify(rest) }}
+        />,
+      );
+    }
   }
   return <>{elements}</>;
 };
