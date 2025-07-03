@@ -8,6 +8,8 @@ interface TypeWriterProps {
   className?: string;
   onComplete?: () => void;
   startTyping?: boolean;
+  onTyping?: (partialText: string) => void;
+  visual?: boolean;
 }
 
 export default function TypeWriter({
@@ -16,6 +18,8 @@ export default function TypeWriter({
   className = "",
   onComplete,
   startTyping = true,
+  onTyping,
+  visual = true,
 }: TypeWriterProps) {
   const [delta, setDelta] = useState(speed);
   const [index, setIndex] = useState(0);
@@ -33,9 +37,7 @@ export default function TypeWriter({
     if (index < text.length) {
       const timeout = setTimeout(() => {
         setDisplayText((prev) => prev + text[index]);
-
         setIndex((prev) => prev + 1);
-
         setDelta(speed + Math.random() * 40 - 20);
       }, delta);
 
@@ -45,6 +47,14 @@ export default function TypeWriter({
       onComplete?.();
     }
   }, [index, text, delta, speed, isComplete, startTyping, onComplete]);
+
+  useEffect(() => {
+    if (onTyping) {
+      onTyping(displayText);
+    }
+  }, [displayText, onTyping]);
+
+  if (!visual) return null;
 
   return (
     <div className={className}>
