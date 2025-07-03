@@ -1,6 +1,5 @@
 import React from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import CodeBlock from "./CodeBlock";
 
 function linkify(text: string) {
   return text.replace(
@@ -27,31 +26,7 @@ const MessageContent = ({ content }: { content: string }) => {
       );
     }
     elements.push(
-      <div style={{ position: "relative", margin: "1em 0" }} key={key++}>
-        <SyntaxHighlighter language={match[1] || "javascript"} style={oneDark}>
-          {match[2]}
-        </SyntaxHighlighter>
-        <button
-          style={{
-            position: "absolute",
-            top: 8,
-            right: 8,
-            background: "#222",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            padding: "2px 8px",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            if (match && match[2]) {
-              navigator.clipboard.writeText(match[2]);
-            }
-          }}
-        >
-          Copiar /```([a-z]*)\n([\s\S]*?)```/g;{" "}
-        </button>
-      </div>,
+      <CodeBlock code={match[2]} language={match[1]} key={key++} />,
     );
     lastIndex = codeBlockRegex.lastIndex;
   }
