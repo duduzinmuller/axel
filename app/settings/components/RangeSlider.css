@@ -1,0 +1,45 @@
+/* Estilos para o slider de range */
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: #181F2A;
+  outline: none;
+  cursor: pointer;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3B82F6;
+  cursor: pointer;
+  border: 2px solid #3B82F6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.range-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3B82F6;
+  cursor: pointer;
+  border: 2px solid #3B82F6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.range-slider::-webkit-slider-track {
+  background: linear-gradient(to right, #3B82F6 0%, #3B82F6 var(--value, 50%), #181F2A var(--value, 50%), #181F2A 100%);
+  border-radius: 4px;
+  height: 8px;
+}
+
+.range-slider::-moz-range-track {
+  background: linear-gradient(to right, #3B82F6 0%, #3B82F6 var(--value, 50%), #181F2A var(--value, 50%), #181F2A 100%);
+  border-radius: 4px;
+  height: 8px;
+  border: none;
+} 
