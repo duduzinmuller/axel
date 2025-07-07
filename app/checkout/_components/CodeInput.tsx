@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Check, TicketPercent } from "lucide-react";
+import { Check, Key } from "lucide-react";
 import { useAppDispatch } from "@/app/store";
 import { useRouter } from "next/navigation";
 import { validateCodePlan } from "@/app/store/slice/payment";
@@ -54,7 +54,7 @@ export function PromoCodeInput({ value, onChange }: PromoCodeInputProps) {
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <TicketPercent className="h-4 w-4" />
+          <Key className="h-4 w-4" />
           Código de acesso
         </CardTitle>
         <CardDescription>
