@@ -3,8 +3,10 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Users, ArrowRight, UserPlus } from "lucide-react";
 import SettingsSection from "./SettingsSection";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
+  const router = useRouter();
   return (
     <SettingsSection
       title="Dashboard Administrativo"
@@ -69,7 +71,10 @@ export default function AdminDashboard() {
 
       <div className="flex w-full items-center gap-3">
         <div className="min-w-0 flex-1">
-          <Button className="flex h-[38px] w-full items-center justify-between rounded-[10px] border-none bg-[#3B82F6] pr-3 pl-3 text-left text-sm font-medium text-[#0E0F11] shadow-none transition-all">
+          <Button
+            onClick={() => router.push("/dashboard")}
+            className="flex h-[38px] w-full cursor-pointer items-center justify-between rounded-[10px] border-none bg-[#3B82F6] pr-3 pl-3 text-left text-sm font-medium text-[#0E0F11] shadow-none transition-all"
+          >
             <span className="flex items-center gap-2">
               <Users className="mr-2 h-4 w-4" />
               <span className="flex-1 text-left text-sm">
