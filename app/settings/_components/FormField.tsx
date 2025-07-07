@@ -14,7 +14,7 @@ export default function FormField({
 }: FormFieldProps) {
   return (
     <div className={className}>
-      <label className="mb-1 block text-xs text-neutral-200">{label}</label>
+      <label className="mb-1 block text-xs">{label}</label>
       {children}
     </div>
   );

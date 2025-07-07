@@ -19,12 +19,8 @@ export default function ToggleSwitch({
   return (
     <div className={`flex items-center justify-between ${className}`}>
       <div className="flex-1">
-        <span className="text-xs text-neutral-200">{label}</span>
-        {description && (
-          <div className="ml-0.5 text-[12px] text-neutral-400">
-            {description}
-          </div>
-        )}
+        <span className="text-xs">{label}</span>
+        {description && <div className="ml-0.5 text-[12px]">{description}</div>}
       </div>
       <button
         type="button"

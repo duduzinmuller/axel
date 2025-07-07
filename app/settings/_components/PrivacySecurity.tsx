@@ -38,10 +38,10 @@ export default function PrivacySecurity() {
             description="Permitir compartilhamento de dados com parceiros"
           />
           <div>
-            <label className="mb-1 block text-[14px] font-medium text-white">
+            <label className="mb-1 block text-[14px] font-medium">
               Retenção de Dados
             </label>
-            <select className="w-full rounded-lg border border-[#3B82F6] bg-transparent px-3 py-2 text-[14px] text-white focus:outline-none">
+            <select className="w-full rounded-lg border border-[#3B82F6] bg-transparent px-3 py-2 text-[14px] focus:outline-none">
               <option>6 meses</option>
             </select>
           </div>
@@ -49,7 +49,7 @@ export default function PrivacySecurity() {
       </SettingsSection>
       <hr className="my-7 border-t border-[#23262F] opacity-30" />
       <div>
-        <div className="mb-4 text-[15px] font-semibold text-white">
+        <div className="mb-4 text-[15px] font-semibold">
           Gerenciamento de Dados
         </div>
         <div className="flex gap-3">
