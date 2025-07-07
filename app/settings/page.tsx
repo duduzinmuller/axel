@@ -4,7 +4,7 @@ import {
   AdminDashboard,
   PrivacySecurity,
   AppearanceInterface,
-} from "./components";
+} from "./_components";
 
 export default function SettingsPage() {
   return (
