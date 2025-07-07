@@ -118,7 +118,7 @@ export default function LoginPage() {
                         <Input
                           type="email"
                           placeholder="Email"
-                          className="border-zinc-700 pl-10 text-white"
+                          className="border-zinc-700 !pl-10"
                           {...field}
                         />
                       </div>
@@ -142,7 +142,7 @@ export default function LoginPage() {
                         <Input
                           type="password"
                           placeholder="Senha"
-                          className="border-zinc-700 pl-10 text-white"
+                          className="border-zinc-700 !pl-10"
                           {...field}
                         />
                       </div>
