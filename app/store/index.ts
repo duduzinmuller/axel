@@ -11,6 +11,7 @@ import sidebarReducer from "./slice/sidebar/sidebar-reducer";
 import chatReducer from "./slice/chat/chat-reducer";
 import paymentReducer from "./slice/payment";
 import { usageReducer } from "./slice/usage";
+import voiceReducer from "./slice/voiceSlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -32,6 +33,7 @@ export const store = configureStore({
     chat: persistedChatReducer,
     payment: paymentReducer,
     usage: usageReducer,
+    voice: voiceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
