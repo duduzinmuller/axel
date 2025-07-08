@@ -14,11 +14,7 @@ import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../store";
 import LoadingScreen from "../_components/LoadingScreen";
 import { useRouter } from "next/navigation";
-import {
-  createBoletoPayment,
-  createPixPayment,
-  pollPaymentStatus,
-} from "../store/slice/payment";
+import { createBoletoPayment, createPixPayment } from "../store/slice/payment";
 import { PaymentMethod } from "../types/checkout";
 import { PromoCodeInput } from "./_components/CodeInput";
 import { CreditCardForm } from "./_components/CreditCardForm";
@@ -82,7 +78,6 @@ export default function CheckoutPage() {
         paymentMethod: creditCardData.paymentMethod,
         installments: creditCardData.installments,
       };
-      console.log("paymentData", paymentData);
       try {
         const result = await dispatch(
           payWithCreditCard({ cardData, paymentData }),
@@ -90,6 +85,7 @@ export default function CheckoutPage() {
 
         const paymentId =
           result.paymentResult?.externalId || result.paymentResult?.id;
+
         if (paymentId) setExternalId(paymentId);
 
         const status = result.updateResult?.status;
@@ -178,15 +174,6 @@ export default function CheckoutPage() {
       router.push("/login");
     }
   }, [isAuthenticated, user, isLoading, router]);
-
-  useEffect(() => {
-    if (!externalId) return;
-    const interval = setInterval(() => {
-      dispatch(pollPaymentStatus(externalId));
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [externalId, dispatch]);
 
   useEffect(() => {
     if (paymentStatus === "COMPLETED") {
