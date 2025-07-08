@@ -70,7 +70,7 @@ export default function AdminDashboard() {
       <div className="flex w-full items-center gap-3">
         <div className="min-w-0 flex-1">
           <Button
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push("/admin/dashboard")}
             className="flex h-[38px] w-full cursor-pointer items-center justify-between rounded-[10px] border-none bg-[#3B82F6] pr-3 pl-3 text-left text-sm font-medium text-[#0E0F11] shadow-none transition-all"
           >
             <span className="flex items-center gap-2">
