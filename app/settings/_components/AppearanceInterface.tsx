@@ -7,6 +7,8 @@ import FormField from "./FormField";
 import ActionButton from "./ActionButton";
 import SecurityIcon from "./SecurityIcon";
 import SettingsSection from "./SettingsSection";
+import { toast } from "sonner";
+import { resetVoiceSettings } from "@/app/store/slice/voiceSlice";
 
 export default function AppearanceInterface() {
   const [animations, setAnimations] = useState(true);
@@ -71,10 +73,21 @@ export default function AppearanceInterface() {
       </SettingsSection>
       <hr className="my-7 border-t border-[#23262F] opacity-30" />
       <div className="mt-2 flex justify-end gap-3">
-        <ActionButton icon={RefreshCcw} variant="secondary">
+        <ActionButton
+          icon={RefreshCcw}
+          variant="secondary"
+          onClick={() => {
+            resetVoiceSettings();
+            toast.success("Configurações restauradas para o padrão!");
+          }}
+        >
           Restaurar Padrões
         </ActionButton>
-        <ActionButton icon={Save} variant="primary">
+        <ActionButton
+          icon={Save}
+          variant="primary"
+          onClick={() => toast.success("Configurações salvas com sucesso!")}
+        >
           Salvar Configurações
         </ActionButton>
       </div>

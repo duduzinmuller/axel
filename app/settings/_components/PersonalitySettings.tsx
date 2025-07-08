@@ -1,14 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import ToggleSwitch from "./ToggleSwitch";
 import RangeSlider from "./RangeSlider";
 import FormField from "./FormField";
 import SettingsSection from "./SettingsSection";
+import { useAppSelector, useAppDispatch } from "@/app/store";
+import {
+  setProactive,
+  setFormalidade,
+  setProatividade,
+  setInstructions,
+} from "@/app/store/slice/personalitySlice";
 
 export default function PersonalitySettings() {
-  const [proactive, setProactive] = useState(true);
-  const [formalidade, setFormalidade] = useState(40);
-  const [proatividade, setProatividade] = useState(60);
+  const dispatch = useAppDispatch();
+  const { proactive, formalidade, proatividade, instructions } = useAppSelector(
+    (state) => state.personality,
+  );
 
   return (
     <SettingsSection
@@ -24,7 +32,7 @@ export default function PersonalitySettings() {
         <FormField label="Nível de Formalidade">
           <RangeSlider
             value={formalidade}
-            onChange={setFormalidade}
+            onChange={(val) => dispatch(setFormalidade(val))}
             leftLabel="Casual"
             rightLabel="Formal"
           />
@@ -32,7 +40,7 @@ export default function PersonalitySettings() {
         <FormField label="Proatividade">
           <RangeSlider
             value={proatividade}
-            onChange={setProatividade}
+            onChange={(val) => dispatch(setProatividade(val))}
             leftLabel="Reativo"
             rightLabel="Proativo"
           />
@@ -41,6 +49,8 @@ export default function PersonalitySettings() {
           <textarea
             className="min-h-[48px] w-full rounded-lg border bg-transparent px-3 py-2 text-sm placeholder:text-neutral-500"
             placeholder="Adicione instruções específicas sobre como o assistente deve se comportar..."
+            value={instructions}
+            onChange={(e) => dispatch(setInstructions(e.target.value))}
           />
           <p className="mt-1 text-xs text-neutral-500">
             Exemplo: &ldquo;Sempre cumprimente o usuário pelo nome&rdquo; ou
@@ -49,7 +59,7 @@ export default function PersonalitySettings() {
         </FormField>
         <ToggleSwitch
           checked={proactive}
-          onChange={setProactive}
+          onChange={(val) => dispatch(setProactive(val))}
           label="Proatividade Visual"
           className="mt-2"
         />
