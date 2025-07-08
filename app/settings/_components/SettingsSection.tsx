@@ -18,13 +18,13 @@ export default function SettingsSection({
 }: SettingsSectionProps) {
   return (
     <section
-      className={`space-y-7 rounded-2xl border border-[#23262F] bg-[#0E0F11] p-8 shadow ${className}`}
+      className={`space-y-7 rounded-2xl border border-[#23262F] p-8 shadow ${className}`}
     >
-      <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold text-white">
+      <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold">
         {icon}
         {title}
       </h2>
-      <p className="mb-4 text-[12px] text-neutral-400">{description}</p>
+      <p className="mb-4 text-[12px]">{description}</p>
       {children}
     </section>
   );

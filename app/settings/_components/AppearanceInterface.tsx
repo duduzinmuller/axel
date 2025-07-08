@@ -24,7 +24,7 @@ export default function AppearanceInterface() {
         <div className="space-y-4">
           <FormField label="Tema">
             <select
-              className="w-full rounded-lg border bg-transparent py-2 text-sm text-white"
+              className="w-full rounded-lg border bg-transparent py-2 text-sm"
               defaultValue="Sistema"
             >
               <option>Sistema</option>
@@ -32,7 +32,7 @@ export default function AppearanceInterface() {
           </FormField>
           <FormField label="Cor Principal">
             <select
-              className="w-full rounded-lg border bg-transparent py-2 text-sm text-white"
+              className="w-full rounded-lg border bg-transparent py-2 text-sm"
               defaultValue="Azul"
             >
               <option>Azul</option>

@@ -6,23 +6,18 @@ import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { clearPaymentState } from "@/app/store/slice/payment";
-import { useAppDispatch, useAppSelector } from "../store";
+import { useAppSelector } from "../store";
 
 export default function SuccessPage() {
   const { paymentStatus } = useAppSelector((state) => state.payment);
   const { user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
     if (paymentStatus !== "COMPLETED" || user?.plan === "FREE") {
       router.replace("/checkout");
     }
-    return () => {
-      dispatch(clearPaymentState());
-    };
-  }, [paymentStatus, router, dispatch, user]);
+  }, [paymentStatus, router, user]);
 
   return (
     <div className="flex min-h-screen items-center justify-center">

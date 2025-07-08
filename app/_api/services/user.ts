@@ -20,6 +20,7 @@ export interface UserResponse {
   image?: string;
   cpf?: string;
   plan?: string;
+  role?: string;
   tokens?: {
     accessToken: string;
     refreshToken: string;

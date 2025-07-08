@@ -17,7 +17,7 @@ export default function PersonalitySettings() {
     >
       <div className="space-y-4">
         <FormField label="Estilo de Personalidade">
-          <select className="w-full rounded-lg border bg-transparent px-3 py-2 text-sm text-white">
+          <select className="w-full rounded-lg border bg-transparent px-3 py-2 text-sm">
             <option>Amigável e Casual</option>
           </select>
         </FormField>
@@ -39,7 +39,7 @@ export default function PersonalitySettings() {
         </FormField>
         <FormField label="Instruções Personalizadas">
           <textarea
-            className="min-h-[48px] w-full rounded-lg border bg-transparent px-3 py-2 text-sm text-white placeholder:text-neutral-500"
+            className="min-h-[48px] w-full rounded-lg border bg-transparent px-3 py-2 text-sm placeholder:text-neutral-500"
             placeholder="Adicione instruções específicas sobre como o assistente deve se comportar..."
           />
           <p className="mt-1 text-xs text-neutral-500">
