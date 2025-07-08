@@ -1,6 +1,3 @@
-import { Card } from "../../../components/ui/card";
-import { Badge } from "../../../components/ui/badge";
-import { Button } from "../../../components/ui/button";
 import React, { useState, useMemo } from "react";
 import {
   Funnel,
@@ -15,6 +12,9 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useUsers } from "@/app/_lib/hooks/useUsers";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {
