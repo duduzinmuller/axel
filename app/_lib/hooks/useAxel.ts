@@ -250,13 +250,11 @@ export function useBrender(
       if (response) {
         const type = detectType(response);
         onResponse({ text: response, type });
-        speak(response);
       } else {
         onResponse({
           text: "Não consegui encontrar uma resposta para isso.",
           type: "text",
         });
-        speak("Não consegui encontrar uma resposta para isso.");
       }
     } else {
       const aiResult = await AIService.generationQuestionWithAI(message);

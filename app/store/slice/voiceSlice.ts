@@ -9,7 +9,7 @@ interface VoiceState {
 const initialState: VoiceState = {
   voiceEnabled: true,
   selectedVoice: null,
-  voiceRate: 1, // 1 = normal, pode ser de 0.5 a 2
+  voiceRate: 1,
 };
 
 const voiceSlice = createSlice({
