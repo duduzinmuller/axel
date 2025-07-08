@@ -25,9 +25,16 @@ const voiceSlice = createSlice({
     setVoiceRate(state, action: PayloadAction<number>) {
       state.voiceRate = action.payload;
     },
+    resetVoiceSettings() {
+      return initialState;
+    },
   },
 });
 
-export const { setVoiceEnabled, setSelectedVoice, setVoiceRate } =
-  voiceSlice.actions;
+export const {
+  setVoiceEnabled,
+  setSelectedVoice,
+  setVoiceRate,
+  resetVoiceSettings,
+} = voiceSlice.actions;
 export default voiceSlice.reducer;

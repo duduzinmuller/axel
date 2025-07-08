@@ -13,6 +13,7 @@ import { Bot, User } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import TypeWriter from "@/app/_components/TypeWriter";
 import MessageContent from "./MessageContent";
+import { useBrender } from "@/app/_lib/hooks/useAxel";
 
 const ChatMessages = () => {
   const currentChat = useAppSelector(selectCurrentChat);
@@ -48,6 +49,19 @@ const ChatMessages = () => {
     .pop();
 
   const [partialTypewriterText, setPartialTypewriterText] = useState("");
+
+  const { speak, voiceEnabled } = useBrender(() => {});
+  const lastAssistantMsg = currentChat.messages
+    .slice()
+    .reverse()
+    .find((msg: { role: string }) => msg.role === "assistant");
+
+  useEffect(() => {
+    if (lastAssistantMsg && voiceEnabled) {
+      speak(lastAssistantMsg.content);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastAssistantMsg?.id, voiceEnabled]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
