@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useAppSelector } from "../store";
 import {
   GeneralSettings,
-  PersonalitySettings,
   AdminDashboard,
   PrivacySecurity,
   AppearanceInterface,
@@ -35,7 +34,6 @@ export default function SettingsPage() {
           Personalize seu assistente virtual de acordo com suas preferências
         </p>
         <GeneralSettings />
-        <PersonalitySettings />
         {user?.role === "ADMIN" && <AdminDashboard />}
         <PrivacySecurity />
         <AppearanceInterface />
