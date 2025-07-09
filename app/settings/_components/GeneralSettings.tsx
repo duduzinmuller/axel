@@ -9,7 +9,7 @@ import {
   setVoiceEnabled,
   setSelectedVoice,
   setVoiceRate,
-} from "@/app/store/slice/voiceSlice";
+} from "@/app/store/slice/voice/voiceSlice";
 
 export default function GeneralSettings() {
   const dispatch = useAppDispatch();
@@ -46,13 +46,13 @@ export default function GeneralSettings() {
           />
         </FormField>
         <FormField label="Idioma Principal">
-          <select className="w-full rounded-lg border border-[#3B82F6] bg-transparent px-3 py-2 text-sm">
+          <select className="w-full rounded-lg border border-[#3B82F6] px-3 py-2 text-sm">
             <option>Português (Brasil)</option>
           </select>
         </FormField>
         <FormField label="Tipo de Voz">
           <select
-            className="w-full rounded-lg border border-[#3B82F6] bg-transparent px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-[#3B82F6] px-3 py-2 text-sm"
             value={selectedVoice || ""}
             onChange={(e) => dispatch(setSelectedVoice(e.target.value))}
           >

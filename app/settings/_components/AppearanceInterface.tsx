@@ -8,7 +8,7 @@ import ActionButton from "./ActionButton";
 import SecurityIcon from "./SecurityIcon";
 import SettingsSection from "./SettingsSection";
 import { toast } from "sonner";
-import { resetVoiceSettings } from "@/app/store/slice/voiceSlice";
+import { resetVoiceSettings } from "@/app/store/slice/voice/voiceSlice";
 
 export default function AppearanceInterface() {
   const [animations, setAnimations] = useState(true);

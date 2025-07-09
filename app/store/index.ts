@@ -11,8 +11,8 @@ import sidebarReducer from "./slice/sidebar/sidebar-reducer";
 import chatReducer from "./slice/chat/chat-reducer";
 import paymentReducer from "./slice/payment";
 import { usageReducer } from "./slice/usage";
-import voiceReducer from "./slice/voiceSlice";
-import personalityReducer from "./slice/personalitySlice";
+import voiceReducer from "./slice/voice/voiceSlice";
+import personalityReducer from "./slice/personality/personalitySlice";
 
 const authPersistConfig = {
   key: "auth",
@@ -24,6 +24,21 @@ const chatPersistConfig = {
   storage,
 };
 
+const voicePersistConfig = {
+  key: "voice",
+  storage,
+};
+
+const personalityPersistConfig = {
+  key: "personality",
+  storage,
+};
+
+const persistedVoiceReducer = persistReducer(voicePersistConfig, voiceReducer);
+const persistedPersonalityReducer = persistReducer(
+  personalityPersistConfig,
+  personalityReducer,
+);
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistedChatReducer = persistReducer(chatPersistConfig, chatReducer);
 
@@ -34,8 +49,8 @@ export const store = configureStore({
     chat: persistedChatReducer,
     payment: paymentReducer,
     usage: usageReducer,
-    voice: voiceReducer,
-    personality: personalityReducer,
+    voice: persistedVoiceReducer,
+    personality: persistedPersonalityReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

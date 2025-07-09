@@ -10,7 +10,7 @@ import {
   setFormalidade,
   setProatividade,
   setInstructions,
-} from "@/app/store/slice/personalitySlice";
+} from "@/app/store/slice/personality/personalitySlice";
 
 export default function PersonalitySettings() {
   const dispatch = useAppDispatch();
@@ -27,6 +27,13 @@ export default function PersonalitySettings() {
         <FormField label="Estilo de Personalidade">
           <select className="w-full rounded-lg border bg-transparent px-3 py-2 text-sm">
             <option>Amigável e Casual</option>
+            <option>Profissional e Formal</option>
+            <option>Engraçado e Descontraído</option>
+            <option>Sério e Objetivo</option>
+            <option>Empático e Atencioso</option>
+            <option>Técnico e Preciso</option>
+            <option>Motivador e Inspirador</option>
+            <option>Neutro e Impessoal</option>
           </select>
         </FormField>
         <FormField label="Nível de Formalidade">
