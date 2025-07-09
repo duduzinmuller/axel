@@ -13,6 +13,12 @@ import paymentReducer from "./slice/payment";
 import { usageReducer } from "./slice/usage";
 import voiceReducer from "./slice/voice/voiceSlice";
 import personalityReducer from "./slice/personality/personalitySlice";
+import { StorageUtils } from "./utils/storage-utils";
+
+const getCurrentUserId = () => {
+  const user = StorageUtils.getUser();
+  return user?.id || user?.email || "anon";
+};
 
 const authPersistConfig = {
   key: "auth",
@@ -20,7 +26,7 @@ const authPersistConfig = {
 };
 
 const chatPersistConfig = {
-  key: "chat",
+  key: `chat-${getCurrentUserId()}`,
   storage,
 };
 
