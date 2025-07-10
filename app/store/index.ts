@@ -13,6 +13,7 @@ import paymentReducer from "./slice/payment";
 import { usageReducer } from "./slice/usage";
 import voiceReducer from "./slice/voice/voiceSlice";
 import personalityReducer from "./slice/personality/personalitySlice";
+import appearanceReducer from "./slice/appearance/appearanceSlice";
 import { StorageUtils } from "./utils/storage-utils";
 
 const getCurrentUserId = () => {
@@ -40,10 +41,19 @@ const personalityPersistConfig = {
   storage,
 };
 
+const appearancePersistConfig = {
+  key: "appearance",
+  storage,
+};
+
 const persistedVoiceReducer = persistReducer(voicePersistConfig, voiceReducer);
 const persistedPersonalityReducer = persistReducer(
   personalityPersistConfig,
   personalityReducer,
+);
+const persistedAppearanceReducer = persistReducer(
+  appearancePersistConfig,
+  appearanceReducer,
 );
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistedChatReducer = persistReducer(chatPersistConfig, chatReducer);
@@ -57,6 +67,7 @@ export const store = configureStore({
     usage: usageReducer,
     voice: persistedVoiceReducer,
     personality: persistedPersonalityReducer,
+    appearance: persistedAppearanceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
