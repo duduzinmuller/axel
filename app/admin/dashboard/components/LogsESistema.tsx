@@ -1,5 +1,4 @@
 import React from "react";
-import { Key } from "lucide-react";
 import { useCodes } from "@/app/_lib/hooks/useCodes";
 import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
@@ -10,7 +9,6 @@ import { AccessCodesTable } from "./logs/AccessCodesTable";
 import { EmailNotificationsTable } from "./logs/EmailNotificationsTable";
 import { EmailVerificationsTable } from "./logs/EmailVerificationsTable";
 import { MessageUsageTable } from "./logs/MessageUsageTable";
-import { Card } from "@/components/ui/card";
 
 export default function LogsESistema() {
   const { codes, loading: loadingCodes, error: errorCodes } = useCodes();
@@ -46,26 +44,11 @@ export default function LogsESistema() {
         messageUsage={messageUsage || []}
       />
       <div className="space-y-8">
-        <Card className="rounded-sm border p-0 shadow-none">
-          <div className="mt-2 ml-4 p-2">
-            <div className="mb-2 flex items-center gap-2">
-              <Key className="h-5 w-5" />
-              <p className="text-xl font-semibold">
-                Códigos de Acesso ({codes.length})
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-[#777]">
-                Gerencie códigos de acesso para novos usuários
-              </p>
-            </div>
-          </div>
-          <AccessCodesTable
-            codes={codes}
-            loadingCodes={loadingCodes}
-            errorCodes={errorCodes}
-          />
-        </Card>
+        <AccessCodesTable
+          codes={codes}
+          loadingCodes={loadingCodes}
+          errorCodes={errorCodes}
+        />
 
         <EmailNotificationsTable
           emails={emails}

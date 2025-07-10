@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlanBadge, StatusBadge } from "./LogsBadges";
+import { Key } from "lucide-react";
 
 interface AccessCodesTableProps {
   codes: any[];
@@ -17,7 +18,7 @@ export const AccessCodesTable: React.FC<AccessCodesTableProps> = ({
   <Card className="rounded-sm border p-0 shadow-none">
     <div className="mt-2 ml-4 p-2">
       <div className="mb-2 flex items-center gap-2">
-        <span className="h-5 w-5">🔑</span>
+        <Key className="h-5 w-5" />
         <p className="text-xl font-semibold">
           Códigos de Acesso ({codes.length})
         </p>
