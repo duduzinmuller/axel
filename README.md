@@ -1,6 +1,6 @@
 # Axel Frontend
 
-Axel Frontend é uma aplicação web moderna desenvolvida em Next.js 15 com TypeScript, React 19 e Tailwind CSS, oferecendo uma interface intuitiva e responsiva para interação com o assistente virtual Axel AI. O projeto integra autenticação, chat inteligente, sistema de pagamentos, dashboard administrativo e muito mais, com foco em experiência do usuário e performance.
+Axel Frontend é uma aplicação web moderna desenvolvida em Next.js 15 com TypeScript, React 19 e Tailwind CSS, oferecendo uma interface intuitiva e responsiva para interação com o assistente virtual Axel AI. O projeto integra autenticação, chat inteligente, sistema de pagamentos, dashboard administrativo, sistema de animações personalizável e muito mais, com foco em experiência do usuário e performance.
 
 ## 🚀 Tecnologias Principais
 
@@ -14,6 +14,8 @@ Axel Frontend é uma aplicação web moderna desenvolvida em Next.js 15 com Type
 - **Axios** (Requisições HTTP)
 - **Chart.js** (Gráficos e analytics)
 - **Husky** + ESLint + Prettier (Qualidade de código)
+- **Next-themes** (Tema claro/escuro)
+- **Redux Persist** (Persistência de estado)
 
 ## 📁 Estrutura de Pastas (/app)
 
@@ -21,11 +23,16 @@ Axel Frontend é uma aplicação web moderna desenvolvida em Next.js 15 com Type
 app/
 ├── _api/                 # Serviços de API (AI, usuário, etc.)
 ├── _components/          # Componentes reutilizáveis
+│   ├── AnimatedCard.tsx  # Card com animações
+│   ├── AnimatedButton.tsx # Botão com animações
+│   └── ThemeToggle.tsx   # Toggle de tema
 ├── _constants/           # Constantes e configurações
 ├── _data/                # Dados estáticos (planos, recursos, etc.)
 ├── _examples/            # Exemplos de uso da IA
 ├── _forms/               # Hooks e schemas de formulários
 ├── _lib/                 # Utilitários e hooks customizados
+│   └── hooks/
+│       └── useAnimations.ts # Hook para gerenciar animações
 ├── callback/             # Página de callback OAuth
 ├── chat-axel/            # Interface principal do chat
 ├── checkout/             # Sistema de pagamentos
@@ -33,8 +40,21 @@ app/
 ├── login/                # Autenticação
 ├── profile/              # Perfil do usuário
 ├── register/             # Cadastro
+├── settings/             # Configurações do usuário
+│   └── _components/
+│       ├── AppearanceInterface.tsx # Configurações de aparência
+│       ├── PrivacySecurity.tsx     # Privacidade e dados
+│       └── ConfirmDialog.tsx       # Diálogo de confirmação
 ├── store/                # Redux store e slices
+│   └── slice/
+│       ├── appearance/   # Configurações de aparência
+│       ├── auth/         # Autenticação
+│       ├── chat/         # Conversas
+│       ├── personality/  # Personalidade do assistente
+│       ├── voice/        # Configurações de voz
+│       └── usage/        # Controle de uso
 ├── types/                # Tipos TypeScript
+├── provider/             # Providers da aplicação
 └── globals.css           # Estilos globais
 ```
 
@@ -47,6 +67,24 @@ app/
 - Exemplos de perguntas para iniciar conversas
 - Indicadores de limite de uso
 - Integração com IA para respostas inteligentes
+- **Novo**: Controle de exibição do avatar do assistente
+- **Novo**: Sistema de animações personalizável
+
+### 🎨 Sistema de Animações
+
+- **Animações Controláveis**: Ativar/desativar através das configurações
+- **Componentes Animados**: Cards, botões e elementos com animações suaves
+- **Hook Personalizado**: `useAnimations()` para gerenciar animações
+- **Framer Motion**: Animações fluidas e performáticas
+- **Respeito à Acessibilidade**: Suporte a preferências de movimento reduzido
+
+### ⚙️ Configurações Avançadas
+
+- **Tema Dinâmico**: Claro, escuro ou sistema
+- **Animações**: Controle total sobre animações da interface
+- **Avatar do Assistente**: Mostrar/ocultar avatar nas conversas
+- **Configurações de Voz**: Controle de síntese de voz
+- **Personalidade**: Ajustes no comportamento do assistente
 
 ### 🔐 Sistema de Autenticação
 
@@ -72,11 +110,18 @@ app/
 - Logs e analytics
 - Interface responsiva para desktop e mobile
 
+### 🗂️ Gerenciamento de Dados
+
+- **Exportação de Dados**: Download completo de conversas e configurações
+- **Limpeza de Histórico**: Remoção segura de todos os dados
+- **Backup Automático**: Formato JSON estruturado
+- **Confirmação Segura**: Diálogos de confirmação para ações destrutivas
+
 ### 🎨 Interface Moderna
 
 - Design system consistente
-- Tema claro/escuro
-- Animações suaves
+- Tema claro/escuro dinâmico
+- Animações suaves e personalizáveis
 - Componentes acessíveis
 - Responsivo para todos os dispositivos
 
@@ -84,11 +129,25 @@ app/
 
 ### Chat Interface
 
-- `ChatMessages`: Exibição de mensagens
+- `ChatMessages`: Exibição de mensagens com controle de avatar
 - `InputChatAxel`: Campo de entrada com validação
 - `ExampleQuestions`: Sugestões de perguntas
 - `HeaderChatAxel`: Cabeçalho do chat
 - `LimitWarning`: Avisos de limite de uso
+
+### Sistema de Animações
+
+- `AnimatedCard`: Card com animações automáticas
+- `AnimatedButton`: Botão com diferentes tipos de animação
+- `useAnimations`: Hook para gerenciar animações
+- `ThemeToggle`: Toggle de tema com animações
+
+### Configurações
+
+- `AppearanceInterface`: Configurações de aparência e tema
+- `PrivacySecurity`: Gerenciamento de dados e privacidade
+- `ConfirmDialog`: Diálogo de confirmação reutilizável
+- `GeneralSettings`: Configurações gerais do sistema
 
 ### Sistema de Pagamentos
 
@@ -176,6 +235,7 @@ npm run lint
 - `/login` - Autenticação
 - `/register` - Cadastro de usuário
 - `/chat-axel` - Interface principal do chat
+- `/settings` - Configurações do usuário
 - `/dashboard` - Painel administrativo
 - `/profile` - Perfil do usuário
 - `/checkout` - Sistema de pagamentos
@@ -207,6 +267,13 @@ A aplicação é totalmente responsiva e otimizada para:
 - **Criatividade**: Brainstorming, conteúdo, design
 - **Análise**: Dados, insights, relatórios
 
+### Sistema de Animações
+
+- **Tipos de Animação**: Scale, slide, fade
+- **Controle Granular**: Ativar/desativar por componente
+- **Performance**: Animações otimizadas
+- **Acessibilidade**: Respeita preferências do usuário
+
 ## 🛠️ Desenvolvimento
 
 ### Scripts Disponíveis
@@ -231,6 +298,9 @@ npm run lint         # Verificação de código
 - **Chat**: Conversas e mensagens
 - **Payment**: Pagamentos e planos
 - **Usage**: Controle de uso
+- **Appearance**: Configurações de aparência e animações
+- **Voice**: Configurações de voz
+- **Personality**: Personalidade do assistente
 - **Sidebar**: Estado da navegação
 
 ## 🎨 Design System
@@ -245,10 +315,17 @@ npm run lint         # Verificação de código
 
 ### Temas
 
-- Suporte a tema claro/escuro
+- Suporte a tema claro/escuro dinâmico
 - Cores consistentes
 - Tipografia padronizada
 - Espaçamentos uniformes
+
+### Animações
+
+- Transições suaves
+- Micro-interações
+- Estados de hover/focus
+- Animações de entrada/saída
 
 ## 📊 Performance
 
@@ -257,6 +334,7 @@ npm run lint         # Verificação de código
 - **Code Splitting**: Carregamento sob demanda
 - **Caching**: Redux Persist para estado
 - **Lazy Loading**: Componentes carregados quando necessário
+- **Animações Otimizadas**: Framer Motion com performance
 
 ## 🔒 Segurança
 
@@ -265,6 +343,7 @@ npm run lint         # Verificação de código
 - Sanitização de dados
 - HTTPS em produção
 - Tokens JWT seguros
+- Confirmação para ações destrutivas
 
 ## 🚀 Deploy
 
@@ -292,6 +371,8 @@ vercel
 - Integração completa com o backend Axel
 - Sistema de planos flexível e escalável
 - Interface moderna e acessível
+- Sistema de animações personalizável
+- Gerenciamento completo de dados do usuário
 
 ## 🏆 Autores
 
