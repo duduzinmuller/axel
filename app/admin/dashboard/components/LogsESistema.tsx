@@ -1,5 +1,5 @@
 import React from "react";
-import { Key, Mail, CheckCircle2, Info } from "lucide-react";
+import { Key, Mail, CheckCircle2 } from "lucide-react";
 import { useCodes } from "@/app/_lib/hooks/useCodes";
 import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
@@ -107,26 +107,12 @@ export default function LogsESistema() {
             getUserName={getUserName}
           />
         </Card>
-        <Card className="rounded-sm border p-0 shadow-none">
-          <div className="mt-2 ml-4 p-2">
-            <div className="mb-2 flex items-center gap-2">
-              <Info className="h-5 w-5" />
-              <p className="text-xl font-semibold">
-                Uso de Mensagens ({messageUsage ? messageUsage.length : 0})
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-[#777]">
-                Controle diário de uso de mensagens por usuário
-              </p>
-            </div>
-          </div>
-          <MessageUsageTable
-            messageUsage={messageUsage || []}
-            loadingUsage={loadingUsage}
-            errorUsage={errorUsage}
-          />
-        </Card>
+
+        <MessageUsageTable
+          messageUsage={messageUsage || []}
+          loadingUsage={loadingUsage}
+          errorUsage={errorUsage}
+        />
       </div>
     </>
   );
