@@ -8,7 +8,6 @@ import SettingsSection from "./SettingsSection";
 
 export default function PrivacySecurity() {
   const [history, setHistory] = useState(true);
-  const [analytics, setAnalytics] = useState(true);
   const [thirdParty, setThirdParty] = useState(false);
 
   return (
@@ -26,25 +25,11 @@ export default function PrivacySecurity() {
             description="Manter registro das interações para melhorar a experiência"
           />
           <ToggleSwitch
-            checked={analytics}
-            onChange={setAnalytics}
-            label="Análise de Dados para Melhorias"
-            description="Permitir análise anônima para aprimorar o assistente"
-          />
-          <ToggleSwitch
             checked={thirdParty}
             onChange={setThirdParty}
             label="Compartilhamento com Terceiros"
             description="Permitir compartilhamento de dados com parceiros"
           />
-          <div>
-            <label className="mb-1 block text-[14px] font-medium">
-              Retenção de Dados
-            </label>
-            <select className="w-full rounded-lg border border-[#3B82F6] bg-transparent px-3 py-2 text-[14px] focus:outline-none">
-              <option>6 meses</option>
-            </select>
-          </div>
         </div>
       </SettingsSection>
       <hr className="my-7 border-t border-[#23262F] opacity-30" />
