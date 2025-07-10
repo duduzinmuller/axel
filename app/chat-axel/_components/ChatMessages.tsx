@@ -21,6 +21,7 @@ const ChatMessages = () => {
   const isTyping = useAppSelector(selectIsTyping);
 
   const { user } = useAppSelector((state) => state.auth);
+  const { avatar } = useAppSelector((state) => state.appearance);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -117,7 +118,7 @@ const ChatMessages = () => {
                   message.role === "user" ? "justify-end" : "justify-start",
                 )}
               >
-                {message.role === "assistant" && (
+                {message.role === "assistant" && avatar && (
                   <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src="/axel.svg" alt="AxelAI" />
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
@@ -165,7 +166,7 @@ const ChatMessages = () => {
                 message.role === "user" ? "justify-end" : "justify-start",
               )}
             >
-              {message.role === "assistant" && (
+              {message.role === "assistant" && avatar && (
                 <Avatar className="h-8 w-8 flex-shrink-0">
                   <AvatarImage src="/axel.svg" alt="AxelAI" />
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">

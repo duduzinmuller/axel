@@ -97,6 +97,7 @@ export default function AppearanceInterface() {
           icon={RefreshCcw}
           variant="secondary"
           onClick={handleResetSettings}
+          className="cursor-pointer"
         >
           Restaurar Padrões
         </ActionButton>
@@ -104,6 +105,7 @@ export default function AppearanceInterface() {
           icon={Save}
           variant="primary"
           onClick={handleSaveSettings}
+          className="cursor-pointer"
         >
           Salvar Configurações
         </ActionButton>
