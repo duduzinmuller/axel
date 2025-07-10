@@ -1,12 +1,15 @@
 "use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Users, ArrowRight, UserPlus } from "lucide-react";
+import { Users, ArrowRight } from "lucide-react";
 import SettingsSection from "./SettingsSection";
 import { useRouter } from "next/navigation";
+import { useUserStatus } from "@/app/_lib/hooks/useUserStatus";
 
 export default function AdminDashboard() {
   const router = useRouter();
+  const { status, loading } = useUserStatus();
+
   return (
     <SettingsSection
       title="Dashboard Administrativo"
@@ -18,7 +21,9 @@ export default function AdminDashboard() {
           <div className="mr-3 h-6 w-6 rounded-full bg-blue-400"></div>
           <div className="flex flex-col items-start">
             <span className="text-2xl leading-tight font-bold text-blue-100">
-              --
+              {loading
+                ? "..."
+                : status.ACTIVE + status.PENDING + status.INACTIVE}
             </span>
             <span className="text-xs leading-tight text-blue-300">Total</span>
           </div>
@@ -27,7 +32,7 @@ export default function AdminDashboard() {
           <div className="mr-3 h-6 w-6 rounded-full bg-green-400"></div>
           <div className="flex flex-col items-start">
             <span className="text-2xl leading-tight font-bold text-green-200">
-              --
+              {loading ? "..." : status.ACTIVE}
             </span>
             <span className="text-xs leading-tight text-green-400">Ativos</span>
           </div>
@@ -36,7 +41,7 @@ export default function AdminDashboard() {
           <div className="mr-3 h-6 w-6 rounded-full bg-yellow-400"></div>
           <div className="flex flex-col items-start">
             <span className="text-2xl leading-tight font-bold text-yellow-200">
-              --
+              {loading ? "..." : status.PENDING}
             </span>
             <span className="text-xs leading-tight text-yellow-400">
               Pendentes
@@ -47,7 +52,7 @@ export default function AdminDashboard() {
           <div className="mr-3 h-6 w-6 rounded-full bg-neutral-500"></div>
           <div className="flex flex-col items-start">
             <span className="text-2xl leading-tight font-bold text-neutral-400">
-              --
+              {loading ? "..." : status.INACTIVE}
             </span>
             <span className="text-xs leading-tight text-neutral-400">
               Inativos
@@ -80,15 +85,6 @@ export default function AdminDashboard() {
               </span>
             </span>
             <ArrowRight className="ml-auto h-4 w-4" />
-          </Button>
-        </div>
-        <div className="min-w-[120px]">
-          <Button
-            variant="outline"
-            className="flex h-[38px] min-w-0 items-center justify-start gap-2 rounded-[10px] border border-[#3B82F6] bg-transparent px-3 text-sm font-medium text-white shadow-none transition-all"
-          >
-            <UserPlus className="mr-2 h-4 w-4 text-[#3B82F6]" />
-            <span className="text-sm text-black">Adicionar Usuário</span>
           </Button>
         </div>
       </div>

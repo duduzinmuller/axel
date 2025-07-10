@@ -7,6 +7,7 @@ interface RangeSliderProps {
   onChange: (value: number) => void;
   min?: number;
   max?: number;
+  step?: number;
   leftLabel?: string;
   rightLabel?: string;
   centerLabel?: string;

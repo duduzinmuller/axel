@@ -1,6 +1,5 @@
 // Componentes principais
 export { default as GeneralSettings } from "./GeneralSettings";
-export { default as PersonalitySettings } from "./PersonalitySettings";
 export { default as AdminDashboard } from "./AdminDashboard";
 export { default as PrivacySecurity } from "./PrivacySecurity";
 export { default as AppearanceInterface } from "./AppearanceInterface";

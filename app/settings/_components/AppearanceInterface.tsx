@@ -1,18 +1,60 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { RefreshCcw, Save } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useAppSelector, useAppDispatch } from "@/app/store";
+import {
+  setAnimations,
+  setAvatar,
+  resetAppearanceSettings,
+} from "@/app/store/slice/appearance/appearanceSlice";
+import { resetVoiceSettings } from "@/app/store/slice/voice/voiceSlice";
 import ToggleSwitch from "./ToggleSwitch";
-import RangeSlider from "./RangeSlider";
 import FormField from "./FormField";
 import ActionButton from "./ActionButton";
 import SecurityIcon from "./SecurityIcon";
 import SettingsSection from "./SettingsSection";
+import { toast } from "sonner";
 
 export default function AppearanceInterface() {
-  const [animations, setAnimations] = useState(true);
-  const [compact, setCompact] = useState(false);
-  const [avatar, setAvatar] = useState(true);
-  const [tamanhoFonte, setTamanhoFonte] = useState(60);
+  const dispatch = useAppDispatch();
+  const { animations, avatar } = useAppSelector((state) => state.appearance);
+  const { theme, setTheme } = useTheme();
+
+  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedTheme = e.target.value;
+    if (selectedTheme === "Claro") {
+      setTheme("light");
+    } else if (selectedTheme === "Escuro") {
+      setTheme("dark");
+    } else {
+      setTheme("system");
+    }
+  };
+
+  const getCurrentThemeValue = () => {
+    if (theme === "light") return "Claro";
+    if (theme === "dark") return "Escuro";
+    return "Sistema";
+  };
+
+  const handleAnimationsChange = (enabled: boolean) => {
+    dispatch(setAnimations(enabled));
+  };
+
+  const handleAvatarChange = (enabled: boolean) => {
+    dispatch(setAvatar(enabled));
+  };
+
+  const handleResetSettings = () => {
+    dispatch(resetAppearanceSettings());
+    dispatch(resetVoiceSettings());
+    toast.success("Configurações restauradas para o padrão!");
+  };
+
+  const handleSaveSettings = () => {
+    toast.success("Configurações salvas com sucesso!");
+  };
 
   return (
     <>
@@ -25,44 +67,24 @@ export default function AppearanceInterface() {
           <FormField label="Tema">
             <select
               className="w-full rounded-lg border bg-transparent py-2 text-sm"
-              defaultValue="Sistema"
+              value={getCurrentThemeValue()}
+              onChange={handleThemeChange}
             >
-              <option>Sistema</option>
+              <option value="Sistema">Sistema</option>
+              <option value="Claro">Claro</option>
+              <option value="Escuro">Escuro</option>
             </select>
-          </FormField>
-          <FormField label="Cor Principal">
-            <select
-              className="w-full rounded-lg border bg-transparent py-2 text-sm"
-              defaultValue="Azul"
-            >
-              <option>Azul</option>
-            </select>
-          </FormField>
-          <FormField label="Tamanho da Fonte">
-            <RangeSlider
-              value={tamanhoFonte}
-              onChange={setTamanhoFonte}
-              leftLabel="Pequena"
-              rightLabel="Grande"
-              centerLabel="Normal"
-            />
           </FormField>
           <div className="space-y-5 pt-2">
             <ToggleSwitch
               checked={animations}
-              onChange={setAnimations}
+              onChange={handleAnimationsChange}
               label="Animações"
               description="Ativar animações na interface"
             />
             <ToggleSwitch
-              checked={compact}
-              onChange={setCompact}
-              label="Modo Compacto"
-              description="Reduzir espaçamento para mais conteúdo"
-            />
-            <ToggleSwitch
               checked={avatar}
-              onChange={setAvatar}
+              onChange={handleAvatarChange}
               label="Mostrar Avatar do Assistente"
               description="Exibir avatar nas conversas"
             />
@@ -71,10 +93,20 @@ export default function AppearanceInterface() {
       </SettingsSection>
       <hr className="my-7 border-t border-[#23262F] opacity-30" />
       <div className="mt-2 flex justify-end gap-3">
-        <ActionButton icon={RefreshCcw} variant="secondary">
+        <ActionButton
+          icon={RefreshCcw}
+          variant="secondary"
+          onClick={handleResetSettings}
+          className="cursor-pointer"
+        >
           Restaurar Padrões
         </ActionButton>
-        <ActionButton icon={Save} variant="primary">
+        <ActionButton
+          icon={Save}
+          variant="primary"
+          onClick={handleSaveSettings}
+          className="cursor-pointer"
+        >
           Salvar Configurações
         </ActionButton>
       </div>
