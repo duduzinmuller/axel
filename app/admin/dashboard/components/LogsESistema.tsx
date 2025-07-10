@@ -1,5 +1,5 @@
 import React from "react";
-import { Key, Mail, CheckCircle2 } from "lucide-react";
+import { Key, Mail } from "lucide-react";
 import { useCodes } from "@/app/_lib/hooks/useCodes";
 import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
@@ -86,27 +86,13 @@ export default function LogsESistema() {
             errorEmails={errorEmails}
           />
         </Card>
-        <Card className="rounded-sm border p-0 shadow-none">
-          <div className="mt-2 ml-4 p-2">
-            <div className="mb-2 flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5" />
-              <p className="text-xl font-semibold">
-                Verificações de Email ({verifications.length})
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-[#777]">
-                Status das verificações de email dos usuários
-              </p>
-            </div>
-          </div>
-          <EmailVerificationsTable
-            verifications={verifications}
-            loadingVerifications={loadingVerifications}
-            errorVerifications={errorVerifications}
-            getUserName={getUserName}
-          />
-        </Card>
+
+        <EmailVerificationsTable
+          verifications={verifications}
+          loadingVerifications={loadingVerifications}
+          errorVerifications={errorVerifications}
+          getUserName={getUserName}
+        />
 
         <MessageUsageTable
           messageUsage={messageUsage || []}
