@@ -1,6 +1,3 @@
-import { Card } from "../../../components/ui/card";
-import { Badge } from "../../../components/ui/badge";
-import { Button } from "../../../components/ui/button";
 import React from "react";
 import {
   CheckCircle,
@@ -16,6 +13,9 @@ import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
 import { useUsers } from "@/app/_lib/hooks/useUsers";
 import { useMessageUsage } from "@/app/_lib/hooks";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {

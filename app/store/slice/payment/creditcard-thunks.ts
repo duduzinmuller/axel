@@ -59,7 +59,10 @@ export const payWithCreditCard = createAsyncThunk(
       const paymentResult = await dispatch(
         createCreditCardPayment(paymentPayload),
       ).unwrap();
-      const paymentId = paymentResult?.externalId || paymentResult?.id;
+
+      const paymentId =
+        paymentResult?.payment?.externalId || paymentResult?.payment?.id;
+
       if (!paymentId) throw new Error("Pagamento não criado");
 
       const updateResult = await dispatch<any>(

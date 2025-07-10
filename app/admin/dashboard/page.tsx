@@ -1,22 +1,19 @@
 "use client";
 
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "../../components/ui/tabs";
-import { Button } from "../../components/ui/button";
 import { Calendar, Clock, ArrowLeft, Menu } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { Sheet, SheetTrigger, SheetContent } from "../../components/ui/sheet";
+
 import VisaoGeral from "./components/VisaoGeral";
 import Usuarios from "./components/Usuarios";
 import Pagamentos from "./components/Pagamentos";
 import LogsESistema from "./components/LogsESistema";
-import { Badge } from "../../components/ui/badge";
-import ThemeToggle from "../_components/ThemeToggle";
+
 import { useRouter } from "next/navigation";
+import ThemeToggle from "@/app/_components/ThemeToggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 export default function DashboardPage() {
   const router = useRouter();

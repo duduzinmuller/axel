@@ -13,7 +13,6 @@ export function useMessageUsage() {
     setError(null);
     MessageUsageService.getAll()
       .then((usages) => {
-        // Faz join com users e mapeia para o formato esperado
         const mapped = usages.map((usage) => {
           const user = users.find((u) => u.id === usage.userId);
           return {

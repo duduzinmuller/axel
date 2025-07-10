@@ -26,14 +26,12 @@ export const PlanDistributionChart = ({
       };
     }
 
-    // Mapeamento de cores para cada plano
     const colors = {
-      FREE: "#7c3aed", // Roxo
-      MONTHLY: "#34d399", // Verde
-      ANNUAL: "#fbbf24", // Amarelo
+      FREE: "#7c3aed",
+      MONTHLY: "#34d399",
+      ANNUAL: "#fbbf24",
     };
 
-    // Mapeamento de nomes para exibição
     const planNames = {
       FREE: "Gratuito",
       MONTHLY: "Mensal",

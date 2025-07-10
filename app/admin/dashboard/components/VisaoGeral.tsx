@@ -24,7 +24,6 @@ ChartJS.register(
   Legend,
 );
 
-import { Card } from "../../../components/ui/card";
 import { Line } from "react-chartjs-2";
 import React, { useMemo } from "react";
 import { AlertCircle } from "lucide-react";
@@ -33,6 +32,7 @@ import { CircleDollarSign } from "lucide-react";
 import { UserCheck } from "lucide-react";
 import { useDashboardStats } from "@/app/_lib/hooks/useDashboardStats";
 import { PlanDistributionChart } from "./PlanDistributionChart";
+import { Card } from "@/components/ui/card";
 
 const lineOptions = {
   responsive: true,
@@ -110,7 +110,6 @@ export default function VisaoGeral() {
 
   return (
     <>
-      {/* Cards principais */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-4">
         <Card className="flex flex-col gap-2 p-4">
           <span className="text-muted-foreground text-xs">

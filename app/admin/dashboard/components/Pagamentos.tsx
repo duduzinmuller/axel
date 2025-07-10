@@ -1,10 +1,10 @@
-import { Card } from "../../../components/ui/card";
-import { Badge } from "../../../components/ui/badge";
-import { Button } from "../../../components/ui/button";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import React, { useState } from "react";
 import { CircleCheckBig, Clock, X, XCircle } from "lucide-react";
 import { usePayments } from "@/app/_lib/hooks/usePayments";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const PlanBadge = ({ plan }: { plan: string }) => {
   const planStyles = {

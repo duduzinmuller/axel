@@ -20,7 +20,6 @@ const retryWithBackoff = async <T>(
     } catch (error: any) {
       lastError = error;
 
-      // Se não é erro 429 ou já tentamos o máximo de vezes, não tenta novamente
       if (error.response?.status !== 429 || attempt === maxRetries) {
         throw error;
       }
