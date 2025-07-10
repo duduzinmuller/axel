@@ -1,5 +1,5 @@
 import React from "react";
-import { Key, Mail } from "lucide-react";
+import { Key } from "lucide-react";
 import { useCodes } from "@/app/_lib/hooks/useCodes";
 import { useEmailNotifications } from "@/app/_lib/hooks/useEmailNotifications";
 import { useEmailVerifications } from "@/app/_lib/hooks/useEmailVerifications";
@@ -66,26 +66,12 @@ export default function LogsESistema() {
             errorCodes={errorCodes}
           />
         </Card>
-        <Card className="rounded-sm border p-0 shadow-none">
-          <div className="mt-2 ml-4 p-2">
-            <div className="mb-2 flex items-center gap-2">
-              <Mail className="h-5 w-5" />
-              <p className="text-xl font-semibold">
-                Notificações por Email ({emails.length})
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-[#777]">
-                Histórico de emails enviados pelo sistema
-              </p>
-            </div>
-          </div>
-          <EmailNotificationsTable
-            emails={emails}
-            loadingEmails={loadingEmails}
-            errorEmails={errorEmails}
-          />
-        </Card>
+
+        <EmailNotificationsTable
+          emails={emails}
+          loadingEmails={loadingEmails}
+          errorEmails={errorEmails}
+        />
 
         <EmailVerificationsTable
           verifications={verifications}

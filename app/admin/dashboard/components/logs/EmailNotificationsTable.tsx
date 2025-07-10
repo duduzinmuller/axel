@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlanBadge, StatusBadge } from "./LogsBadges";
+import { Mail } from "lucide-react";
 
 interface EmailNotificationsTableProps {
   emails: any[];
@@ -15,7 +16,7 @@ export const EmailNotificationsTable: React.FC<
   <Card className="rounded-sm border p-0 shadow-none">
     <div className="mt-2 ml-4 p-2">
       <div className="mb-2 flex items-center gap-2">
-        <span className="h-5 w-5">📧</span>
+        <Mail className="h-5 w-5" />
         <p className="text-xl font-semibold">
           Notificações por Email ({emails.length})
         </p>
