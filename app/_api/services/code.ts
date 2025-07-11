@@ -14,4 +14,11 @@ export const CodeService = {
     const response = await protectedApi.get<AccessCode[]>("/code");
     return response.data;
   },
+  async createAccessCode(plan: string, expiresAt: string) {
+    const response = await protectedApi.post("/code/access-code", {
+      plan,
+      expiresAt,
+    });
+    return response.data;
+  },
 };
