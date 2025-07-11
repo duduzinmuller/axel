@@ -11,7 +11,13 @@ import { EmailVerificationsTable } from "./logs/EmailVerificationsTable";
 import { MessageUsageTable } from "./logs/MessageUsageTable";
 
 export default function LogsESistema() {
-  const { codes, loading: loadingCodes, error: errorCodes } = useCodes();
+  const {
+    codes,
+    loading: loadingCodes,
+    error: errorCodes,
+    createCode,
+    refresh,
+  } = useCodes();
   const {
     emails,
     loading: loadingEmails,
@@ -48,6 +54,8 @@ export default function LogsESistema() {
           codes={codes}
           loadingCodes={loadingCodes}
           errorCodes={errorCodes}
+          createCode={createCode}
+          refresh={refresh}
         />
 
         <EmailNotificationsTable
