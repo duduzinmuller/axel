@@ -83,7 +83,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
               <div className="text-center text-[10px] md:text-xs">
                 {new Date(user.createdAt).toLocaleDateString("pt-BR")}
               </div>
-              <div className="-ml-7 -ml-12 ml-4 flex justify-center gap-1 md:ml-0 md:gap-2">
+              <div className="ml-4 flex justify-center gap-1 md:ml-0 md:gap-2">
                 <Button
                   size="icon"
                   variant="ghost"

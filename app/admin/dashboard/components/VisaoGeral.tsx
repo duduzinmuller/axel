@@ -109,7 +109,6 @@ export default function VisaoGeral() {
   return (
     <>
       <DashboardStatsCards dashboardStats={dashboardStats} />
-      {/* Gráficos e Distribuição */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card className="p-5">
           <div>
@@ -137,7 +136,6 @@ export default function VisaoGeral() {
           </div>
         </Card>
       </div>
-      {/* Status de Pagamentos e Resumo Geral */}
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card className="p-5">
           <div>
