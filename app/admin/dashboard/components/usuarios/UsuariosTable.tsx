@@ -6,6 +6,7 @@ import {
   StatusBadge,
 } from "./UsuariosBadges";
 import { Button } from "@/components/ui/button";
+import { Eye, Edit, Mail, Trash2 } from "lucide-react";
 
 interface UsuariosTableProps {
   filteredUsers: any[];
@@ -87,26 +88,26 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="text-[#B1B5C3] hover:bg-[#23262F]"
+                  className="hover:bg-[#23262F]"
                 >
                   <span className="sr-only">Ver</span>
-                  <i className="lucide lucide-eye h-4 w-4" />
+                  <Eye className="h-4 w-4" />
                 </Button>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="text-[#B1B5C3] hover:bg-[#23262F]"
+                  className="hover:bg-[#23262F]"
                 >
                   <span className="sr-only">Editar</span>
-                  <i className="lucide lucide-edit h-4 w-4" />
+                  <Edit className="h-4 w-4" />
                 </Button>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="text-[#B1B5C3] hover:bg-[#23262F]"
+                  className="hover:bg-[#23262F]"
                 >
                   <span className="sr-only">Email</span>
-                  <i className="lucide lucide-mail h-4 w-4" />
+                  <Mail className="h-4 w-4" />
                 </Button>
                 <Button
                   size="icon"
@@ -114,7 +115,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
                   className="text-red-400 hover:bg-[#23262F]"
                 >
                   <span className="sr-only">Excluir</span>
-                  <i className="lucide lucide-trash-2 h-4 w-4" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
             </div>
