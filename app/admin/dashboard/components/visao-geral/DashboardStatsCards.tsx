@@ -25,7 +25,8 @@ export const DashboardStatsCards: React.FC<DashboardStatsCardsProps> = ({
         {dashboardStats?.totalUsers || 0}
       </span>
       <span className="text-xs text-green-500">
-        +23 <span className="text-gray-500">hoje</span>
+        +{dashboardStats?.usersCreatedToday || 0}{" "}
+        <span className="text-gray-500">hoje</span>
       </span>
     </Card>
     <Card className="flex flex-col gap-2 p-4">

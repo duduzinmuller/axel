@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "./LogsBadges";
+import { CheckCircle2 } from "lucide-react";
 
 interface EmailVerificationsTableProps {
   verifications: any[];
@@ -21,7 +22,7 @@ export const EmailVerificationsTable: React.FC<
   <Card className="rounded-sm border p-0 shadow-none">
     <div className="mt-2 ml-4 p-2">
       <div className="mb-2 flex items-center gap-2">
-        <span className="h-5 w-5">✅</span>
+        <CheckCircle2 className="h-5 w-5" />
         <p className="text-xl font-semibold">
           Verificações de Email ({verifications.length})
         </p>

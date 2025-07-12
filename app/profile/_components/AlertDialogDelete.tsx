@@ -34,7 +34,6 @@ import {
   Legend,
 } from "chart.js";
 
-// Registre os elementos e escalas necessários
 ChartJS.register(
   CategoryScale,
   LinearScale,
