@@ -128,7 +128,7 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
 
       <div className="border-border space-y-2 border-t p-4">
         <LimitWarning />
-        <MessageLimitIndicator />
+        {user?.plan === "FREE" && <MessageLimitIndicator />}
         <div className="flex items-center space-x-3">
           <Link href="/profile" className="flex items-center space-x-3">
             <Avatar className="border-border h-10 w-10 border">

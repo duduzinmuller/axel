@@ -15,11 +15,6 @@ const MessageLimitIndicator = () => {
   const backendIsLimitReached = backendCount >= backendLimit;
 
   useEffect(() => {
-    console.log("MessageLimitIndicator - usage atualizado:", usage);
-    console.log("backendRemaining:", backendRemaining);
-    console.log("backendCount:", backendCount);
-    console.log("isLoading:", isLoading);
-
     setForceUpdate((prev) => prev + 1);
   }, [usage, backendRemaining, backendCount, isLoading]);
 
