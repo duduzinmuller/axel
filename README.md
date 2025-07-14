@@ -33,10 +33,10 @@ app/
 ├── _lib/                 # Utilitários e hooks customizados
 │   └── hooks/
 │       └── useAnimations.ts # Hook para gerenciar animações
+├── admin/                # Rotas somente admin pode entrar
 ├── callback/             # Página de callback OAuth
 ├── chat-axel/            # Interface principal do chat
 ├── checkout/             # Sistema de pagamentos
-├── dashboard/            # Painel administrativo
 ├── login/                # Autenticação
 ├── profile/              # Perfil do usuário
 ├── register/             # Cadastro
@@ -62,7 +62,9 @@ app/
 
 ### 🤖 Chat Inteligente
 
-- Interface de chat moderna e responsiva
+- Interface de chat moderna, responsiva e **centralizada na tela**
+- Saudação inicial personalizada: "Olá, [nome]! como posso te ajudar?", centralizada e com animação de digitação
+- Texto de saudação estilizado (tamanho grande e negrito)
 - Histórico de conversas persistente
 - Exemplos de perguntas para iniciar conversas
 - Indicadores de limite de uso
@@ -192,18 +194,7 @@ Crie um arquivo `.env.local` na raiz do projeto:
 # API Backend
 NEXT_PUBLIC_API_URL=http://localhost:3001
 
-# Supabase (OAuth)
-NEXT_PUBLIC_SUPABASE_URL=sua_url_supabase
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima
-
-# MercadoPago
-NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY=sua_chave_publica
-
-# Google OAuth
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=seu_client_id
-
 # Outras configurações
-NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ### Desenvolvimento
