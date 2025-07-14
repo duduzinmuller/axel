@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   PlanBadge,
   RoleBadge,
@@ -6,8 +6,11 @@ import {
   StatusBadge,
 } from "./UsuariosBadges";
 import { Button } from "@/components/ui/button";
-import { Eye, Edit, Mail, Trash2 } from "lucide-react";
+import { Eye, Edit, Trash2 } from "lucide-react";
 import { UsuarioDetailsDialog } from "./UsuarioDetailsDialog";
+import { UsuarioEditDialog } from "./UsuarioEditDialog";
+import { useAppDispatch } from "@/app/store";
+import { openEditDialog } from "@/app/store/slice/admin/userEditSlice";
 
 interface UsuariosTableProps {
   filteredUsers: any[];
@@ -16,8 +19,14 @@ interface UsuariosTableProps {
 export const UsuariosTable: React.FC<UsuariosTableProps> = ({
   filteredUsers,
 }) => {
+  const [users, setUsers] = useState(filteredUsers);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setUsers(filteredUsers);
+  }, [filteredUsers]);
 
   const handleViewUser = (user: any) => {
     setSelectedUser(user);
@@ -28,6 +37,16 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
     setIsDialogOpen(false);
     setSelectedUser(null);
   };
+
+  const handleEditUser = (user: any) => {
+    dispatch(openEditDialog(user));
+  };
+
+  const handleUserUpdated = useCallback((updatedUser: any) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === updatedUser.id ? { ...u, ...updatedUser } : u)),
+    );
+  }, []);
 
   return (
     <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
@@ -59,14 +78,14 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
           </div>
         </div>
         <div className="space-y-0">
-          {filteredUsers.length === 0 ? (
+          {users.length === 0 ? (
             <div className="py-8 text-center">
               <p className="text-[#777]">
                 Nenhum usuário encontrado com os filtros aplicados.
               </p>
             </div>
           ) : (
-            filteredUsers.map((user) => (
+            users.map((user) => (
               <div
                 key={user.id}
                 className="grid grid-cols-8 items-center gap-2 border-b border-[#23262F] py-2 md:gap-4"
@@ -113,17 +132,10 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
                     size="icon"
                     variant="ghost"
                     className="hover:bg-[#23262F]"
+                    onClick={() => handleEditUser(user)}
                   >
                     <span className="sr-only">Editar</span>
                     <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="hover:bg-[#23262F]"
-                  >
-                    <span className="sr-only">Email</span>
-                    <Mail className="h-4 w-4" />
                   </Button>
                   <Button
                     size="icon"
@@ -145,6 +157,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
       />
+      <UsuarioEditDialog onUserUpdated={handleUserUpdated} />
     </div>
   );
 };
