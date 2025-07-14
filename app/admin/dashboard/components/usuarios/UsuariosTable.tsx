@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { UsuarioDetailsDialog } from "./UsuarioDetailsDialog";
 import { UsuarioEditDialog } from "./UsuarioEditDialog";
+import { UsuarioDeleteDialog } from "./UsuarioDeleteDialog";
 import { useAppDispatch } from "@/app/store";
 import { openEditDialog } from "@/app/store/slice/admin/userEditSlice";
+import { openDeleteDialog } from "@/app/store/slice/admin/userDeleteSlice";
 
 interface UsuariosTableProps {
   filteredUsers: any[];
@@ -41,6 +43,14 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
   const handleEditUser = (user: any) => {
     dispatch(openEditDialog(user));
   };
+
+  const handleDeleteUser = (user: any) => {
+    dispatch(openDeleteDialog(user));
+  };
+
+  const handleUserDeleted = useCallback((userId: string) => {
+    setUsers((prev) => prev.filter((u) => u.id !== userId));
+  }, []);
 
   const handleUserUpdated = useCallback((updatedUser: any) => {
     setUsers((prev) =>
@@ -122,7 +132,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="hover:bg-[#23262F]"
+                    className="cursor-pointer hover:bg-[#23262F]"
                     onClick={() => handleViewUser(user)}
                   >
                     <span className="sr-only">Ver</span>
@@ -131,7 +141,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="hover:bg-[#23262F]"
+                    className="cursor-pointer hover:bg-[#23262F]"
                     onClick={() => handleEditUser(user)}
                   >
                     <span className="sr-only">Editar</span>
@@ -140,7 +150,8 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="text-red-400 hover:bg-[#23262F]"
+                    className="cursor-pointer text-red-400 hover:bg-[#23262F]"
+                    onClick={() => handleDeleteUser(user)}
                   >
                     <span className="sr-only">Excluir</span>
                     <Trash2 className="h-4 w-4" />
@@ -158,6 +169,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
         onClose={handleCloseDialog}
       />
       <UsuarioEditDialog onUserUpdated={handleUserUpdated} />
+      <UsuarioDeleteDialog onUserDeleted={handleUserDeleted} />
     </div>
   );
 };

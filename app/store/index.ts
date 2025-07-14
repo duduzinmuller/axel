@@ -15,6 +15,7 @@ import voiceReducer from "./slice/voice/voiceSlice";
 import personalityReducer from "./slice/personality/personalitySlice";
 import appearanceReducer from "./slice/appearance/appearanceSlice";
 import { userEditReducer } from "./slice/admin";
+import { userDeleteReducer } from "./slice/admin";
 import { StorageUtils } from "./utils/storage-utils";
 
 const getCurrentUserId = () => {
@@ -70,6 +71,7 @@ export const store = configureStore({
     personality: persistedPersonalityReducer,
     appearance: persistedAppearanceReducer,
     userEdit: userEditReducer,
+    userDelete: userDeleteReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

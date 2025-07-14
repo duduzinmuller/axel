@@ -118,4 +118,8 @@ export const UserService = {
     );
     return response.data;
   },
+
+  async deleteUserById(id: string): Promise<void> {
+    await protectedApi.delete(`/admin/${id}`);
+  },
 };
