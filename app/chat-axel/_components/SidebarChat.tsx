@@ -24,6 +24,7 @@ import MessageLimitIndicator from "./MessageLimitIndicator";
 import Link from "next/link";
 import { useUsage } from "@/app/_lib/hooks/useUsage";
 import LimitWarning from "./LimitWarning";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   onNewChat?: () => void;
@@ -31,23 +32,20 @@ interface SidebarProps {
 }
 
 const SidebarChat = ({ onSelectChat }: SidebarProps) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const chats = useAppSelector(selectChats);
   const currentChatId = useAppSelector(selectCurrentChatId);
   const { usage } = useUsage();
 
-  console.log("Sidebar usage:", usage);
-
   const handleNewChat = () => {
-    console.log("Sidebar: Criando nova conversa...");
     try {
       dispatch(
         createChat({
           title: "Nova Conversa",
         }),
       );
-      console.log("Sidebar: Nova conversa criada com sucesso!");
     } catch (error) {
       console.error("Sidebar: Erro ao criar nova conversa", error);
     }
@@ -130,7 +128,7 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
 
       <div className="border-border space-y-2 border-t p-4">
         <LimitWarning />
-        <MessageLimitIndicator />
+        {user?.plan === "FREE" && <MessageLimitIndicator />}
         <div className="flex items-center space-x-3">
           <Link href="/profile" className="flex items-center space-x-3">
             <Avatar className="border-border h-10 w-10 border">
@@ -157,7 +155,10 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
               <p className="text-muted-foreground text-xs">{user?.email}</p>
             </div>
           </Link>
-          <Settings />
+          <Settings
+            className="cursor-pointer"
+            onClick={() => router.push("/settings")}
+          />
         </div>
       </div>
     </motion.div>

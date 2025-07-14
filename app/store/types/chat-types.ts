@@ -25,6 +25,7 @@ export interface ChatState {
 export interface CreateChatPayload {
   title: string;
   initialMessage?: string;
+  id?: string;
 }
 
 export interface AddMessagePayload {

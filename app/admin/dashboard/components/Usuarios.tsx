@@ -171,9 +171,6 @@ export default function Usuarios() {
             <option>Verificado</option>
             <option>Pendente</option>
           </select>
-          <Button className="mt-2 w-2/4 border border-[#353945] text-white hover:bg-[#23262F]/80 md:mt-0 md:w-1/5">
-            Exportar
-          </Button>
         </div>
       </Card>
       <Card className="mb-5 overflow-x-auto rounded-sm border border-[#1E293B] p-0 shadow-none">
@@ -190,7 +187,6 @@ export default function Usuarios() {
         <UsuariosTable filteredUsers={filteredUsers} />
       </Card>
 
-      {/* Estatísticas */}
       <UsuariosStatsCards stats={stats} />
     </>
   );
