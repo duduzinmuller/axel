@@ -5,9 +5,10 @@ import { useAppSelector } from "../store";
 import { selectCurrentChat } from "../store/slice/chat";
 import LoadingScreen from "../_components/LoadingScreen";
 import HeaderChatAxel from "./_components/HeaderChatAxel";
-import ExampleQuestions from "./_components/ExampleQuestions";
+
 import InputChatAxel from "./_components/InputChatAxel";
 import ChatMessages from "./_components/ChatMessages";
+import TypeWriter from "../_components/TypeWriter";
 
 const ChatAxel = () => {
   const [hasMounted, setHasMounted] = useState(false);
@@ -45,7 +46,12 @@ const ChatAxel = () => {
           <ChatMessages />
         </div>
       ) : (
-        <ExampleQuestions />
+        <div className="flex h-screen w-screen items-center justify-center">
+          <TypeWriter
+            className="text-3xl font-semibold"
+            text={`Olá, ${user?.name}! como posso te ajudar?`}
+          />
+        </div>
       )}
 
       <InputChatAxel />
