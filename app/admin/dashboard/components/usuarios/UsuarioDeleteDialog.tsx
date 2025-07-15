@@ -20,9 +20,9 @@ interface UsuarioDeleteDialogProps {
   onUserDeleted?: (userId: string) => void;
 }
 
-export const UsuarioDeleteDialog: React.FC<UsuarioDeleteDialogProps> = ({
+export const UsuarioDeleteDialog = ({
   onUserDeleted,
-}) => {
+}: UsuarioDeleteDialogProps) => {
   const dispatch = useAppDispatch();
   const { isOpen, selectedUser, isLoading } = useAppSelector(
     (s) => s.userDelete,
