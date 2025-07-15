@@ -87,7 +87,7 @@ export const PagamentosTable = ({
         </div>
       </Card>
       <PagamentoDetailsDialog
-        pagamento={selectedPagamento}
+        payment={selectedPagamento}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
       />
