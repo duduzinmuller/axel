@@ -14,14 +14,15 @@ interface AccessCodesTableProps {
   refresh: () => Promise<void>;
 }
 
-export const AccessCodesTable: React.FC<AccessCodesTableProps> = ({
+export const AccessCodesTable = ({
   codes,
   loadingCodes,
   errorCodes,
   createCode,
   refresh,
-}) => {
+}: AccessCodesTableProps) => {
   const [open, setOpen] = useState(false);
+
   return (
     <Card className="rounded-sm border p-0 shadow-none">
       <div className="mt-2 ml-4 p-2">
