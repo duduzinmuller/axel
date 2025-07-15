@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import {
   PaymentService,
   PaymentStatusPercentage,
-  PaymentHistory,
 } from "@/app/_api/services/payment";
+import { PaymentHistory } from "@/app/types/payment-history";
 
 export const usePayments = () => {
   const [statusPercentages, setStatusPercentages] = useState<
