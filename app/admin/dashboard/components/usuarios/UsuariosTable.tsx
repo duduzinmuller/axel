@@ -13,14 +13,13 @@ import { UsuarioDeleteDialog } from "./UsuarioDeleteDialog";
 import { useAppDispatch } from "@/app/store";
 import { openEditDialog } from "@/app/store/slice/admin/userEditSlice";
 import { openDeleteDialog } from "@/app/store/slice/admin/userDeleteSlice";
+import { Users } from "@/app/types/user";
 
 interface UsuariosTableProps {
-  filteredUsers: any[];
+  filteredUsers: Users[];
 }
 
-export const UsuariosTable: React.FC<UsuariosTableProps> = ({
-  filteredUsers,
-}) => {
+export const UsuariosTable = ({ filteredUsers }: UsuariosTableProps) => {
   const [users, setUsers] = useState(filteredUsers);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -30,7 +29,7 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
     setUsers(filteredUsers);
   }, [filteredUsers]);
 
-  const handleViewUser = (user: any) => {
+  const handleViewUser = (user: Users) => {
     setSelectedUser(user);
     setIsDialogOpen(true);
   };
@@ -40,11 +39,11 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
     setSelectedUser(null);
   };
 
-  const handleEditUser = (user: any) => {
+  const handleEditUser = (user: Users) => {
     dispatch(openEditDialog(user));
   };
 
-  const handleDeleteUser = (user: any) => {
+  const handleDeleteUser = (user: Users) => {
     dispatch(openDeleteDialog(user));
   };
 
@@ -52,11 +51,16 @@ export const UsuariosTable: React.FC<UsuariosTableProps> = ({
     setUsers((prev) => prev.filter((u) => u.id !== userId));
   }, []);
 
-  const handleUserUpdated = useCallback((updatedUser: any) => {
-    setUsers((prev) =>
-      prev.map((u) => (u.id === updatedUser.id ? { ...u, ...updatedUser } : u)),
-    );
-  }, []);
+  const handleUserUpdated = useCallback(
+    (updatedUser: Pick<Users, "name" | "email" | "role">) => {
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === selectedUser?.id ? { ...u, ...updatedUser } : u,
+        ),
+      );
+    },
+    [selectedUser],
+  );
 
   return (
     <div className="mr-5 mb-10 ml-5 flex overflow-x-auto rounded-sm border border-[#23262F] p-3 md:p-5">
