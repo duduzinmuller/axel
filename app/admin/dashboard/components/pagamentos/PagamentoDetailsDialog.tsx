@@ -11,17 +11,17 @@ import { PlanBadge, ProviderBadge, StatusBadge } from "./PagamentosBadges";
 import { CreditCard, User, Mail } from "lucide-react";
 
 interface PagamentoDetailsDialogProps {
-  pagamento: any | null;
+  payment: any | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const PagamentoDetailsDialog: React.FC<PagamentoDetailsDialogProps> = ({
-  pagamento,
+export const PagamentoDetailsDialog = ({
+  payment,
   isOpen,
   onClose,
-}) => {
-  if (!pagamento) return null;
+}: PagamentoDetailsDialogProps) => {
+  if (!payment) return null;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR", {
@@ -51,63 +51,63 @@ export const PagamentoDetailsDialog: React.FC<PagamentoDetailsDialogProps> = ({
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">ID</label>
                 <p className="font-mono text-xs break-all text-[#777]">
-                  {pagamento.id}
+                  {payment.id}
                 </p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Status
                 </label>
-                <StatusBadge status={pagamento.status} />
+                <StatusBadge status={payment.status} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">Valor</label>
                 <p className="text-sm">
                   R${" "}
-                  {Number(pagamento.amount).toLocaleString("pt-BR", {
+                  {Number(payment.amount).toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
                   })}
                 </p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">Moeda</label>
-                <p className="text-sm">{pagamento.currency?.toUpperCase()}</p>
+                <p className="text-sm">{payment.currency?.toUpperCase()}</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Parcelas
                 </label>
-                <p className="text-sm">{pagamento.installments}</p>
+                <p className="text-sm">{payment.installments}</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Método
                 </label>
-                <p className="text-sm">{pagamento.paymentMethod}</p>
+                <p className="text-sm">{payment.paymentMethod}</p>
               </div>
               <div className="space-y-2">
                 <label className="flex items-center gap-1 text-sm font-medium text-[#777]">
                   Plano
                 </label>
-                <PlanBadge plan={pagamento.plan} />
+                <PlanBadge plan={payment.plan} />
               </div>
               <div className="space-y-2">
                 <label className="flex items-center gap-1 text-sm font-medium text-[#777]">
                   Provider
                 </label>
-                <ProviderBadge provider={pagamento.paymentProvider} />
+                <ProviderBadge provider={payment.paymentProvider} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Criado em
                 </label>
-                <p className="text-sm">{formatDate(pagamento.createdAt)}</p>
+                <p className="text-sm">{formatDate(payment.createdAt)}</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Atualizado em
                 </label>
-                <p className="text-sm">{formatDate(pagamento.updatedAt)}</p>
+                <p className="text-sm">{formatDate(payment.updatedAt)}</p>
               </div>
             </div>
           </div>
@@ -121,20 +121,20 @@ export const PagamentoDetailsDialog: React.FC<PagamentoDetailsDialogProps> = ({
                 <label className="flex items-center gap-1 text-sm font-medium text-[#777]">
                   <User className="h-3 w-3" /> Nome
                 </label>
-                <p className="text-sm">{pagamento.user?.name}</p>
+                <p className="text-sm">{payment.user?.name}</p>
               </div>
               <div className="space-y-2">
                 <label className="flex items-center gap-1 text-sm font-medium text-[#777]">
                   <Mail className="h-3 w-3" /> Email
                 </label>
-                <p className="text-sm">{pagamento.user?.email}</p>
+                <p className="text-sm">{payment.user?.email}</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   User ID
                 </label>
                 <p className="font-mono text-xs break-all text-[#777]">
-                  {pagamento.userId}
+                  {payment.userId}
                 </p>
               </div>
             </div>
@@ -147,18 +147,18 @@ export const PagamentoDetailsDialog: React.FC<PagamentoDetailsDialogProps> = ({
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">CPF</label>
-                <p className="text-sm">{pagamento.cpf}</p>
+                <p className="text-sm">{payment.cpf}</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Destinatário
                 </label>
-                <p className="text-sm">{pagamento.recipient}</p>
+                <p className="text-sm">{payment.recipient}</p>
               </div>
             </div>
           </div>
 
-          {pagamento.paymentMethod === "bolbradesco" && (
+          {payment.paymentMethod === "bolbradesco" && (
             <div className="space-y-4">
               <h3 className="border-b border-[#23262F] pb-2 text-lg font-semibold text-[#B1B5C3]">
                 Endereço
@@ -166,33 +166,33 @@ export const PagamentoDetailsDialog: React.FC<PagamentoDetailsDialogProps> = ({
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#777]">CEP</label>
-                  <p className="text-sm">{pagamento.zip_code}</p>
+                  <p className="text-sm">{payment.zip_code}</p>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#777]">Rua</label>
-                  <p className="text-sm">{pagamento.street_name}</p>
+                  <p className="text-sm">{payment.street_name}</p>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#777]">
                     Número
                   </label>
-                  <p className="text-sm">{pagamento.street_number}</p>
+                  <p className="text-sm">{payment.street_number}</p>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#777]">
                     Bairro
                   </label>
-                  <p className="text-sm">{pagamento.neighborhood}</p>
+                  <p className="text-sm">{payment.neighborhood}</p>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#777]">
                     Cidade
                   </label>
-                  <p className="text-sm">{pagamento.city}</p>
+                  <p className="text-sm">{payment.city}</p>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-[#777]">UF</label>
-                  <p className="text-sm">{pagamento.federal_unit}</p>
+                  <p className="text-sm">{payment.federal_unit}</p>
                 </div>
               </div>
             </div>
@@ -207,14 +207,14 @@ export const PagamentoDetailsDialog: React.FC<PagamentoDetailsDialogProps> = ({
                 <label className="text-sm font-medium text-[#777]">
                   External ID
                 </label>
-                <p className="text-sm">{pagamento.externalId}</p>
+                <p className="text-sm">{payment.externalId}</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-[#777]">
                   Notificação Enviada
                 </label>
                 <p className="text-sm">
-                  {pagamento.notificationSent ? "Sim" : "Não"}
+                  {payment.notificationSent ? "Sim" : "Não"}
                 </p>
               </div>
             </div>
