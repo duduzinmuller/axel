@@ -1,8 +1,9 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
+import { PaymentHistory } from "@/app/types/payment-history";
 
 interface PagamentosStatsCardsProps {
-  history: any[];
+  history: PaymentHistory[];
 }
 
 export const PagamentosStatsCards = ({

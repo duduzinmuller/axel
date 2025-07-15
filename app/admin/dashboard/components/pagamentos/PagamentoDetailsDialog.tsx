@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { PlanBadge, ProviderBadge, StatusBadge } from "./PagamentosBadges";
 import { CreditCard, User, Mail } from "lucide-react";
-import { PaymentHistory } from "@/app/_api/services/payment";
+import { PaymentHistory } from "@/app/types/payment-history";
 
 interface PagamentoDetailsDialogProps {
   payment: PaymentHistory;
