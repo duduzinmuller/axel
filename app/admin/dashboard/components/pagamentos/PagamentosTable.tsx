@@ -8,9 +8,9 @@ interface PagamentosTableProps {
   pagamentosFiltrados: any[];
 }
 
-export const PagamentosTable: React.FC<PagamentosTableProps> = ({
+export const PagamentosTable = ({
   pagamentosFiltrados,
-}) => {
+}: PagamentosTableProps) => {
   const [selectedPagamento, setSelectedPagamento] = useState<any | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
