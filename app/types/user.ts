@@ -17,3 +17,13 @@ export interface Users {
   status: string;
   messages?: number;
 }
+
+export interface UsersStats {
+  verified: number;
+  pending: number;
+  freePlan: number;
+  monthlyPlan: number;
+  annualPlan: number;
+  totalMessages: number;
+  avgMessages: number;
+}
