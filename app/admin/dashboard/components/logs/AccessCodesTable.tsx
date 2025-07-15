@@ -5,12 +5,13 @@ import { PlanBadge, StatusBadge } from "./LogsBadges";
 import { Key } from "lucide-react";
 import CreateAccessCode from "./CreateAccessCode";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { AccessCode } from "@/app/_api/services/code";
 
 interface AccessCodesTableProps {
-  codes: any[];
+  codes: AccessCode[];
   loadingCodes: boolean;
   errorCodes: string | null;
-  createCode: (plan: string, expiresAt: string) => Promise<any>;
+  createCode: (plan: string, expiresAt: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
