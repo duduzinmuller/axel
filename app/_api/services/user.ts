@@ -107,4 +107,19 @@ export const UserService = {
     const response = await protectedApi.get<DashboardUser[]>("/users");
     return response.data;
   },
+
+  async updateUserById(
+    id: string,
+    data: Partial<DashboardUser>,
+  ): Promise<DashboardUser> {
+    const response = await protectedApi.patch<DashboardUser>(
+      `/admin/${id}`,
+      data,
+    );
+    return response.data;
+  },
+
+  async deleteUserById(id: string): Promise<void> {
+    await protectedApi.delete(`/admin/${id}`);
+  },
 };

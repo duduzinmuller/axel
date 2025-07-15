@@ -32,11 +32,11 @@ interface UsuarioDetailsDialogProps {
   onClose: () => void;
 }
 
-export const UsuarioDetailsDialog: React.FC<UsuarioDetailsDialogProps> = ({
+export const UsuarioDetailsDialog = ({
   user,
   isOpen,
   onClose,
-}) => {
+}: UsuarioDetailsDialogProps) => {
   if (!user) return null;
 
   const formatDate = (dateString: string) => {

@@ -5,23 +5,25 @@ import { PlanBadge, StatusBadge } from "./LogsBadges";
 import { Key } from "lucide-react";
 import CreateAccessCode from "./CreateAccessCode";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { AccessCode } from "@/app/_api/services/code";
 
 interface AccessCodesTableProps {
-  codes: any[];
+  codes: AccessCode[];
   loadingCodes: boolean;
   errorCodes: string | null;
-  createCode: (plan: string, expiresAt: string) => Promise<any>;
+  createCode: (plan: string, expiresAt: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
-export const AccessCodesTable: React.FC<AccessCodesTableProps> = ({
+export const AccessCodesTable = ({
   codes,
   loadingCodes,
   errorCodes,
   createCode,
   refresh,
-}) => {
+}: AccessCodesTableProps) => {
   const [open, setOpen] = useState(false);
+
   return (
     <Card className="rounded-sm border p-0 shadow-none">
       <div className="mt-2 ml-4 p-2">
