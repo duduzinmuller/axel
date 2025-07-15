@@ -21,6 +21,7 @@ import {
 import { UserService } from "@/app/_api/services/user";
 import { toast } from "sonner";
 import { useUsers } from "@/app/_lib/hooks/useUsers";
+import { Users } from "@/app/types/user";
 
 const userEditSchema = z.object({
   name: z.string().min(2, "Nome muito curto"),
@@ -31,12 +32,12 @@ const userEditSchema = z.object({
 type UserEditForm = z.infer<typeof userEditSchema>;
 
 interface UsuarioEditDialogProps {
-  onUserUpdated?: (user: any) => void;
+  onUserUpdated?: (user: Pick<Users, "name" | "email" | "role">) => void;
 }
 
-export const UsuarioEditDialog: React.FC<UsuarioEditDialogProps> = ({
+export const UsuarioEditDialog = ({
   onUserUpdated,
-}) => {
+}: UsuarioEditDialogProps) => {
   const dispatch = useAppDispatch();
   const { isOpen, selectedUser, isLoading } = useAppSelector((s) => s.userEdit);
   const { refreshUsers } = useUsers();
