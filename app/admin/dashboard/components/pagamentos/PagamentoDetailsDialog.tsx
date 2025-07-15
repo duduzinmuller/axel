@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/dialog";
 import { PlanBadge, ProviderBadge, StatusBadge } from "./PagamentosBadges";
 import { CreditCard, User, Mail } from "lucide-react";
+import { PaymentHistory } from "@/app/_api/services/payment";
 
 interface PagamentoDetailsDialogProps {
-  payment: any | null;
+  payment: PaymentHistory;
   isOpen: boolean;
   onClose: () => void;
 }
