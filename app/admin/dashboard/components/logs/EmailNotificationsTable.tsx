@@ -3,9 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlanBadge, StatusBadge } from "./LogsBadges";
 import { Mail } from "lucide-react";
+import { EmailNotification } from "@/app/_api/services/emailNotification";
 
 interface EmailNotificationsTableProps {
-  emails: any[];
+  emails: EmailNotification[];
   loadingEmails: boolean;
   errorEmails: string | null;
 }
