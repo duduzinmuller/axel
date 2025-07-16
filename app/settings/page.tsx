@@ -7,7 +7,7 @@ import {
   PrivacySecurity,
   AppearanceInterface,
 } from "./_components";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
@@ -27,7 +27,7 @@ export default function SettingsPage() {
       </div>
       <div className="w-full max-w-3xl space-y-10">
         <h1 className="mb-2 flex items-center gap-2 text-2xl font-semibold">
-          <span>⚙️</span>
+          <Settings />
           Configurações do Assistente
         </h1>
         <p className="mb-6 text-sm text-neutral-400">
