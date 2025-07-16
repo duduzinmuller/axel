@@ -21,12 +21,9 @@ export default function ActionButton({
     "flex items-center gap-2 font-medium px-5 py-2 text-sm rounded-lg transition";
 
   const variantClasses = {
-    primary:
-      "bg-[#3B82F6] border border-[#3B82F6] hover:bg-[#2563eb] text-[#0E0F11]",
-    secondary:
-      "bg-[#0E0F11] border border-[#23262F] hover:bg-[#23262F] text-white",
-    danger:
-      "bg-[#0E0F11] border border-[#3B82F6] hover:bg-[#232B3A] text-red-500",
+    primary: "border border-[#3B82F6] hover:bg-[#2563eb]",
+    secondary: "border border-[#23262F] hover:bg-[#23262F] ",
+    danger: "border border-[#23262F] hover:bg-[#232B3A] text-red-500",
   };
 
   return (
