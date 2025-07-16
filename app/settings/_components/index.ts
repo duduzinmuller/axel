@@ -9,5 +9,4 @@ export { default as ToggleSwitch } from "./ToggleSwitch";
 export { default as RangeSlider } from "./RangeSlider";
 export { default as FormField } from "./FormField";
 export { default as ActionButton } from "./ActionButton";
-export { default as SecurityIcon } from "./SecurityIcon";
 export { default as SettingsSection } from "./SettingsSection";

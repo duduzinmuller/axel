@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { RefreshCcw, Save } from "lucide-react";
+import { Palette, RefreshCcw, Save } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAppSelector, useAppDispatch } from "@/app/store";
 import {
@@ -12,7 +12,6 @@ import { resetVoiceSettings } from "@/app/store/slice/voice/voiceSlice";
 import ToggleSwitch from "./ToggleSwitch";
 import FormField from "./FormField";
 import ActionButton from "./ActionButton";
-import SecurityIcon from "./SecurityIcon";
 import SettingsSection from "./SettingsSection";
 import { toast } from "sonner";
 
@@ -61,7 +60,7 @@ export default function AppearanceInterface() {
       <SettingsSection
         title="Aparência e Interface"
         description="Personalize a aparência do seu assistente"
-        icon={<SecurityIcon />}
+        icon={<Palette />}
       >
         <div className="space-y-4">
           <FormField label="Tema">
@@ -91,7 +90,6 @@ export default function AppearanceInterface() {
           </div>
         </div>
       </SettingsSection>
-      <hr className="my-7 border-t border-[#23262F] opacity-30" />
       <div className="mt-2 flex justify-end gap-3">
         <ActionButton
           icon={RefreshCcw}
@@ -103,7 +101,7 @@ export default function AppearanceInterface() {
         </ActionButton>
         <ActionButton
           icon={Save}
-          variant="primary"
+          variant="secondary"
           onClick={handleSaveSettings}
           className="cursor-pointer"
         >
