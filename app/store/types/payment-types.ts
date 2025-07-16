@@ -4,8 +4,8 @@ export interface PaymentState {
   validateCode: string | null;
   error: string | null;
   plan: string | null;
-  cardToken: any;
-  paymentResult: any;
+  cardToken: string | null;
+  paymentResult: string | null;
   paymentStatus: "FAILED" | "PENDING" | "COMPLETED" | "CANCELED";
 }
 

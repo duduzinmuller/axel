@@ -23,7 +23,9 @@ export function useMessageUsage() {
             messages: usage.count,
             limit: user ? user.messageLimit : 0,
             status:
-              usage.count >= (user?.messageLimit || 0) ? "Limite" : "Normal",
+              usage.count >= Number(user?.messageLimit || 0)
+                ? "Limite"
+                : "Normal",
           };
         });
         setData(mapped);
