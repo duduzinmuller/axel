@@ -131,13 +131,17 @@ input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
   height: 6px;
-  background: #181F2A;
+  background: #181f2a;
   border-radius: 999px;
   outline: none;
 }
 input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
-  background: linear-gradient(to right, #3B82F6 var(--value, 60%), #181F2A var(--value, 60%));
+  background: linear-gradient(
+    to right,
+    #3b82f6 var(--value, 60%),
+    #181f2a var(--value, 60%)
+  );
   border-radius: 999px;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -146,8 +150,8 @@ input[type="range"]::-webkit-slider-thumb {
   height: 18px;
   border-radius: 50%;
   background: #000;
-  border: 2px solid #3B82F6;
-  box-shadow: 0 0 0 2px #181F2A;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px #181f2a;
   margin-top: -6px;
   transition: border 0.2s;
   z-index: 10;
@@ -161,8 +165,8 @@ input[type="range"]::-moz-range-thumb {
   height: 18px;
   border-radius: 50%;
   background: #000;
-  border: 2px solid #3B82F6;
-  box-shadow: 0 0 0 2px #181F2A;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px #181f2a;
   transition: border 0.2s;
   z-index: 10;
   position: relative;
@@ -175,8 +179,8 @@ input[type="range"]::-ms-thumb {
   height: 18px;
   border-radius: 50%;
   background: #000;
-  border: 2px solid #3B82F6;
-  box-shadow: 0 0 0 2px #181F2A;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px #181f2a;
   transition: border 0.2s;
   z-index: 10;
   position: relative;
@@ -185,11 +189,11 @@ input[type="range"]:focus::-ms-thumb {
   border: 2px solid #2563eb;
 }
 input[type="range"]::-ms-fill-lower {
-  background: #3B82F6;
+  background: #3b82f6;
   border-radius: 999px;
 }
 input[type="range"]::-ms-fill-upper {
-  background: #181F2A;
+  background: #181f2a;
   border-radius: 999px;
 }
 input[type="range"]:focus {
@@ -199,24 +203,46 @@ input[type="range"]::-ms-tooltip {
   display: none;
 }
 
-input, select, textarea, input[type="range"]:focus {
-  outline: 2px solid #1E293B !important;
+input,
+select,
+textarea,
+input[type="range"]:focus {
+  outline: 2px solid #1e293b !important;
   outline-offset: 0;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   border-width: 1px !important;
-  border-color: #0E0F11 !important;
+  border-color: #0e0f11 !important;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   border-width: 1px !important;
-  border-color: #23262F !important;
-  outline: 1px solid #23262F !important;
+  border-color: #23262f !important;
+  outline: 1px solid #23262f !important;
   outline-offset: 0;
 }
 
-input:not([type="range"]), select, textarea {
+input:not([type="range"]),
+select,
+textarea {
   padding-left: 0.75rem !important;
   padding-right: 0.75rem !important;
+}
+
+.dark select,
+.dark select option,
+.dark select optgroup {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+.dark select option:disabled {
+  color: #bbb !important;
+  background-color: #111 !important;
+  opacity: 1 !important;
 }
