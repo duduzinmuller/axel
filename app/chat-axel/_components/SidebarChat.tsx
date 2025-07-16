@@ -5,7 +5,8 @@ import { SquarePen, Settings, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -132,7 +133,13 @@ const SidebarChat = ({ onSelectChat }: SidebarProps) => {
         <div className="flex items-center space-x-3">
           <Link href="/profile" className="flex items-center space-x-3">
             <Avatar className="border-border h-10 w-10 border">
-              <AvatarImage src={user?.image} alt={user?.name} />
+              <Image
+                src={user?.image || "/placeholder.png"}
+                alt={user?.name || "Avatar"}
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+              />
             </Avatar>
             <div className="flex flex-col">
               <div className="flex flex-row items-center gap-2">
