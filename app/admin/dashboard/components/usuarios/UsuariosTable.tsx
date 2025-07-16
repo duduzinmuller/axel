@@ -14,9 +14,10 @@ import { useAppDispatch } from "@/app/store";
 import { openEditDialog } from "@/app/store/slice/admin/userEditSlice";
 import { openDeleteDialog } from "@/app/store/slice/admin/userDeleteSlice";
 import { Users } from "@/app/types/user";
+import { DashboardUser } from "@/app/_api/services/user";
 
 interface UsuariosTableProps {
-  filteredUsers: Users[];
+  filteredUsers: DashboardUser[];
 }
 
 export const UsuariosTable = ({ filteredUsers }: UsuariosTableProps) => {
@@ -29,7 +30,7 @@ export const UsuariosTable = ({ filteredUsers }: UsuariosTableProps) => {
     setUsers(filteredUsers);
   }, [filteredUsers]);
 
-  const handleViewUser = (user: Users) => {
+  const handleViewUser = (user: DashboardUser) => {
     setSelectedUser(user);
     setIsDialogOpen(true);
   };
@@ -39,12 +40,12 @@ export const UsuariosTable = ({ filteredUsers }: UsuariosTableProps) => {
     setSelectedUser(null);
   };
 
-  const handleEditUser = (user: Users) => {
-    dispatch(openEditDialog(user));
+  const handleEditUser = (user: DashboardUser) => {
+    dispatch(openEditDialog({ ...user, status: "ACTIVE" }));
   };
 
-  const handleDeleteUser = (user: Users) => {
-    dispatch(openDeleteDialog(user));
+  const handleDeleteUser = (user: DashboardUser) => {
+    dispatch(openDeleteDialog({ ...user, status: "ACTIVE" }));
   };
 
   const handleUserDeleted = useCallback((userId: string) => {

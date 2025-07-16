@@ -28,7 +28,7 @@ export interface UserResponse {
 }
 
 export interface DashboardUser {
-  messageLimit: any;
+  messageLimit: string;
   id: string;
   name: string;
   email: string;
