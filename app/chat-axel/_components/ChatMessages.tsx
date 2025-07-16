@@ -14,6 +14,7 @@ import { useRef, useEffect, useState } from "react";
 import TypeWriter from "@/app/_components/TypeWriter";
 import MessageContent from "./MessageContent";
 import { useBrender } from "@/app/_lib/hooks/useAxel";
+import Image from "next/image";
 
 const ChatMessages = () => {
   const currentChat = useAppSelector(selectCurrentChat);
@@ -148,7 +149,13 @@ const ChatMessages = () => {
                 </div>
                 {message.role === "user" && (
                   <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarImage src={user?.image} alt="Usuário" />
+                    <Image
+                      src={user?.image || "/placeholder.png"}
+                      alt={user?.name || "Avatar"}
+                      width={20}
+                      height={20}
+                      className="rounded-full object-cover"
+                    />
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
                       <User className="h-4 w-4 text-white" />
                     </div>
