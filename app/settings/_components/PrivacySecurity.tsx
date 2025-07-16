@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Download, Trash2 } from "lucide-react";
+import { Download, Shield, Trash2 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store";
 import { clearChats } from "@/app/store/slice/chat";
 import { clearUsage } from "@/app/store/slice/usage";
@@ -9,7 +9,6 @@ import { resetVoiceSettings } from "@/app/store/slice/voice/voiceSlice";
 import { resetPersonality } from "@/app/store/slice/personality/personalitySlice";
 import ToggleSwitch from "./ToggleSwitch";
 import ActionButton from "./ActionButton";
-import SecurityIcon from "./SecurityIcon";
 import SettingsSection from "./SettingsSection";
 import ConfirmDialog from "./ConfirmDialog";
 import { toast } from "sonner";
@@ -94,7 +93,7 @@ export default function PrivacySecurity() {
       <SettingsSection
         title="Privacidade e Segurança"
         description="Controle como seus dados são coletados e utilizados"
-        icon={<SecurityIcon />}
+        icon={<Shield />}
       >
         <div className="space-y-7">
           <ToggleSwitch
@@ -110,31 +109,30 @@ export default function PrivacySecurity() {
             description="Permitir compartilhamento de dados com parceiros"
           />
         </div>
+        <div>
+          <div className="mb-4 text-[15px] font-semibold">
+            Gerenciamento de Dados
+          </div>
+          <div className="flex gap-3">
+            <ActionButton
+              icon={Download}
+              variant="secondary"
+              className="cursor-pointer px-4 py-2 text-[13px]"
+              onClick={exportData}
+            >
+              Exportar Dados
+            </ActionButton>
+            <ActionButton
+              icon={Trash2}
+              variant="danger"
+              className="cursor-pointer px-4 py-2 text-[13px]"
+              onClick={clearHistory}
+            >
+              Limpar Histórico
+            </ActionButton>
+          </div>
+        </div>
       </SettingsSection>
-      <hr className="my-7 border-t border-[#23262F] opacity-30" />
-      <div>
-        <div className="mb-4 text-[15px] font-semibold">
-          Gerenciamento de Dados
-        </div>
-        <div className="flex gap-3">
-          <ActionButton
-            icon={Download}
-            variant="secondary"
-            className="cursor-pointer px-4 py-2 text-[13px]"
-            onClick={exportData}
-          >
-            Exportar Dados
-          </ActionButton>
-          <ActionButton
-            icon={Trash2}
-            variant="danger"
-            className="cursor-pointer px-4 py-2 text-[13px]"
-            onClick={clearHistory}
-          >
-            Limpar Histórico
-          </ActionButton>
-        </div>
-      </div>
 
       <ConfirmDialog
         isOpen={showConfirmDialog}

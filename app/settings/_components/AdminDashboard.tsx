@@ -20,30 +20,30 @@ export default function AdminDashboard() {
         <div className="flex flex-1 items-center rounded-xl px-5 py-3">
           <div className="mr-3 h-6 w-6 rounded-full bg-blue-400"></div>
           <div className="flex flex-col items-start">
-            <span className="text-2xl leading-tight font-bold text-blue-100">
+            <span className="text-2xl leading-tight font-bold text-blue-500">
               {loading
                 ? "..."
                 : status.ACTIVE + status.PENDING + status.INACTIVE}
             </span>
-            <span className="text-xs leading-tight text-blue-300">Total</span>
+            <span className="text-xs leading-tight text-blue-500">Total</span>
           </div>
         </div>
         <div className="flex flex-1 items-center rounded-xl px-5 py-3">
           <div className="mr-3 h-6 w-6 rounded-full bg-green-400"></div>
           <div className="flex flex-col items-start">
-            <span className="text-2xl leading-tight font-bold text-green-200">
+            <span className="text-2xl leading-tight font-bold text-green-500">
               {loading ? "..." : status.ACTIVE}
             </span>
-            <span className="text-xs leading-tight text-green-400">Ativos</span>
+            <span className="text-xs leading-tight text-green-500">Ativos</span>
           </div>
         </div>
         <div className="flex flex-1 items-center rounded-xl px-5 py-3">
           <div className="mr-3 h-6 w-6 rounded-full bg-yellow-400"></div>
           <div className="flex flex-col items-start">
-            <span className="text-2xl leading-tight font-bold text-yellow-200">
+            <span className="text-2xl leading-tight font-bold text-yellow-500">
               {loading ? "..." : status.PENDING}
             </span>
-            <span className="text-xs leading-tight text-yellow-400">
+            <span className="text-xs leading-tight text-yellow-500">
               Pendentes
             </span>
           </div>
@@ -61,22 +61,11 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="mb-6">
-        <h3 className="mb-2 text-sm font-semibold">Atividade Recente</h3>
-        <div className="rounded-lg px-3 py-4 text-center">
-          <span className="text-xs text-neutral-400">
-            Nenhuma atividade recente
-          </span>
-        </div>
-      </div>
-
-      <hr className="my-4 mb-7 border-t border-[#23262F] opacity-30" />
-
       <div className="flex w-full items-center gap-3">
         <div className="min-w-0 flex-1">
           <Button
             onClick={() => router.push("/admin/dashboard")}
-            className="flex h-[38px] w-full cursor-pointer items-center justify-between rounded-[10px] border-none bg-[#3B82F6] pr-3 pl-3 text-left text-sm font-medium text-[#0E0F11] shadow-none transition-all"
+            className="flex h-[38px] w-full cursor-pointer items-center justify-between rounded-[10px] border-none bg-[#3B82F6] pr-3 pl-3 text-left text-sm font-medium text-white shadow-none transition-all"
           >
             <span className="flex items-center gap-2">
               <Users className="mr-2 h-4 w-4" />
