@@ -4,6 +4,8 @@ import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,
   LOCAL_STORAGE_REFRESH_TOKEN_KEY,
 } from "../_constants/local-storage";
+import { store } from "@/app/store";
+import { signOut } from "@/app/store/slice/auth/auth-reducer";
 
 export const protectedApi = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -28,6 +30,8 @@ protectedApi.interceptors.response.use(
     const request = error.config;
     const refrseshToken = localStorage.getItem(LOCAL_STORAGE_REFRESH_TOKEN_KEY);
     if (!refrseshToken) {
+      store.dispatch(signOut());
+      window.location.href = "/login";
       return Promise.reject(error);
     }
     if (
@@ -49,6 +53,8 @@ protectedApi.interceptors.response.use(
       } catch (refreshError) {
         localStorage.removeItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY);
         localStorage.removeItem(LOCAL_STORAGE_REFRESH_TOKEN_KEY);
+        store.dispatch(signOut());
+        window.location.href = "/login";
         console.error(refreshError);
       }
     }

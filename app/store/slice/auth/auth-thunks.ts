@@ -12,29 +12,55 @@ import {
   SignupInput,
   UserResponse,
 } from "@/app/_api/services/user";
+import { signOut } from "./auth-reducer";
 
 export const initAuth = createAsyncThunk(
   "auth/init",
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
-      const accessToken = StorageUtils.getAccessToken();
-      const refreshToken = StorageUtils.getRefreshToken();
+      let accessToken = StorageUtils.getAccessToken() || null;
+      const refreshToken = StorageUtils.getRefreshToken() || null;
 
       if (!accessToken && !refreshToken) return null;
 
+      if (!accessToken && refreshToken) {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/users/refresh-token`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ refrseshToken: refreshToken }),
+            },
+          );
+          if (!response.ok) throw new Error("Refresh token inválido");
+          const data = await response.json();
+          if (!data.accessToken || !data.refreshToken)
+            throw new Error("Tokens não retornados pelo servidor");
+          accessToken = data.accessToken;
+          StorageUtils.setTokens({
+            accessToken: String(accessToken),
+            refreshToken: String(data.refreshToken),
+          });
+        } catch {
+          StorageUtils.removeTokens();
+          dispatch(signOut());
+          return rejectWithValue("Sessão expirada");
+        }
+      }
+      if (!accessToken)
+        throw new Error("Token de acesso não encontrado após renovação");
       const response = await AuthService.me();
       if (!response) throw new Error("Falha ao obter dados do usuário");
       return response;
-    } catch (error: unknown) {
-      console.error("Error initializing auth:", error);
+    } catch (error: any) {
       StorageUtils.removeTokens();
-
-      if (isAxiosError(error)) {
+      dispatch(signOut());
+      if (error && error.response && error.response.data) {
         return rejectWithValue(
           error.response?.data?.message || "Falha ao inicializar autenticação",
         );
       }
-
       return rejectWithValue("Erro inesperado ao inicializar autenticação");
     }
   },
