@@ -40,7 +40,6 @@ const ChatMessages = () => {
       localStorage.setItem(`typedAssistantIds:${chatId}`, JSON.stringify(ids));
     }
   };
-
   const [typedAssistantIds, setTypedAssistantIds] = useState<string[]>(() =>
     getTypedIds(chatId),
   );
@@ -49,8 +48,6 @@ const ChatMessages = () => {
     .map((msg: any, idx: number) => (msg.role === "assistant" ? idx : -1))
     .filter((idx: number) => idx !== -1)
     .pop();
-
-  const [partialTypewriterText, setPartialTypewriterText] = useState("");
 
   const { speak, voiceEnabled } = useBrender(() => {});
   const lastAssistantMsg = currentChat.messages
@@ -81,11 +78,6 @@ const ChatMessages = () => {
     }
   }, [currentChat, lastAssistantIdx, typedAssistantIds]);
 
-  const handleTypeWriterComplete = (msgId: string) => {
-    addTypedId(chatId, msgId);
-    setTypedAssistantIds((prev) => [...prev, msgId]);
-  };
-
   if (!currentChat) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -109,8 +101,7 @@ const ChatMessages = () => {
             message.role === "assistant" &&
             idx === lastAssistantIdx &&
             !isLoading;
-
-          if (isLastAssistant && !typedAssistantIds.includes(message.id)) {
+          if (isLastAssistant && message.content !== "Gerando resposta...") {
             return (
               <div
                 key={message.id}
@@ -135,14 +126,18 @@ const ChatMessages = () => {
                       : "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100",
                   )}
                 >
-                  <TypeWriter
-                    text={message.content}
-                    onComplete={() => handleTypeWriterComplete(message.id)}
-                    onTyping={setPartialTypewriterText}
-                    speed={20}
-                    visual={false}
-                  />
-                  <MessageContent content={partialTypewriterText} />
+                  {!typedAssistantIds.includes(message.id) ? (
+                    <TypeWriter
+                      text={message.content}
+                      speed={20}
+                      onComplete={() => {
+                        addTypedId(chatId, message.id);
+                        setTypedAssistantIds((prev) => [...prev, message.id]);
+                      }}
+                    />
+                  ) : (
+                    <MessageContent content={message.content} />
+                  )}
                   <p className="mt-1 text-xs opacity-70">
                     {formatISOTime(message.timestamp)}
                   </p>
@@ -164,7 +159,39 @@ const ChatMessages = () => {
               </div>
             );
           }
-
+          if (
+            message.role === "assistant" &&
+            message.content === "Gerando resposta..."
+          ) {
+            return (
+              <div
+                key={message.id}
+                className={cn(
+                  "flex gap-4",
+                  message.role === "user" ? "justify-end" : "justify-start",
+                )}
+              >
+                {avatar && (
+                  <Avatar className="h-8 w-8 flex-shrink-0">
+                    <AvatarImage src="/axel.svg" alt="AxelAI" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
+                      <Bot className="h-4 w-4 text-white" />
+                    </div>
+                  </Avatar>
+                )}
+                <div
+                  className={cn(
+                    "max-w-[80%] rounded-lg bg-gray-100 px-4 py-3 text-gray-900 dark:bg-gray-800 dark:text-gray-100",
+                  )}
+                >
+                  <span className="italic opacity-70">Gerando resposta...</span>
+                  <p className="mt-1 text-xs opacity-70">
+                    {formatISOTime(message.timestamp)}
+                  </p>
+                </div>
+              </div>
+            );
+          }
           return (
             <div
               key={message.id}

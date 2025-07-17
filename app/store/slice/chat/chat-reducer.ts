@@ -63,13 +63,28 @@ const chatSlice = createSlice({
       state.error = null;
     },
 
-    addMessage: (state, action: PayloadAction<AddMessagePayload>) => {
-      const { chatId, content, role } = action.payload;
+    addMessage: (
+      state,
+      action: PayloadAction<
+        AddMessagePayload & { id?: string; replace?: boolean }
+      >,
+    ) => {
+      const { chatId, content, role, id, replace } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
 
       if (chat) {
+        if (replace && id) {
+          const msgIdx = chat.messages.findIndex((msg) => msg.id === id);
+          if (msgIdx !== -1) {
+            chat.messages[msgIdx].content = content;
+            chat.messages[msgIdx].timestamp = new Date().toISOString();
+            return;
+          }
+        }
         const newMessage = {
-          id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id:
+            id ||
+            `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           content,
           role,
           timestamp: new Date().toISOString(),
