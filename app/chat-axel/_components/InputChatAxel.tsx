@@ -88,6 +88,15 @@ const InputChatAxel = () => {
           }),
         );
       }
+      const pendingId = `pending-${Date.now()}`;
+      dispatch(
+        addMessage({
+          chatId: chatId as string,
+          content: "Gerando resposta...",
+          role: "assistant",
+          id: pendingId,
+        }),
+      );
       await new Promise((resolve) => setTimeout(resolve, 100));
       const aiResponse = await sendMessage(message);
       chatId = currentChatIdRef.current;
@@ -98,6 +107,8 @@ const InputChatAxel = () => {
             chatId,
             content: aiResponse,
             role: "assistant",
+            id: pendingId,
+            replace: true,
           }),
         );
       } else if (chatId) {
@@ -107,6 +118,8 @@ const InputChatAxel = () => {
             content:
               "Desculpe, não consegui processar sua mensagem no momento. Tente novamente.",
             role: "assistant",
+            id: pendingId,
+            replace: true,
           }),
         );
       }
