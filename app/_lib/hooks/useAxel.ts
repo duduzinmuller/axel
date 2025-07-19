@@ -1,17 +1,11 @@
 import { useRef, useState } from "react";
 
 import { useAppSelector } from "@/app/store";
-import {
-  blockComputer,
-  restartComputer,
-  shutdownComputer,
-} from "@/app/_api/services/computerControl";
-import { AIService } from "@/app/_api/services/ai";
 
 declare global {
   interface Window {
-    SpeechRecognition: any;
-    webkitSpeechRecognition: any;
+    SpeechRecognition?: typeof SpeechRecognition;
+    webkitSpeechRecognition?: typeof SpeechRecognition;
   }
 }
 
@@ -33,7 +27,6 @@ export function useBrender(
 
   const recognitionRef = useRef<any>(null);
 
-  const { user } = useAppSelector((state) => state.auth);
   const {
     selectedVoice,
     voiceEnabled: voiceEnabledFromStore,
@@ -127,7 +120,6 @@ export function useBrender(
         console.log("Reconhecido:", transcript);
         if (onUserSpeech) onUserSpeech(transcript);
         onResponse({ text: transcript, type: "text" });
-        takeCommand(transcript.toLowerCase());
       };
 
       recognition.onend = () => {
@@ -176,100 +168,6 @@ export function useBrender(
     }
   }
 
-  function detectType(text: string): ResponseType {
-    if (text.match(/```/)) return "code";
-    if (text.includes("@") && text.toLowerCase().includes("assunto"))
-      return "email";
-    if (text.split("\n").length > 1 && text.match(/^- |^\d+\. /m))
-      return "list";
-    return "text";
-  }
-
-  async function takeCommand(message: string) {
-    console.log("Comando reconhecido:", message);
-
-    if (
-      message.includes("para de falar") ||
-      message.includes("silêncio") ||
-      message.includes("cala a boca")
-    ) {
-      stopSpeaking();
-      speak("Ok, parei de falar.");
-      return;
-    }
-
-    if (
-      message.includes("desligar microfone") ||
-      message.includes("parar de ouvir") ||
-      message.includes("parar")
-    ) {
-      stopListening();
-      return;
-    }
-
-    if (
-      message.includes("olá") ||
-      message.includes("oi") ||
-      message.includes("eai")
-    ) {
-      speak(`Olá, ${user?.name || "mestre"}! Como posso te ajudar?`);
-    } else if (message.includes("abrir google")) {
-      window.open("https://google.com", "_blank");
-      speak("Abrindo Google...");
-    } else if (message.includes("me conta uma piada")) {
-      const piadas = [
-        "Por que o livro de matemática se suicidou? Porque estava cheio de problemas.",
-        "O que é um vegetariano que come carne? Um ex-vegetariano.",
-        "Por que o jacaré tirou o filho da escola? Porque ele réptil de ano.",
-      ];
-      const piada = piadas[Math.floor(Math.random() * piadas.length)];
-      onResponse({ text: piada, type: "text" });
-      speak(piada);
-    } else if (
-      message.includes("desligar computador") ||
-      message.includes("desligar pc")
-    ) {
-      await shutdownComputer((text) => onResponse({ text, type: "text" }));
-    } else if (
-      message.includes("bloquear computador") ||
-      message.includes("bloquear pc")
-    ) {
-      await blockComputer((text) => onResponse({ text, type: "text" }));
-    } else if (
-      message.includes("reiniciar computador") ||
-      message.includes("reiniciar pc")
-    ) {
-      await restartComputer((text) => onResponse({ text, type: "text" }));
-    } else if (message.includes("gerar resposta")) {
-      onResponse({
-        text: "Deixe-me pensar um pouco sobre isso...",
-        type: "text",
-      });
-      const aiResult = await AIService.generationQuestionWithAI(message);
-      const response = aiResult?.response;
-      if (response) {
-        const type = detectType(response);
-        onResponse({ text: response, type });
-      } else {
-        onResponse({
-          text: "Não consegui encontrar uma resposta para isso.",
-          type: "text",
-        });
-      }
-    } else {
-      const aiResult = await AIService.generationQuestionWithAI(message);
-      const response = aiResult?.response;
-      if (response) {
-        const type = detectType(response);
-        onResponse({ text: response, type });
-        speak(response);
-      } else {
-        onResponse({ text: "Desculpe, não entendi o comando.", type: "text" });
-        speak("Desculpe, não entendi o comando.");
-      }
-    }
-  }
-
   return {
     isListening,
     speaking,
@@ -277,7 +175,6 @@ export function useBrender(
     startListening,
     stopListening,
     speak,
-    takeCommand,
     stopSpeaking,
     setVoiceByName,
     listAvailableVoices,
