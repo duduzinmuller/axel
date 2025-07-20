@@ -16,7 +16,7 @@ export default function AdminDashboard() {
       description="Visualize e gerencie todos os usuários do seu assistente AI"
       icon={<Users className="h-5 w-5" />}
     >
-      <div className="mb-6 flex gap-6">
+      <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="flex flex-1 items-center rounded-xl px-5 py-3">
           <div className="mr-3 h-6 w-6 rounded-full bg-blue-400"></div>
           <div className="flex flex-col items-start">
