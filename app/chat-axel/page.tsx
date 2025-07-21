@@ -20,9 +20,6 @@ const ChatAxel = () => {
   const currentChat = useAppSelector(selectCurrentChat);
   const shouldShowMessages = currentChat && currentChat.messages.length > 0;
 
-  console.log("Page: currentChat", currentChat);
-  console.log("Page: shouldShowMessages", shouldShowMessages);
-
   useEffect(() => {
     setHasMounted(true);
     if (!isLoading && (!user || !isAuthenticated)) {
@@ -46,7 +43,7 @@ const ChatAxel = () => {
           <ChatMessages />
         </div>
       ) : (
-        <div className="flex h-screen w-screen items-center justify-center">
+        <div className="flex h-screen w-screen items-center justify-center text-center">
           <TypeWriter
             className="text-3xl font-semibold"
             text={`Olá, ${user?.name}! como posso te ajudar?`}
